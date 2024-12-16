@@ -307,7 +307,7 @@ const ProfileUserCompetition = () => {
               size="small"
               style={{ marginBottom: "10px" }}
               columns={[
-                { title: "Semana Actual", dataIndex: "glosa" },
+                { title: "Historico", dataIndex: "glosa" },
                 { title: "Cantidad", dataIndex: "cantidad" },
               ]}
               pagination={false}
@@ -336,7 +336,7 @@ const ProfileUserCompetition = () => {
                         type="primary"
                         style={{ marginRight: "10px" }}
                       ></Button>
-                      Semana #1{" "}
+                      Intervalo #1{" "}
                       <Button
                         size="small"
                         icon={<RightOutlined />}
@@ -356,78 +356,6 @@ const ProfileUserCompetition = () => {
                 { glosa: "Kcal quemadas", cantidad: "800" },
               ]}
             />
-          </Col>
-        </Row>
-      </Col>
-      <Col span={24} style={{ marginTop: "20px" }}>
-        <Row
-          align="middle"
-          justify={"space-between"}
-          style={{ marginTop: "0px" }}
-        >
-          <Col>
-            <Title level={2}>Logros</Title>
-          </Col>
-          <Col>
-            <Button
-              type="primary"
-              icon={<ArrowRightOutlined />}
-              onClick={() => window.location.assign("/achievements")}
-            >
-              Ver mas
-            </Button>
-          </Col>
-        </Row>
-      </Col>
-      <Col span={24}>
-        <Row justify={"space-between"}>
-          <Col>
-            <EuroCircleFilled style={{ fontSize: "100px", color: "#faad14" }} />
-            <Title level={4} style={{ textAlign: "center" }}>
-              Logro 1
-            </Title>
-          </Col>
-          <Col>
-            <EuroCircleFilled style={{ fontSize: "100px", color: "#faad14" }} />
-            <Title level={4} style={{ textAlign: "center" }}>
-              Logro 2
-            </Title>
-          </Col>
-          <Col>
-            <EuroCircleFilled style={{ fontSize: "100px", color: "#faad14" }} />
-            <Title level={4} style={{ textAlign: "center" }}>
-              Logro 3
-            </Title>
-          </Col>
-          <Col>
-            <EuroCircleFilled style={{ fontSize: "100px", color: "#faad14" }} />
-            <Title level={4} style={{ textAlign: "center" }}>
-              Logro 4
-            </Title>
-          </Col>
-          <Col>
-            <EuroCircleFilled style={{ fontSize: "100px", color: "#faad14" }} />
-            <Title level={4} style={{ textAlign: "center" }}>
-              Logro 5
-            </Title>
-          </Col>
-          <Col>
-            <EuroCircleFilled style={{ fontSize: "100px", color: "#faad14" }} />
-            <Title level={4} style={{ textAlign: "center" }}>
-              Logro 6
-            </Title>
-          </Col>
-          <Col>
-            <EuroCircleFilled style={{ fontSize: "100px", color: "#faad14" }} />
-            <Title level={4} style={{ textAlign: "center" }}>
-              Logro 7
-            </Title>
-          </Col>
-          <Col>
-            <EuroCircleFilled style={{ fontSize: "100px", color: "#faad14" }} />
-            <Title level={4} style={{ textAlign: "center" }}>
-              Logro 8
-            </Title>
           </Col>
         </Row>
       </Col>

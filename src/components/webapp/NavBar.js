@@ -47,8 +47,6 @@ const NavBar = () => {
     getItem("Perfil", "profile_competition", <UserOutlined />),
     getItem("Equipo", "team", <TeamOutlined />),
     getItem("Empresa", "enterprise", <TrophyOutlined />),
-    getItem("Desafio", "challenges", <FireOutlined />),
-    getItem("Logros", "achievements", <StarFilled />),
   ];
   return (
     <Affix>

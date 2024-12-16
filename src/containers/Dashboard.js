@@ -34,13 +34,9 @@ const Dashboard = () => {
   const [challengersUser, setChallengersUser] = useState([]);
   const [typeMeditions, setTypeMeditions] = useState([]);
 
-  const Ranking = (data) => {
-    var order = state.user.groups.sort((a, b) => b.points - a.points);
-    const rankedData = order.map((item, index) => {
-      return { ...item, ranking: index + 1 };
-    });
+  const Ranking = () => {
     var myRanking =
-      state.user.groups
+      state.user.profile.groups
         .sort((a, b) => b.points - a.points)
         .findIndex((item) => item.id === state.user.team.id) + 1;
 
@@ -143,7 +139,7 @@ const Dashboard = () => {
       payload: filteredActivitiesUser,
     });
     setStatsPersonal(filteredActivitiesUser);
-    setChallengersUser(state.user.profile.challengers_user);
+    setChallengersUser(state.user.profile.total_activities_user);
     setTypeMeditions(state.user.profile.type_meditions);
   }, []);
 
@@ -207,6 +203,7 @@ const Dashboard = () => {
           </Col>
         </Row>
       </Col>
+
       <Col xl={8} xs={24}>
         <Card style={{ width: "300px", ...styles.card }} hoverable>
           <Row align={"middle"} justify={"space-evenly"}>
@@ -232,6 +229,7 @@ const Dashboard = () => {
           </Row>
         </Card>
       </Col>
+
       <Col span={8} xl={8} xs={24}>
         <Card style={{ width: "260px", ...styles.card }} hoverable>
           <Title
@@ -243,7 +241,12 @@ const Dashboard = () => {
             }}
           >
             <UpCircleFilled style={{ marginRight: "10px" }} />
-            {state.user.team.points} pts.
+            {(
+              state.user.team.participants.reduce(
+                (total, user) => total + user.points,
+                0
+              ) / state.user.team.participants.length
+            ).toFixed(0)}
           </Title>{" "}
           <br />
         </Card>
@@ -271,7 +274,7 @@ const Dashboard = () => {
                 <Ranking />/{" "}
                 <span style={{ fontSize: "22px" }}>
                   {" "}
-                  {state.user.groups.length} Equipos{" "}
+                  {state.user.profile.groups.length} Equipos{" "}
                 </span>
               </Title>
             </Col>
@@ -283,177 +286,10 @@ const Dashboard = () => {
         <Row
           align="middle"
           justify={"space-between"}
-          style={{ marginTop: "30px" }}
-        >
-          <Col>
-            <Title level={2}>Desempeño grupal</Title>
-          </Col>
-
-          <Col>
-            <Button
-              type="primary"
-              icon={<ArrowRightOutlined />}
-              style={{ marginBottom: window.innerWidth < 900 && "20px" }}
-              onClick={() => window.location.assign("/team")}
-            >
-              Ver mas
-            </Button>
-          </Col>
-        </Row>
-      </Col>
-      <Col span={24}>
-        {state.dashboard && (
-          <Row style={{ marginBottom: "20px" }} justify={"space-around"}>
-            {state.dashboard.activities.map((item) => (
-              <Col style={{ width: 150, height: 140 }}>
-                <CircularProgressbar
-                  value={item.value_team}
-                  maxValue={item.value_activity}
-                  text={
-                    item.type_stats === "INCREMENTAL"
-                      ? `${item.value_team}/${item.value_activity}`
-                      : `${(item.value_team * 100) / item.value_activity}%`
-                  }
-                  styles={styles.circlePro}
-                />
-                <Title level={4} style={{ textAlign: "center" }}>
-                  {item.name}
-                </Title>
-              </Col>
-            ))}
-          </Row>
-        )}
-      </Col>
-      <Col span={24} style={{ marginTop: "20px" }}>
-        <Row
-          align="middle"
-          justify={"space-between"}
-          style={{ marginTop: "30px" }}
-        >
-          <Col>
-            <Title level={2}>Novedades</Title>
-          </Col>
-          <Col>
-            <Button
-              type="primary"
-              icon={<ArrowRightOutlined />}
-              onClick={() => window.location.assign("/blog")}
-            >
-              Ver mas
-            </Button>
-          </Col>
-        </Row>
-      </Col>
-      <Col span={24}>
-        <Blog type="novedades" />
-      </Col>
-      <Col span={24} style={{ marginTop: "20px" }}>
-        <Row
-          align="middle"
-          justify={"space-between"}
           style={{ marginTop: "0px" }}
         >
           <Col>
-            <Title level={2}>Actividad personal</Title>
-          </Col>
-          <Col>
-            <Button
-              type="primary"
-              icon={<ArrowRightOutlined />}
-              style={{ marginBottom: window.innerWidth < 900 && "20px" }}
-              onClick={() => window.location.assign("/profile_competition")}
-            >
-              Ver mas
-            </Button>
-          </Col>
-        </Row>
-      </Col>
-      <Col span={24}>
-        <Row justify={"space-between"} style={{ marginBottom: "20px" }}>
-          <Col xl={11} xs={24}>
-            {stats_personal.length > 0 && (
-              <Descriptions title="Semana Actual" bordered>
-                <Descriptions.Item label="Pruebas en competencia " span={3}>
-                  {stats_personal[0].totalActivities}
-                </Descriptions.Item>
-                <Descriptions.Item label="Pruebas completadas" span={3}>
-                  {stats_personal[0].totalCompletedActivities}
-                </Descriptions.Item>
-                <Descriptions.Item label="Minutos ejercitados" span={3}>
-                  {stats_personal[0].totalDuration}
-                </Descriptions.Item>
-                <Descriptions.Item label="Kcal quemadas" span={3}>
-                  {stats_personal[0].totalCaloriesBurned}
-                </Descriptions.Item>
-              </Descriptions>
-            )}
-          </Col>
-          <Col xl={11} xs={24} style={{ marginTop: "-23px" }}>
-            {stats_personal && (
-              <>
-                <Title level={4} style={{ marginBottom: "15px" }}>
-                  Registro competencía
-                </Title>
-                <Table
-                  bordered
-                  style={{ marginBottom: "10px" }}
-                  rowClassName={"backtable"}
-                  size="small"
-                  pagination={{ pageSize: 1 }}
-                  columns={[
-                    {
-                      title: "Semana",
-                      width: "30%",
-                      dataIndex: "week",
-                      render: (text) => (
-                        <span>{text.replace("Week ", "Semana ")}</span>
-                      ),
-                    },
-                    {
-                      render: (obj) => (
-                        <Row>
-                          <Descriptions>
-                            <Descriptions.Item
-                              label="Pruebas en competencia "
-                              span={3}
-                            >
-                              {obj.totalActivities}
-                            </Descriptions.Item>
-                            <Descriptions.Item
-                              label="Pruebas completadas"
-                              span={3}
-                            >
-                              {obj.totalCompletedActivities}
-                            </Descriptions.Item>
-                            <Descriptions.Item
-                              label="Minutos ejercitados"
-                              span={3}
-                            >
-                              {obj.totalDuration}
-                            </Descriptions.Item>
-                            <Descriptions.Item label="Kcal quemadas" span={3}>
-                              {obj.totalCaloriesBurned}
-                            </Descriptions.Item>
-                          </Descriptions>
-                        </Row>
-                      ),
-                    },
-                  ]}
-                  dataSource={stats_personal}
-                />
-              </>
-            )}
-          </Col>
-        </Row>
-      </Col>
-      <Col span={24} style={{ marginTop: "20px" }}>
-        <Row
-          align="middle"
-          justify={"space-between"}
-          style={{ marginTop: "0px" }}
-        >
-          <Col>
-            <Title level={2}>Desafios</Title>
+            <Title level={2}>Pruebas</Title>
           </Col>
           <Col>
             <Button
@@ -504,8 +340,13 @@ const Dashboard = () => {
                 />
                 <Button
                   icon={<PlusCircleFilled />}
-                  style={{ float: "right" }}
+                  style={{
+                    float: "right",
+                    color:
+                      new Date(item.finish_date_time) < new Date() && "grey",
+                  }}
                   block
+                  disabled={new Date(item.finish_date_time) < new Date()}
                 >
                   Realizar
                 </Button>
@@ -518,16 +359,18 @@ const Dashboard = () => {
         <Row
           align="middle"
           justify={"space-between"}
-          style={{ marginTop: "0px" }}
+          style={{ marginTop: "30px" }}
         >
           <Col>
-            <Title level={2}>Logros</Title>
+            <Title level={2}>Desempeño grupal</Title>
           </Col>
+
           <Col>
             <Button
               type="primary"
               icon={<ArrowRightOutlined />}
-              onClick={() => window.location.assign("/achievements")}
+              style={{ marginBottom: window.innerWidth < 900 && "20px" }}
+              onClick={() => window.location.assign("/team")}
             >
               Ver mas
             </Button>
@@ -535,46 +378,29 @@ const Dashboard = () => {
         </Row>
       </Col>
       <Col span={24}>
-        <Row justify={"space-around"}>
-          {typeMeditions &&
-            typeMeditions.map((item) => (
-              <Col>
-                {stats_personal.map((stat) => {
-                  return stat.totalCaloriesBurned > item.achievement_1 ? (
-                    <div>
-                      <CheckCircleFilled
-                        style={{
-                          color: "green",
-                          fontSize: "60px",
-                          padding: "10px",
-                        }}
-                      />
-                      <Text>
-                        <center>10 ckal</center>
-                      </Text>
-                    </div>
-                  ) : (
-                    <div>
-                      <CheckCircleFilled
-                        style={{
-                          color: "grey",
-                          fontSize: "60px",
-                          padding: "10px",
-                        }}
-                      />
-                    </div>
-                  );
-                })}
-
-                {console.log(stats_personal)}
-
+        {state.dashboard && (
+          <Row style={{ marginBottom: "20px" }} justify={"space-around"}>
+            {state.dashboard.activities.map((item) => (
+              <Col style={{ width: 150, height: 140 }}>
+                <CircularProgressbar
+                  value={item.value_team}
+                  maxValue={item.value_activity}
+                  text={
+                    item.type_stats === "INCREMENTAL"
+                      ? `${item.value_team}/${item.value_activity}`
+                      : `${(item.value_team * 100) / item.value_activity}%`
+                  }
+                  styles={styles.circlePro}
+                />
                 <Title level={4} style={{ textAlign: "center" }}>
-                  {item.name.toUpperCase()}
+                  {item.name}
                 </Title>
               </Col>
             ))}
-        </Row>
+          </Row>
+        )}
       </Col>
+
       <Col span={24} style={{ marginTop: "20px" }}>
         <Row
           align="middle"
@@ -582,13 +408,122 @@ const Dashboard = () => {
           style={{ marginTop: "0px" }}
         >
           <Col>
-            <Title level={2}>Beneficio, descuentos y alianzas</Title>
+            <Title level={2}>Actividad personal</Title>
           </Col>
           <Col>
             <Button
               type="primary"
               icon={<ArrowRightOutlined />}
               style={{ marginBottom: window.innerWidth < 900 && "20px" }}
+              onClick={() => window.location.assign("/profile_competition")}
+            >
+              Ver mas
+            </Button>
+          </Col>
+        </Row>
+      </Col>
+      <Col span={24}>
+        <Row justify={"space-between"} style={{ marginBottom: "20px" }}>
+          <Col xl={11} xs={24}>
+            {stats_personal.length > 0 && (
+              <Descriptions title="Acumulado" bordered>
+                <Descriptions.Item label="Pruebas en competencia " span={3}>
+                  {state.user.profile.total_activities_user.length}
+                </Descriptions.Item>
+                <Descriptions.Item label="Pruebas completadas" span={3}>
+                  {state.user.profile.total_activities_user_completed.length}
+                </Descriptions.Item>
+                <Descriptions.Item label="Puntos obtenidos" span={3}>
+                  {state.user.points} pts.
+                </Descriptions.Item>
+                <Descriptions.Item label="Minutos ejercitados" span={3}>
+                  {state.user.profile.total_activities_user.reduce(
+                    (total, activity) => total + activity.duration,
+                    0
+                  )}
+                </Descriptions.Item>
+              </Descriptions>
+            )}
+          </Col>
+          <Col xl={11} xs={24} style={{ marginTop: "-23px" }}>
+            {stats_personal && (
+              <>
+                <Title level={4} style={{ marginBottom: "15px" }}>
+                  Intervalos
+                </Title>
+                <Table
+                  bordered
+                  style={{ marginBottom: "10px" }}
+                  rowClassName={"backtable"}
+                  size="small"
+                  pagination={{ pageSize: 1 }}
+                  columns={[
+                    {
+                      title: "Intervalo",
+                      width: "30%",
+                      dataIndex: "week",
+                      render: (text) => (
+                        <span>{text.replace("Week ", "Intervalo ")}</span>
+                      ),
+                    },
+                    {
+                      render: (obj) => (
+                        <Row>
+                          <Descriptions>
+                            <Descriptions.Item
+                              label="Pruebas en competencia "
+                              span={3}
+                            >
+                              {obj.totalActivities}
+                            </Descriptions.Item>
+                            <Descriptions.Item
+                              label="Pruebas completadas"
+                              span={3}
+                            >
+                              {obj.totalCompletedActivities}
+                            </Descriptions.Item>
+                            <Descriptions.Item
+                              label="Puntos obtenidos"
+                              span={3}
+                            >
+                              {(
+                                state.user.team.participants.reduce(
+                                  (total, user) => total + user.points,
+                                  0
+                                ) / state.user.team.participants.length
+                              ).toFixed(0)}
+                            </Descriptions.Item>
+                            <Descriptions.Item
+                              label="Minutos ejercitados"
+                              span={3}
+                            >
+                              {obj.totalDuration}
+                            </Descriptions.Item>
+                          </Descriptions>
+                        </Row>
+                      ),
+                    },
+                  ]}
+                  dataSource={stats_personal}
+                />
+              </>
+            )}
+          </Col>
+        </Row>
+      </Col>
+      <Col span={24} style={{ marginTop: "20px" }}>
+        <Row
+          align="middle"
+          justify={"space-between"}
+          style={{ marginTop: "30px" }}
+        >
+          <Col>
+            <Title level={2}>Novedades</Title>
+          </Col>
+          <Col>
+            <Button
+              type="primary"
+              icon={<ArrowRightOutlined />}
               onClick={() => window.location.assign("/blog")}
             >
               Ver mas
@@ -597,7 +532,7 @@ const Dashboard = () => {
         </Row>
       </Col>
       <Col span={24}>
-        <Blog type="beneficios" />
+        <Blog type="novedades" />
       </Col>
     </Row>
   );

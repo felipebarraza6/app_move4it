@@ -391,31 +391,6 @@ const Enterpise = () => {
           />
         </center>
       </Col>
-      <Col span={24}>
-        <Title level={4}>Pruebas Empresa</Title>
-      </Col>
-      <Col span={24}>
-        <center>
-          <Table
-            bordered
-            style={{ width: window.innerWidth > 900 ? "50%" : "100%" }}
-            dataSource={[
-              {
-                nombre: "Pasos",
-                objetivo: "1.000.000 pasos",
-              },
-              { nombre: "Trote", objetivo: "100 km" },
-              { nombre: "Almuerzo en equipo", objetivo: "50 almuerzo" },
-              { nombre: "Calorias", objetivo: "100.000 kcal" },
-              { nombre: "Minutos entrenamiento", objetivo: "50 horas" },
-            ]}
-            columns={[
-              { title: "Prueba", dataIndex: "nombre", width: "57%" },
-              { title: "Objetivo", dataIndex: "objetivo", width: "43%" },
-            ]}
-          />
-        </center>
-      </Col>
     </Row>
   );
 };
