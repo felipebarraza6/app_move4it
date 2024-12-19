@@ -15,18 +15,13 @@ import {
   ArrowRightOutlined,
   UpCircleFilled,
   TeamOutlined,
-  CheckCircleFilled,
   PlusCircleFilled,
-  LeftOutlined,
-  EuroCircleFilled,
-  RightOutlined,
 } from "@ant-design/icons";
 import "react-circular-progressbar/dist/styles.css";
 import Blog from "./Blog";
 import { AppContext } from "../App";
-import { all } from "axios";
 
-const { Title, Paragraph, Text } = Typography;
+const { Title, Paragraph } = Typography;
 
 const Dashboard = () => {
   const { state, dispatch } = useContext(AppContext);
@@ -103,8 +98,6 @@ const Dashboard = () => {
         totalCaloriesBurned,
       })
     );
-
-    var type_meditions = state.user.profile.type_meditions;
 
     const dataSourceWithMeditions = dataSource.map((data) => {
       return {
