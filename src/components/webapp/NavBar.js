@@ -49,13 +49,13 @@ const NavBar = () => {
     getItem("Empresa", "enterprise", <TrophyOutlined />),
   ];
   return (
-    <Affix>
-      <div style={{ backgroundColor: "white" }}>
+    <Affix offsetTop={10}>
+      <div>
         {window.innerWidth > 900 ? (
           <Menu
             onClick={onChangeOption}
             style={styles.menu}
-            theme={window.innerWidth < 900 && "dark"}
+            theme={"dark"}
             items={items}
           ></Menu>
         ) : (

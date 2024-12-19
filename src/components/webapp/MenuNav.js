@@ -1,4 +1,4 @@
-import React, { useContext }from "react";
+import React, { useContext } from "react";
 import { Menu } from "antd";
 import {
   SnippetsOutlined,
@@ -10,8 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../App";
 
 const MenuNav = () => {
-
-    const { state, dispatch } = useContext(AppContext);
+  const { state, dispatch } = useContext(AppContext);
 
   const navigate = useNavigate();
   function getItem(label, key, icon, children, type) {
