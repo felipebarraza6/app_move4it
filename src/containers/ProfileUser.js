@@ -14,7 +14,7 @@ const ProfileUser = () => {
       <Col span={24}>
         <Title level={3}>@{state.user.username}</Title>
       </Col>
-      <Col span={10} style={styles.col}>
+      <Col span={8} style={styles.col}>
         <FormData />
         <UpdatePassword />
       </Col>
@@ -27,7 +27,7 @@ const ProfileUser = () => {
 
 const styles = {
   col: {
-    padding: "0px 10px 0px 0",
+    padding: "20px 10px 0px 0",
   },
 };
 

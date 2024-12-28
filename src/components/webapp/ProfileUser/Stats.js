@@ -5,7 +5,9 @@ import { AppContext } from "../../../App";
 const Stats = () => {
   const { state } = useContext(AppContext);
 
-  var meditions = state.user.profile.corporal_meditions;
+  var meditions = state.user.profile.corporal_meditions
+    .slice()
+    .sort((a, b) => new Date(b.created) - new Date(a.created));
 
   return (
     <Table

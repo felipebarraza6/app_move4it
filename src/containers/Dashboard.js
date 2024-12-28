@@ -18,8 +18,10 @@ import {
   PlusCircleFilled,
 } from "@ant-design/icons";
 import "react-circular-progressbar/dist/styles.css";
+import Welcome from "../components/webapp/Dashboard/Welcome";
 import Blog from "./Blog";
 import { AppContext } from "../App";
+import { Link } from "react-router-dom";
 
 const { Title, Paragraph } = Typography;
 
@@ -138,43 +140,11 @@ const Dashboard = () => {
 
   return (
     <Row justify={"space-between"} align={"middle"}>
-      <Col>
-        <Card style={styles.card} hoverable>
-          <Title
-            level={1}
-            style={{
-              ...styles.title,
-              marginBottom: "-40px",
-              marginTop: "-5px",
-            }}
-          >
-            Hola, {state.user.first_name} {state.user.last_name}
-          </Title>{" "}
-          <br />
-          <Title level={4} style={styles.title}>
-            Bienvenido a Move4it
-          </Title>
-        </Card>
+      <Col span={24}>
+        <Welcome />
       </Col>
 
-      <Col>
-        <Card style={styles.cardC} hoverable>
-          <Title
-            level={3}
-            style={{
-              ...styles.title,
-              marginTop: "-10px",
-              marginBottom: "-10px",
-            }}
-          >
-            @ {state.user.username}
-          </Title>
-          <br />
-          <Button type="primary" size="large">
-            {state.user.points} pts.
-          </Button>
-        </Card>
-      </Col>
+      <Col></Col>
       <Col span={24}>
         <Row
           align="middle"
@@ -182,17 +152,18 @@ const Dashboard = () => {
           style={{ marginTop: "30px" }}
         >
           <Col>
-            <Title level={2}>Resumen competencia</Title>
+            <Title level={3}>Resumen competencía</Title>
           </Col>
           <Col>
-            <Button
-              type="primary"
-              icon={<ArrowRightOutlined />}
-              style={{ marginBottom: window.innerWidth < 900 && "20px" }}
-              onClick={() => window.location.assign("/enterprise")}
-            >
-              Ver mas
-            </Button>
+            <Link to="/enterprise">
+              <Button
+                type="primary"
+                icon={<ArrowRightOutlined />}
+                style={{ marginBottom: window.innerWidth < 900 && "20px" }}
+              >
+                Ver más
+              </Button>
+            </Link>
           </Col>
         </Row>
       </Col>
@@ -250,11 +221,7 @@ const Dashboard = () => {
           hoverable
         >
           <Row align={"middle"} justify={"center"}>
-            <Col style={{ marginBottom: "10px" }}>
-              <Tag color="green-inverse" style={{ marginLeft: "0px" }}>
-                # RANKING
-              </Tag>
-            </Col>
+            <Col style={{ marginBottom: "10px" }}></Col>
             <Col>
               <Title
                 level={2}
@@ -282,16 +249,14 @@ const Dashboard = () => {
           style={{ marginTop: "0px" }}
         >
           <Col>
-            <Title level={2}>Pruebas</Title>
+            <Title level={3}>Pruebas</Title>
           </Col>
           <Col>
-            <Button
-              type="primary"
-              icon={<ArrowRightOutlined />}
-              onClick={() => window.location.assign("/challenges")}
-            >
-              Ver mas
-            </Button>
+            <Link to="/challenges">
+              <Button type="primary" icon={<ArrowRightOutlined />}>
+                Ver mas
+              </Button>
+            </Link>
           </Col>
         </Row>
       </Col>
@@ -355,18 +320,19 @@ const Dashboard = () => {
           style={{ marginTop: "30px" }}
         >
           <Col>
-            <Title level={2}>Desempeño grupal</Title>
+            <Title level={3}>Desempeño grupal</Title>
           </Col>
 
           <Col>
-            <Button
-              type="primary"
-              icon={<ArrowRightOutlined />}
-              style={{ marginBottom: window.innerWidth < 900 && "20px" }}
-              onClick={() => window.location.assign("/team")}
-            >
-              Ver mas
-            </Button>
+            <Link to="/team">
+              <Button
+                type="primary"
+                icon={<ArrowRightOutlined />}
+                style={{ marginBottom: window.innerWidth < 900 && "20px" }}
+              >
+                Ver mas
+              </Button>
+            </Link>
           </Col>
         </Row>
       </Col>
@@ -401,17 +367,19 @@ const Dashboard = () => {
           style={{ marginTop: "0px" }}
         >
           <Col>
-            <Title level={2}>Actividad personal</Title>
+            <Title level={3}>Actividad personal</Title>
           </Col>
           <Col>
-            <Button
-              type="primary"
-              icon={<ArrowRightOutlined />}
-              style={{ marginBottom: window.innerWidth < 900 && "20px" }}
-              onClick={() => window.location.assign("/profile_competition")}
-            >
-              Ver mas
-            </Button>
+            <Link to="/profile">
+              <Button
+                type="primary"
+                icon={<ArrowRightOutlined />}
+                style={{ marginBottom: window.innerWidth < 900 && "20px" }}
+                onClick={() => window.location.assign("/profile_competition")}
+              >
+                Ver mas
+              </Button>
+            </Link>
           </Col>
         </Row>
       </Col>
@@ -514,13 +482,15 @@ const Dashboard = () => {
             <Title level={2}>Novedades</Title>
           </Col>
           <Col>
-            <Button
-              type="primary"
-              icon={<ArrowRightOutlined />}
-              onClick={() => window.location.assign("/blog")}
-            >
-              Ver mas
-            </Button>
+            <Link to="/blog">
+              <Button
+                type="primary"
+                icon={<ArrowRightOutlined />}
+                onClick={() => window.location.assign("/blog")}
+              >
+                Ver mas
+              </Button>
+            </Link>
           </Col>
         </Row>
       </Col>
@@ -577,13 +547,7 @@ const styles = {
     textColor: "grey",
     backgroundColor: "#3e98c7",
   }),
-  card: {
-    marginBottom: "10px",
-    backgroundColor: "#001529",
-    color: "#fff",
-    fontSize: "15px",
-    fontWeight: "bold",
-  },
+
   cardC: {
     backgroundColor: "#001529",
     color: "#fff",

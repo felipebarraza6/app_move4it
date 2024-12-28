@@ -4,6 +4,9 @@ import logo from "../assets/img/logo_dark.png";
 import { Form, Input, Button, Row, Col, Card, notification } from "antd";
 import { endpoints } from "../config/endpoints";
 import { AppContext } from "../App";
+import { MailOutlined, LoginOutlined, ClearOutlined } from '@ant-design/icons'
+import { MdOutlinePassword } from "react-icons/md";
+
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -15,7 +18,6 @@ const Login = () => {
     const rq = await endpoints.auth
       .login(values)
       .then((x) => {
-        console.log(x);
             dispatch({
               type: "LOGIN",
               payload: {
@@ -32,7 +34,6 @@ const Login = () => {
           description: "Usuario o contraseña incorrectos",
         });
       });
-    console.log("Valores recopilados:", values);
   };
 
   return (
@@ -43,22 +44,22 @@ const Login = () => {
             <img
               src={logo}
               alt="logo"
-              style={{ width: "80%", marginBottom: "0px" }}
+              style={{ width: "50%", marginBottom: "0px" }}
             />
           </center>
           <Form onFinish={handleLogin} layout="vertical" form={form}>
-            <Form.Item name="email" label="Correo">
-              <Input type="email" />
+            <Form.Item name="email" >
+              <Input type="email" addonBefore={<MailOutlined />} />
             </Form.Item>
-            <Form.Item name="password" label="Contraseña">
-              <Input.Password />
+            <Form.Item name="password" >
+              <Input.Password addonBefore={<MdOutlinePassword/>} />
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit" loading={loading}>
+              <Button type="primary" htmlType="submit" loading={loading} icon={<LoginOutlined/>}>
                 Iniciar sesión
               </Button>
-<Button type="default" style={{marginLeft:'10px'}} onClick={()=> form.resetFields()}>
-      Limpiar
+              <Button type="default" style={{marginLeft:'10px'}} icon={<ClearOutlined/>} onClick={()=> form.resetFields()}>
+                Limpiar
               </Button>
 
             </Form.Item>
