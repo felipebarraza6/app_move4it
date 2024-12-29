@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Card, Button, Flex, Table, Typography } from "antd";
+import { Card, Button, Flex, Table, Typography, Tag } from "antd";
 import { AppContext } from "../../../App";
 
 import { OrderedListOutlined, CloudUploadOutlined } from "@ant-design/icons";
@@ -26,7 +26,7 @@ const UserChallenge = () => {
 
   const columns = [
     {
-      title: "Nombre",
+      title: "Actividad",
       width: 100,
       render: (state) => (
         <Flex vertical align="top">
@@ -38,17 +38,21 @@ const UserChallenge = () => {
     {
       width: 100,
       title: "Categoría",
-      render: (state) => state.activity.category.name,
+      render: (state) => <Tag color="blue">{state.activity.category.name}</Tag>,
     },
     {
       title: "Inicia",
       width: 100,
-      render: (state) => formatDate(state.start_date_time),
+      render: (state) => (
+        <Tag color="green-inverse"> {formatDate(state.start_date_time)}</Tag>
+      ),
     },
     {
       title: "Finaliza",
       width: 100,
-      render: (state) => formatDate(state.finish_date_time),
+      render: (state) => (
+        <Tag color="geekblue-inverse">{formatDate(state.finish_date_time)}</Tag>
+      ),
     },
     {
       width: 100,
@@ -69,21 +73,30 @@ const UserChallenge = () => {
     <Card
       title={
         <Flex gap="small">
-          <OrderedListOutlined /> Tus pruebas ({challengers.length})
+          <OrderedListOutlined /> Tus pruebas{" "}
         </Flex>
       }
-      extra={<Button type="primary">Ver más </Button>}
+      extra={`${challengers.length} Pruebas asignadas`}
       hoverable
+      style={styles.table}
     >
       <Table
         size="small"
         dataSource={challengers}
         bordered={true}
-        pagination={{ simple: true }}
+        pagination={{ simple: true, pageSize: 2 }}
         columns={columns}
       />
     </Card>
   );
+};
+const styles = {
+  table: {
+    marginBottom: "20px",
+    border: "1px solid white",
+    background:
+      "linear-gradient(124deg, rgba(255,255,255,1) 0%, rgba(165,171,173,1) 100%",
+  },
 };
 
 export default UserChallenge;

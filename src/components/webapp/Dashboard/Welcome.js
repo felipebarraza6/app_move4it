@@ -1,17 +1,13 @@
 import React, { useContext } from "react";
-import { Flex, Card, Badge } from "antd";
+import { Flex, Card, Badge, Avatar } from "antd";
 import { AppContext } from "../../../App";
 import Stats from "../ProfileUser/Stats";
 const Welcome = () => {
   const { state } = useContext(AppContext);
 
   return (
-    <Flex
-      justify="space-around"
-      align="center"
-      style={{ marginBottom: "20px" }}
-    >
-      <Card style={styles.card}>
+    <Flex justify="space-between" align="top" style={{ marginBottom: "20px" }}>
+      <Card hoverable style={styles.card}>
         <Flex gap="small" vertical>
           <div>
             Hola, {state.user.first_name} {state.user.last_name}
@@ -24,8 +20,12 @@ const Welcome = () => {
         <Flex gap="small" vertical align="center">
           <div>Tu puntaje</div>
           <div>
-            <Badge count={state.user.points} color="blue" />
-            <strong style={styles.badgeText}> pts.</strong>
+            <Badge
+              count={"pts"}
+              color="blue"
+              style={styles.badge}
+              children={<Avatar>{state.user.points}</Avatar>}
+            />
           </div>
         </Flex>
       </Card>
@@ -38,12 +38,14 @@ const styles = {
     fontSize: "15px",
   },
   card: {
-    backgroundColor: "#001529",
+    background:
+      "linear-gradient(124deg, rgba(255,255,255,1) 0%, rgba(165,171,173,1) 100%",
     fontSize: "20px",
-    color: "white",
     fontWeight: "bold",
+    border:'1px solid white',
     height: "100%",
   },
+  badge: {},
 };
 
 export default Welcome;
