@@ -1,44 +1,22 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Typography,
-  Row,
-  Col,
-  Card,
-  Button,
-  Tag,
-  Table,
-  Descriptions,
-} from "antd";
+import { Typography, Row, Col, Button, Table, Descriptions } from "antd";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import {
-  ClockCircleFilled,
-  ArrowRightOutlined,
-  UpCircleFilled,
-  TeamOutlined,
-  PlusCircleFilled,
-} from "@ant-design/icons";
+import { ArrowRightOutlined } from "@ant-design/icons";
 import "react-circular-progressbar/dist/styles.css";
 import Welcome from "../components/webapp/Dashboard/Welcome";
 import Blog from "./Blog";
 import { AppContext } from "../App";
+import CompetitionSummary from "../components/webapp/Dashboard/CompetitionSummary";
+import UserChallenge from "../components/webapp/Dashboard/UserChallenge";
 import { Link } from "react-router-dom";
+import Stats from "../components/webapp/ProfileUser/Stats";
 
 const { Title, Paragraph } = Typography;
 
 const Dashboard = () => {
   const { state, dispatch } = useContext(AppContext);
   const [stats_personal, setStatsPersonal] = useState([]);
-  const [challengersUser, setChallengersUser] = useState([]);
   const [typeMeditions, setTypeMeditions] = useState([]);
-
-  const Ranking = () => {
-    var myRanking =
-      state.user.profile.groups
-        .sort((a, b) => b.points - a.points)
-        .findIndex((item) => item.id === state.user.team.id) + 1;
-
-    return <span style={{ marginRight: "10px" }}>#{myRanking}</span>;
-  };
 
   const filterActivities = (activities) => {
     return activities
@@ -134,185 +112,21 @@ const Dashboard = () => {
       payload: filteredActivitiesUser,
     });
     setStatsPersonal(filteredActivitiesUser);
-    setChallengersUser(state.user.profile.total_activities_user);
     setTypeMeditions(state.user.profile.type_meditions);
   }, []);
 
   return (
-    <Row justify={"space-between"} align={"middle"}>
+    <Row justify={"space-between"} align={"top"}>
       <Col span={24}>
         <Welcome />
       </Col>
-
-      <Col></Col>
-      <Col span={24}>
-        <Row
-          align="middle"
-          justify={"space-between"}
-          style={{ marginTop: "30px" }}
-        >
-          <Col>
-            <Title level={3}>Resumen competencía</Title>
-          </Col>
-          <Col>
-            <Link to="/enterprise">
-              <Button
-                type="primary"
-                icon={<ArrowRightOutlined />}
-                style={{ marginBottom: window.innerWidth < 900 && "20px" }}
-              >
-                Ver más
-              </Button>
-            </Link>
-          </Col>
-        </Row>
+      <Col span={6}>
+        <CompetitionSummary />
+      </Col>
+      <Col span={17}>
+        <UserChallenge />
       </Col>
 
-      <Col xl={8} xs={24}>
-        <Card style={{ width: "300px", ...styles.card }} hoverable>
-          <Row align={"middle"} justify={"space-evenly"}>
-            <Col>
-              <Tag color="geekblue-inverse">
-                {state.user.team.enterprise.name}
-              </Tag>
-            </Col>
-
-            <Col>
-              <Title
-                level={2}
-                style={{
-                  ...styles.title,
-                  marginBottom: "-5px",
-                  marginTop: "-5px",
-                }}
-              >
-                <TeamOutlined style={{ marginRight: "5px" }} />
-                {state.user.team.name}
-              </Title>
-            </Col>
-          </Row>
-        </Card>
-      </Col>
-
-      <Col span={8} xl={8} xs={24}>
-        <Card style={{ width: "260px", ...styles.card }} hoverable>
-          <Title
-            level={2}
-            style={{
-              ...styles.title,
-              marginBottom: "-30px",
-              marginTop: "-5px",
-            }}
-          >
-            <UpCircleFilled style={{ marginRight: "10px" }} />
-            {(
-              state.user.team.participants.reduce(
-                (total, user) => total + user.points,
-                0
-              ) / state.user.team.participants.length
-            ).toFixed(0)}
-          </Title>{" "}
-          <br />
-        </Card>
-      </Col>
-      <Col span={8} xl={8} xs={24}>
-        <Card
-          style={{ width: "260px", ...styles.card, padding: "0px" }}
-          hoverable
-        >
-          <Row align={"middle"} justify={"center"}>
-            <Col style={{ marginBottom: "10px" }}></Col>
-            <Col>
-              <Title
-                level={2}
-                style={{
-                  ...styles.title,
-                  marginBottom: "-30px",
-                  marginTop: "-5px",
-                }}
-              >
-                <Ranking />/{" "}
-                <span style={{ fontSize: "22px" }}>
-                  {" "}
-                  {state.user.profile.groups.length} Equipos{" "}
-                </span>
-              </Title>
-            </Col>
-          </Row>
-          <br />
-        </Card>
-      </Col>
-      <Col span={24} style={{ marginTop: "20px" }}>
-        <Row
-          align="middle"
-          justify={"space-between"}
-          style={{ marginTop: "0px" }}
-        >
-          <Col>
-            <Title level={3}>Pruebas</Title>
-          </Col>
-          <Col>
-            <Link to="/challenges">
-              <Button type="primary" icon={<ArrowRightOutlined />}>
-                Ver mas
-              </Button>
-            </Link>
-          </Col>
-        </Row>
-      </Col>
-      <Col span={24}>
-        <Row justify={window.innerWidth > 900 ? "space-between" : "center"}>
-          {challengersUser.map((item) => (
-            <Col>
-              <Card
-                hoverable
-                style={{ width: "250px", ...styles.card }}
-                cover={
-                  <img
-                    alt="example"
-                    src={`http://localhost:8000/${item.activity.image}`}
-                  />
-                }
-              >
-                <Card.Meta
-                  title={
-                    <Title level={4} style={{ color: "white" }}>
-                      {item.activity.name}
-                    </Title>
-                  }
-                  description={
-                    <>
-                      <Paragraph level={4} style={{ color: "white" }}>
-                        {item.activity.description}
-                      </Paragraph>
-                      <Paragraph level={4} style={{ color: "white" }}>
-                        <ClockCircleFilled style={{ marginRight: "10px" }} />{" "}
-                        Inicio: {item.start_date_time.slice(0, 10)} <br />
-                        <ClockCircleFilled
-                          style={{ marginRight: "10px" }}
-                        />{" "}
-                        Finalizar: {item.finish_date_time.slice(0, 10)}
-                      </Paragraph>
-                    </>
-                  }
-                />
-                <Button
-                  icon={<PlusCircleFilled />}
-                  style={{
-                    float: "right",
-                    color:
-                      new Date(item.finish_date_time) < new Date() && "grey",
-                  }}
-                  block
-                  disabled={new Date(item.finish_date_time) < new Date()}
-                >
-                  Realizar
-                </Button>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      </Col>
       <Col span={24} style={{ marginTop: "20px" }}>
         <Row
           align="middle"

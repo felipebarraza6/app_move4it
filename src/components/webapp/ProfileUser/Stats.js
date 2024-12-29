@@ -1,9 +1,13 @@
 import React, { useContext } from "react";
-import { Table } from "antd";
+import { Table, Flex } from "antd";
 import { AppContext } from "../../../App";
+import { LineChartOutlined } from "@ant-design/icons";
+import { useLocation } from "react-router-dom";
 
 const Stats = () => {
   const { state } = useContext(AppContext);
+  const location = useLocation();
+  console.log(location.pathname);
 
   var meditions = state.user.profile.corporal_meditions
     .slice()
@@ -14,7 +18,10 @@ const Stats = () => {
       size="small"
       bordered
       title={() => (
-        <h3 style={{ marginLeft: "10px" }}>Mediciones Corporales</h3>
+        <Flex gap="small">
+          <LineChartOutlined />
+          <strong>Mediciones Corporales</strong>
+        </Flex>
       )}
       columns={[
         {
@@ -28,6 +35,7 @@ const Stats = () => {
         { name: "height", title: "Altura(mt)", dataIndex: "height" },
       ]}
       dataSource={meditions}
+      pagination={location.pathname === "/" ? false : true}
     />
   );
 };
