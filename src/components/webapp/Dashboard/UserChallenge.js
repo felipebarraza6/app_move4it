@@ -31,7 +31,6 @@ const UserChallenge = () => {
       render: (state) => (
         <Flex vertical align="top">
           <strong>{state.activity.name}</strong>
-          <Paragraph>{state.activity.description}</Paragraph>
         </Flex>
       ),
     },
@@ -43,6 +42,7 @@ const UserChallenge = () => {
     {
       title: "Inicia",
       width: 100,
+      align: "center",
       render: (state) => (
         <Tag color="green-inverse"> {formatDate(state.start_date_time)}</Tag>
       ),
@@ -50,12 +50,26 @@ const UserChallenge = () => {
     {
       title: "Finaliza",
       width: 100,
+
+      align: "center",
       render: (state) => (
         <Tag color="geekblue-inverse">{formatDate(state.finish_date_time)}</Tag>
       ),
     },
     {
+      title: "Estado",
       width: 100,
+      render: (state) => {
+        if (state.is_complete) {
+          return "completado";
+        } else if (!state.is_load) {
+          return "sin realizar";
+        }
+      },
+    },
+    {
+      width: 100,
+      align: "center",
       render: (state) => (
         <Button
           shape="round"
@@ -84,7 +98,7 @@ const UserChallenge = () => {
         size="small"
         dataSource={challengers}
         bordered={true}
-        pagination={{ simple: true, pageSize: 2 }}
+        pagination={{ simple: true, pageSize: 3 }}
         columns={columns}
       />
     </Card>
