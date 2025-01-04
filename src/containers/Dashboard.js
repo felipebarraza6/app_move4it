@@ -11,7 +11,7 @@ import UserChallenge from "../components/webapp/Dashboard/UserChallenge";
 import { Link } from "react-router-dom";
 import UserActivity from "../components/webapp/Dashboard/UserActivity";
 
-const { Title, Paragraph } = Typography;
+const { Title } = Typography;
 
 const Dashboard = () => {
   const { state, dispatch } = useContext(AppContext);
