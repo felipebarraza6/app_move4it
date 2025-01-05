@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Menu } from "antd";
+import { Button, Flex } from "antd";
 import {
   SnippetsOutlined,
   LogoutOutlined,
@@ -43,22 +43,30 @@ const MenuNav = () => {
   ];
 
   return (
-    <Menu
-      onClick={onChangeOption}
-      style={styles.menu}
-      theme="dark"
-      mode="inline"
-      items={items}
-    />
-  );
-};
+    <Flex gap="large">
+      <Button
+        icon={<UserOutlined />}
+        type="primary"
+        onClick={() => navigate("/profile_user")}
+      >
+        {state.user.username}
+      </Button>
 
-const styles = {
-  menu: {
-    width: window.innerWidth > 900 ? "500px" : "200px",
-    display: "flex",
-    justifyContent: "flex-end",
-  },
+      <Button icon={<SnippetsOutlined />} onClick={() => navigate("/blog")}>
+        Blog
+      </Button>
+
+      <Button
+        icon={<LogoutOutlined />}
+        onClick={() => {
+          dispatch({ type: "LOGOUT" });
+          navigate("/");
+        }}
+      >
+        Salir
+      </Button>
+    </Flex>
+  );
 };
 
 export default MenuNav;

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, Card, Tooltip, Drawer } from "antd";
-import { EyeFilled } from "@ant-design/icons";
+import { Row, Col, Card, Tooltip, Drawer, Button, Flex } from "antd";
+import { EyeFilled, PaperClipOutlined } from "@ant-design/icons";
 import { endpoints } from "../config/endpoints";
+import { useNavigate } from "react-router-dom";
 
 const Blog = ({ type }) => {
   const [visible, setVisible] = useState(false); // initialize state for Drawer visibility
   const [blogSingle, setBlogSingle] = useState(null);
   const [blogs, setBlogs] = useState([]);
+  const navigate = useNavigate();
 
   const showDrawer = (blog) => {
     setBlogSingle({ ...blog });
@@ -16,21 +18,36 @@ const Blog = ({ type }) => {
   const onClose = () => {
     setVisible(false);
   };
-const getBlogs = async () => {
-      const request = await endpoints.blog.list(type).then((x) => {
-        setBlogs(x.results);
-      });
-    };
-
+  const getBlogs = async () => {
+    const request = await endpoints.blog.list(type).then((x) => {
+      setBlogs(x.results);
+    });
+    return request;
+  };
 
   useEffect(() => {
-        getBlogs();
+    getBlogs();
   }, []);
 
-
   return (
-    <div>
-      <Row justify={"space-around"}>
+    <Card
+      title={type ? type.toUpperCase() : "Noticias"}
+      style={{
+        marginTop: "20px",
+        background:
+          "radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(0,21,32,0.5438550420168067) 100%)",
+      }}
+      extra={
+        <Button
+          icon={<PaperClipOutlined />}
+          type="primary"
+          onClick={() => navigate("/blog")}
+        >
+          Blog
+        </Button>
+      }
+    >
+      <Flex justify={"start"} gap="large">
         {blogs.map((blog, index) => (
           <Col key={index}>
             <Card
@@ -63,7 +80,7 @@ const getBlogs = async () => {
             </Card>
           </Col>
         ))}
-      </Row>
+      </Flex>
       <Drawer
         title={blogSingle && blogSingle.title}
         placement="right"
@@ -88,7 +105,7 @@ const getBlogs = async () => {
         <p>{blogSingle && blogSingle.description4}</p>
         <p>{blogSingle && blogSingle.description5}</p>
       </Drawer>
-    </div>
+    </Card>
   );
 };
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout, Row, Col, Card, Button } from "antd";
+import { Layout, Row, Col, Card, Button, Flex, Affix } from "antd";
 
 import logo from "../assets/img/logo.png";
 import { Route, Routes, Link, useLocation } from "react-router-dom";
@@ -34,16 +34,18 @@ const Home = () => {
 
   return (
     <Layout>
-      <Header style={styles.header}>
-        <div>
-          <img src={logo} alt="logo" style={styles.logo} />
-        </div>
-        <MenuNav />
-      </Header>
+      <Affix>
+        <Header>
+          <Flex justify="space-between" align="center">
+            <img src={logo} alt="logo" style={styles.logo} />
+            <MenuNav />
+          </Flex>
+        </Header>
+      </Affix>
       <Content style={styles.content}>
         <Row>
           {window.innerWidth > 900 ? (
-            <Col span={3}>
+            <Col span={4}>
               <NavBar />
             </Col>
           ) : (
@@ -117,7 +119,7 @@ const Home = () => {
           )}
 
           <Col
-            span={window.innerWidth > 900 ? 20 : 24}
+            span={window.innerWidth > 900 ? 19 : 24}
             offset={window.innerWidth > 900 && 1}
           >
             <Card>
@@ -150,15 +152,8 @@ const styles = {
   content: {
     padding: "25px",
   },
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    height: "100%",
-    padding: "0 24px",
-  },
   logo: {
-    width: "100px",
+    width: "70px",
   },
 };
 

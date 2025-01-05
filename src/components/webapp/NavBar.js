@@ -49,7 +49,7 @@ const NavBar = () => {
     getItem("Empresa", "enterprise", <TrophyOutlined />),
   ];
   return (
-    <Affix offsetTop={10}>
+    <Affix offsetTop={90}>
       <div>
         {window.innerWidth > 900 ? (
           <Menu
