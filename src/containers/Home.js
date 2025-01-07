@@ -43,9 +43,9 @@ const Home = () => {
         </Header>
       </Affix>
       <Content style={styles.content}>
-        <Row>
+        <Row justify={"space-between"}>
           {window.innerWidth > 900 ? (
-            <Col span={4}>
+            <Col span={3}>
               <NavBar />
             </Col>
           ) : (
@@ -119,7 +119,7 @@ const Home = () => {
           )}
 
           <Col
-            span={window.innerWidth > 900 ? 19 : 24}
+            span={window.innerWidth > 900 ? 20 : 24}
             offset={window.innerWidth > 900 && 1}
           >
             <Card>
@@ -141,9 +141,6 @@ const Home = () => {
           </Col>
         </Row>
       </Content>
-      <Layout>
-        <Sider style={{ background: "#fff", padding: 0 }}></Sider>
-      </Layout>
     </Layout>
   );
 };
