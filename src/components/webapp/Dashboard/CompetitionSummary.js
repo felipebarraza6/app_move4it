@@ -12,26 +12,15 @@ const CompetitionSummary = () => {
   const { state } = useContext(AppContext);
 
   const teamPoints = () => {
-    const participants = state.user.team.participants;
-    const totalPoints = participants.reduce(
-      (total, user) => total + user.points,
-      0
-    );
-    return totalPoints;
+    return 0;
   };
 
   const Ranking = () => {
-    var myRanking =
-      state.user.profile.groups
-        .sort((a, b) => b.points - a.points)
-        .findIndex((item) => item.id === state.user.team.id) + 1;
-
-    return myRanking;
+    return 0;
   };
 
   const SuffixRanking = () => {
-    var count_teams = state.user.profile.groups.length;
-    return <span style={styles.span}>/{count_teams} equipos</span>;
+    return 0;
   };
 
   return (

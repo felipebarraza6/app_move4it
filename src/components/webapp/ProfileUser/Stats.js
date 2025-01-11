@@ -34,7 +34,6 @@ const Stats = () => {
     <Table
       size="small"
       bordered
-      
       title={() => (
         <Flex gap="small" justify="space-between">
           <Flex gap="small">
@@ -45,6 +44,7 @@ const Stats = () => {
             size="small"
             type="dashed"
             onClick={() => navigate("profile_user")}
+            disabled={location.pathname === "/profile_user"}
           >
             {state.user.profile.corporal_meditions.length} mediciones
           </Button>

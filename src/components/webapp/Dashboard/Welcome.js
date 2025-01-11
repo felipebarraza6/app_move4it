@@ -6,7 +6,12 @@ const Welcome = () => {
   const { state } = useContext(AppContext);
 
   return (
-    <Flex justify="space-between" align="top" style={{ marginBottom: "20px" }}>
+    <Flex
+      justify="space-between"
+      align="top"
+      style={{ marginBottom: "20px" }}
+      gap={"small"}
+    >
       <Card hoverable style={styles.card}>
         <Flex gap="small" vertical>
           <div>
@@ -16,19 +21,6 @@ const Welcome = () => {
         </Flex>
       </Card>
       <Stats />
-      <Card hoverable style={styles.card}>
-        <Flex gap="small" vertical align="center">
-          <div>Tu puntaje</div>
-          <div>
-            <Badge
-              count={"pts"}
-              color="blue"
-              style={styles.badge}
-              children={<Avatar>{state.user.points}</Avatar>}
-            />
-          </div>
-        </Flex>
-      </Card>
     </Flex>
   );
 };
@@ -42,7 +34,7 @@ const styles = {
       "linear-gradient(124deg, rgba(255,255,255,1) 0%, rgba(165,171,173,1) 100%",
     fontSize: "20px",
     fontWeight: "bold",
-    border:'1px solid white',
+    border: "1px solid white",
     height: "100%",
   },
   badge: {},
