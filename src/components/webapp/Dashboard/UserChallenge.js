@@ -1,9 +1,8 @@
 import React, { useContext } from "react";
-import { Card, Button, Flex, Table, Typography, Tag } from "antd";
+import { Card, Button, Flex, Table, Tag } from "antd";
 import { AppContext } from "../../../App";
 
 import { OrderedListOutlined, CloudUploadOutlined } from "@ant-design/icons";
-const { Paragraph } = Typography;
 
 const UserChallenge = () => {
   const { state } = useContext(AppContext);

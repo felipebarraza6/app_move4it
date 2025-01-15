@@ -31,10 +31,9 @@ const CompetitionSummary = () => {
         </Flex>
       }
       style={styles.card}
-      hoverable
       size="small"
     >
-      <Flex gap="large" vertical>
+      <Flex gap="large">
         <Statistic
           title={state.user.team.enterprise.name}
           value={state.user.team.name}
@@ -65,7 +64,6 @@ const styles = {
   card: {
     background:
       "linear-gradient(124deg, rgba(255,255,255,1) 0%, rgba(165,171,173,1) 100%",
-    border: "1px solid white",
   },
 };
 

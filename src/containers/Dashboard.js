@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Typography, Row, Col, Button, Table, Descriptions } from "antd";
+import { Typography, Row, Col, Flex } from "antd";
 import { CircularProgressbar } from "react-circular-progressbar";
 import { ArrowRightOutlined } from "@ant-design/icons";
 import Welcome from "../components/webapp/Dashboard/Welcome";
@@ -19,20 +19,14 @@ const Dashboard = () => {
   useEffect(() => {}, []);
 
   return (
-    <Row justify={"space-between"} align={"top"}>
-      <Col span={15}>
+    <Flex vertical>
+      <Flex gap="small" justify="space-between">
         <Welcome />
-      </Col>
-      <Col span={6}>
         <CompetitionSummary />
-      </Col>
-      <Col span={18}></Col>
-      <Col span={24}></Col>
+      </Flex>
 
-      <Col span={24}>
-        <Blog type="novedades" />
-      </Col>
-    </Row>
+      <Blog type="novedades" />
+    </Flex>
   );
 };
 

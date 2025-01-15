@@ -1,4 +1,7 @@
-import React from'react';
+import React from "react";
 
+const UserTesting = () => {
+  return <>User Testing</>;
+};
 
-const UserTesting =
+export default UserTesting;
