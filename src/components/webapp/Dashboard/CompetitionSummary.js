@@ -5,52 +5,62 @@ import {
   FieldNumberOutlined,
   FlagOutlined,
   TeamOutlined,
-  TrophyOutlined,
+  TrophyFilled,
 } from "@ant-design/icons";
 
 const CompetitionSummary = () => {
   const { state } = useContext(AppContext);
 
-  const teamPoints = () => {
-    return 0;
-  };
+  const name_competition =
+    state.user.enterprise_competition_overflow.last_competence.name.toUpperCase();
 
-  const Ranking = () => {
-    return 0;
-  };
+  const team_player =
+    state.user.enterprise_competition_overflow.last_competence.stats.teams
+      .length;
 
-  const SuffixRanking = () => {
-    return 0;
-  };
+  const name_team =
+    state.user.enterprise_competition_overflow.last_competence.stats.my_team
+      .name;
+
+  const points =
+    state.user.enterprise_competition_overflow.last_competence.stats.my_team
+      .points;
+
+  const ranking =
+    state.user.enterprise_competition_overflow.last_competence.stats.my_team
+      .position;
 
   return (
     <Card
       title={
         <Flex gap="small">
-          <TrophyOutlined /> Resumen competencía
+          <TrophyFilled style={styles.iconThrophy} /> Competencía "
+          {name_competition}"
         </Flex>
       }
       style={styles.card}
       size="small"
     >
-      <Flex gap="large">
+      <Flex gap="large" justify="space-between">
         <Statistic
-          title={state.user.team.enterprise.name}
-          value={state.user.team.name}
+          title={"Equipo"}
+          valueStyle={styles.valueStyle}
+          value={name_team}
           prefix={<TeamOutlined />}
         />
         <Statistic
-          title="Puntaje Equipo"
-          value={teamPoints()}
-          suffix="pts."
+          title="Puntos"
+          valueStyle={styles.valueStyle}
+          value={points}
           prefix={<FlagOutlined />}
         />
 
         <Statistic
           title="Ranking"
-          value={Ranking()}
+          valueStyle={styles.valueStyle}
+          value={ranking}
           prefix={<FieldNumberOutlined />}
-          suffix={<SuffixRanking />}
+          suffix={`/${team_player}`}
         />
       </Flex>
     </Card>
@@ -58,12 +68,17 @@ const CompetitionSummary = () => {
 };
 
 const styles = {
-  span: {
-    fontSize: 20,
+  valueStyle: {
+    fontSize: "16px",
   },
   card: {
+    width: "350px",
     background:
       "linear-gradient(124deg, rgba(255,255,255,1) 0%, rgba(165,171,173,1) 100%",
+  },
+  iconThrophy: {
+    fontSize: "20px",
+    color: "#d4b106",
   },
 };
 

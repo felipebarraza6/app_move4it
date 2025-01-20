@@ -49,11 +49,11 @@ const MenuNav = () => {
         type="primary"
         onClick={() => navigate("/profile_user")}
       >
-        {state.user.username}
+        {window.innerWidth > 900 && state.user.username}
       </Button>
 
       <Button icon={<SnippetsOutlined />} onClick={() => navigate("/blog")}>
-        Blog
+        {window.innerWidth > 900 && "Blog"}
       </Button>
 
       <Button

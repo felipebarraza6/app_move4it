@@ -5,18 +5,20 @@ import Stats from "../ProfileUser/Stats";
 const Welcome = () => {
   const { state } = useContext(AppContext);
 
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
   return (
-    <Flex align="top" gap={"small"}>
-      <Card style={styles.card}>
-        <Flex gap="small" vertical>
-          <div>
-            Hola, {state.user.first_name} {state.user.last_name}
-          </div>
-          <div>Bienvenido a Move4it</div>
-        </Flex>
-      </Card>
-      <Stats />
-    </Flex>
+    <Card style={styles.card}>
+      <Flex gap="small" vertical>
+        <div>
+          Hola, {capitalizeFirstLetter(state.user.first_name)}{" "}
+          {capitalizeFirstLetter(state.user.last_name)}
+        </div>
+        <div>Bienvenido a Move4it</div>
+      </Flex>
+    </Card>
   );
 };
 
