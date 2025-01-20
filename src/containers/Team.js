@@ -75,12 +75,12 @@ const Team = () => {
       >
         <Card style={{ width: "100%", ...styles.card }} hoverable>
           <Title level={2} style={{ color: "white" }}>
-            {state.user.team.name}
+            equipo
           </Title>
           <Tag color="blue">Puntaje: -</Tag>
           <Tag color="blue">Ranking: -</Tag>
           <Tag color="geekblue-inverse" style={{ marginTop: "10px" }}>
-            {state.user.team.enterprise.name}
+            empresa
           </Tag>
         </Card>
       </Col>

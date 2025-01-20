@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Menu, Typography, Row, Col, Affix } from "antd";
 import {
   UserOutlined,
@@ -29,22 +29,12 @@ const NavBar = () => {
   const onChangeOption = (item) => {
     if (item.key === "profile_competition") {
       navigate("/profile_competition");
-      setOption("profile_competition");
     } else if (item.key === "team") {
       navigate("/team");
-      setOption("team");
     } else if (item.key === "enterprise") {
       navigate("/enterprise");
-      setOption("enterprise");
     } else if (item.key === "home") {
       navigate("/");
-      setOption("home");
-    } else if (item.key === "achievements") {
-      navigate("/achievements");
-      setOption("achievements");
-    } else if (item.key === "challenges") {
-      navigate("/challenges");
-      setOption("challenges");
     }
   };
 
@@ -54,6 +44,18 @@ const NavBar = () => {
     getItem("Equipo", "team", <TeamOutlined />),
     getItem("Competencía", "enterprise", <TrophyOutlined />),
   ];
+
+  useEffect(() => {
+    if (window.location.pathname === "/profile_competition") {
+      setOption("profile_competition");
+    } else if (window.location.pathname === "/team") {
+      setOption("team");
+    } else if (window.location.pathname === "/enterprise") {
+      setOption("enterprise");
+    } else if (window.location.pathname === "/") {
+      setOption("home");
+    }
+  }, [option, onChangeOption]);
   return (
     <div style={{ paddingLeft: "5px" }}>
       {window.innerWidth > 900 ? (

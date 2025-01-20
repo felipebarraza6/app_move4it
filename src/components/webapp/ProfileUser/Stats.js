@@ -19,14 +19,28 @@ const Stats = () => {
   const sourcePagination = () => {
     if (location.pathname === "/profile_user") {
       return true;
+    } else if (location.pathname === "/profile_competition") {
+      return false;
     } else {
       return false;
     }
   };
 
+  const navigateButton = () => {
+    if (location.pathname === "/profile_user") {
+      return navigate("profile_user");
+    } else if (location.pathname === "/") {
+      return navigate("profile_user");
+    } else {
+      return navigate("/profile_user");
+    }
+  };
+
   useEffect(() => {
-    if (location.pathname !== "/profile_user") {
+    if (location.pathname == "/") {
       setData(meditions.slice(0, 1));
+    } else if (location.pathname == "/profile_competition") {
+      setData(meditions.slice(0, 3));
     }
   }, []);
 
@@ -34,6 +48,7 @@ const Stats = () => {
     <Table
       size="small"
       bordered
+      style={{ width: "100%" }}
       title={() => (
         <Flex gap="small" justify="space-between">
           <Flex gap="small">
@@ -43,7 +58,7 @@ const Stats = () => {
           <Button
             size="small"
             type="dashed"
-            onClick={() => navigate("profile_user")}
+            onClick={navigateButton}
             disabled={location.pathname === "/profile_user"}
           >
             {state.user.profile.corporal_meditions.length} mediciones
