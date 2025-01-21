@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Flex, Card, Descriptions } from "antd";
 import { AppContext } from "../../../App";
+import { BiChart } from "react-icons/bi";
 const UserActivity = () => {
   const { state } = useContext(AppContext);
 
@@ -80,7 +81,7 @@ const UserActivity = () => {
 
   return (
     <Card title="Indicadores competencía" style={styles.card}>
-      <Flex gap={"small"} align="center">
+      <Flex gap={"small"} align="center" style={{ marginTop: "50px" }}>
         <Descriptions bordered style={{ width: "300px" }}>
           <Descriptions.Item label="Pruebas competencia " span={3}>
             {allActivities.length}
