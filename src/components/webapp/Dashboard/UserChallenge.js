@@ -1,9 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button, Flex, Table, Tag, Spin, Statistic } from "antd";
+import {
+  Card,
+  Button,
+  Flex,
+  Table,
+  Tag,
+  Spin,
+  Statistic,
+  Badge,
+  Descriptions,
+} from "antd";
 import { useLocation } from "react-router-dom";
-import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
+import {
+  ArrowLeftOutlined,
+  CalendarOutlined,
+  ArrowRightOutlined,
+} from "@ant-design/icons";
 
-import { OrderedListOutlined, CloudUploadOutlined } from "@ant-design/icons";
+import {
+  OrderedListOutlined,
+  CloudUploadOutlined,
+  CalendarFilled,
+} from "@ant-design/icons";
 
 const UserChallenge = ({ challengers, pagination }) => {
   const location = useLocation();
@@ -104,25 +122,72 @@ const UserChallenge = ({ challengers, pagination }) => {
 
     if (location.pathname === "/profile_competition") {
       return (
-        <Flex gap="small" align="center">
+        <Flex
+          gap="small"
+          align="center"
+          style={{ marginTop: "5px", marginBottom: "10px" }}
+        >
           <Button
-            icon={<ArrowLeftOutlined />}
-            shape="circle"
-            type={"primary"}
-            size="small"
-            onClick={previousInterval}
-            disabled={currentInterval === 0}
-          />
-          {challengers[currentInterval].start_date} /{" "}
-          {challengers[currentInterval].end_date}
-          <Button
-            icon={<ArrowRightOutlined />}
-            shape="circle"
-            size="small"
+            shape="round"
             type="primary"
             onClick={nextInterval}
-            disabled={currentInterval === challengers.length - 1}
-          />
+            disabled={currentInterval >= challengers.length - 1}
+          >
+            <ArrowLeftOutlined />
+            <div style={{ fontSize: "11px", marginLeft: "5px" }}>
+              {currentInterval < challengers.length - 1 ? (
+                <>
+                  {challengers[currentInterval + 1].start_date}
+                  <br />
+                  {challengers[currentInterval + 1].end_date}
+                </>
+              ) : (
+                <>
+                  YY-MM-DD
+                  <br />
+                  YY-MM-DD
+                </>
+              )}
+            </div>
+          </Button>
+          <div
+            size="small"
+            style={{
+              textAlign: "center",
+              paddingTop: "-10px",
+              backgroundColor: "white",
+              padding: "5px",
+              fontSize: "14px",
+              borderRadius: "5px",
+            }}
+          >
+            <CalendarOutlined /> {challengers[currentInterval].start_date}
+            <br />
+            <CalendarFilled /> {challengers[currentInterval].end_date}
+          </div>
+          <Button
+            shape="round"
+            type={"primary"}
+            onClick={previousInterval}
+            disabled={currentInterval === 0}
+          >
+            <div style={{ fontSize: "11px", marginRight: "5px" }}>
+              {currentInterval > 0 ? (
+                <>
+                  {challengers[currentInterval - 1].start_date}
+                  <br />
+                  {challengers[currentInterval - 1].end_date}
+                </>
+              ) : (
+                <>
+                  YY-MM-DD
+                  <br />
+                  YY-MM-DD
+                </>
+              )}
+            </div>
+            <ArrowRightOutlined />
+          </Button>
         </Flex>
       );
     } else {
@@ -155,39 +220,51 @@ const UserChallenge = ({ challengers, pagination }) => {
   return (
     <Card
       title={
-        <Flex gap="small">
+        <Flex gap="small" align="center" justify="space-between">
           <OrderedListOutlined />{" "}
           {location.pathname === "/profile_competition"
             ? "Tus pruebas en competencía"
             : "Tus pruebas"}
+          {extra()}
         </Flex>
       }
-      extra={extra()}
       style={{
         ...styles.table,
       }}
     >
       <Flex gap="large" vertical justify="space-between">
         {location.pathname === "/profile_competition" && (
-          <Card size="small">
-            <Flex gap="small" justify="space-between">
-              <Statistic value={data.length} title="Pruebas en intervalo" />
+          <Flex gap="small" justify="space-between">
+            <Card size="small" hoverable style={{ width: "100%" }}>
+              <Statistic
+                value={data.length}
+                title="Total"
+                valueStyle={{ textAlign: "center" }}
+              />
+            </Card>
+            <Card size="small" hoverable style={{ width: "100%" }}>
               <Statistic
                 value={data.filter((state) => state.is_completed).length}
-                title="Pruebas completadas"
+                title="Completadas"
+                valueStyle={{ textAlign: "center" }}
               />
-              <Statistic
-                value={data.filter((state) => state.is_load).length}
-                title="Pruebas realizadas"
-              />
-              <Statistic
-                value={data.filter((state) => !state.is_load).length}
-                title="Pruebas no realizadas"
-              />
+            </Card>
 
-              <Statistic title={"Puntos obtenidos"} value={totalPoints()} />
-            </Flex>
-          </Card>
+            <Card size="small" hoverable style={{ width: "100%" }}>
+              <Statistic
+                value={data.filter((state) => !state.is_completed).length}
+                title="No completadas"
+                valueStyle={{ textAlign: "center" }}
+              />
+            </Card>
+            <Card size="small" hoverable style={{ width: "100%" }}>
+              <Statistic
+                title={"Puntos"}
+                value={totalPoints()}
+                valueStyle={{ textAlign: "center" }}
+              />
+            </Card>
+          </Flex>
         )}
 
         <Flex vertical>

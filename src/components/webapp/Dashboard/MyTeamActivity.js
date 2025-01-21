@@ -6,14 +6,14 @@ const MyTeamActivity = ({ team_data }) => {
   const data = Object.entries(team_data.my_group).map(([email, activities]) => {
     const activityStatus = activities.reduce((acc, activity) => {
       console.log(activity);
-      if (activity.is_load) {
+      if (activity.is_completed) {
+        acc[activity.activity] = (
+          <CheckCircleFilled style={{ color: "green" }} />
+        );
+      } else if (activity.is_load) {
         acc[activity.activity] = <Spin size="small" />;
       } else {
-        acc[activity.activity] = activity.is_completed ? (
-          <CheckCircleFilled style={{ color: "green" }} />
-        ) : (
-          <CloseCircleFilled style={{ color: "red" }} />
-        );
+        acc[activity.activity] = <CloseCircleFilled style={{ color: "red" }} />;
       }
       return acc;
     }, {});

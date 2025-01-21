@@ -10,29 +10,91 @@ const UserActivity = () => {
     totalDuration: 0,
   };
 
-  console.log(state);
-  const [statsActualInvertal, setStatsPersonal] = useState(initialStateStats);
+  const activities =
+    state.user.enterprise_competition_overflow.last_competence.stats
+      .historical_data;
+
+  const allActivities = activities.reduce((acc, activity) => {
+    return acc.concat(activity.data.user.activities);
+  }, []);
+
+  const allActivitiesGroup = activities.reduce((acc, activity) => {
+    return acc.concat(activity.data.my_team.activities);
+  }, []);
+
+  console.log(allActivitiesGroup);
+
+  const groupedActivities = allActivitiesGroup.reduce((acc, activity) => {
+    const intervalId = activity.interval.id;
+    if (!acc[intervalId]) {
+      acc[intervalId] = {
+        intervalId: intervalId,
+        totalActivities: 0,
+        totalCompleted: 0,
+        totalPoints: 0,
+        participantsCount: 0,
+        participants: new Set(),
+      };
+    }
+    acc[intervalId].totalActivities += 1;
+    if (activity.is_completed) {
+      acc[intervalId].totalCompleted += 1;
+      acc[intervalId].totalPoints += activity.activity.points;
+    }
+    acc[intervalId].participants.add(activity.user.id);
+    acc[intervalId].participantsCount = acc[intervalId].participants.size;
+    return acc;
+  }, {});
+
+  Object.keys(groupedActivities).forEach((intervalId) => {
+    delete groupedActivities[intervalId].participants;
+  });
+
+  console.log(groupedActivities);
+  const averagePointsPerParticipant = Object.keys(groupedActivities).reduce(
+    (acc, intervalId) => {
+      const interval = groupedActivities[intervalId];
+      acc[intervalId] = {
+        intervalId: interval.intervalId,
+        averagePoints:
+          interval.participantsCount > 0
+            ? interval.totalPoints / interval.participantsCount
+            : 0,
+      };
+      return acc;
+    },
+    {}
+  );
+
+  console.log(averagePointsPerParticipant);
+  const totalAveragePoints = Object.values(averagePointsPerParticipant).reduce(
+    (acc, interval) => acc + interval.averagePoints,
+    0
+  );
+
+  console.log(Math.round(totalAveragePoints));
+
+  const completedActivities = allActivities.filter(
+    (activity) => activity.is_completed
+  );
 
   return (
     <Card title="Indicadores competencía" style={styles.card}>
-      <Flex justify="space-around" gap={"small"}>
-        <Descriptions bordered size="small">
-          <Descriptions.Item
-            label="Pruebas en competencia "
-            span={3}
-          ></Descriptions.Item>
-          <Descriptions.Item
-            label="Pruebas completadas"
-            span={3}
-          ></Descriptions.Item>
-          <Descriptions.Item
-            label="Puntos obtenidos"
-            span={3}
-          ></Descriptions.Item>
-          <Descriptions.Item
-            label="Minutos ejercitados"
-            span={3}
-          ></Descriptions.Item>
+      <Flex gap={"small"} align="center">
+        <Descriptions bordered style={{ width: "300px" }}>
+          <Descriptions.Item label="Pruebas competencia " span={3}>
+            {allActivities.length}
+          </Descriptions.Item>
+          <Descriptions.Item label="Pruebas completadas" span={3}>
+            {allActivities.filter((activity) => activity.is_completed).length}
+          </Descriptions.Item>
+
+          <Descriptions.Item label="Pruebas no completadas" span={3}>
+            {allActivities.filter((activity) => !activity.is_load).length}
+          </Descriptions.Item>
+          <Descriptions.Item label="Puntos obtenidos" span={3}>
+            {totalAveragePoints}{" "}
+          </Descriptions.Item>
         </Descriptions>
       </Flex>
     </Card>

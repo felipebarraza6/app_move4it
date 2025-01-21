@@ -48,7 +48,7 @@ const Stats = () => {
     <Table
       size="small"
       bordered
-      style={{ width: "100%" }}
+      style={{ width: location.pathname !== "/" && "100%" }}
       title={() => (
         <Flex gap="small" justify="space-between">
           <Flex gap="small">
