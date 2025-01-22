@@ -34,7 +34,7 @@ const Dashboard = () => {
         <MyTeamActivity
           team_data={
             state.user.enterprise_competition_overflow.last_competence.stats
-              .current_interval_data
+              .my_team
           }
         />
       </Flex>

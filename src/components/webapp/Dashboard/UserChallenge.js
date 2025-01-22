@@ -15,6 +15,7 @@ import {
   ArrowLeftOutlined,
   CalendarOutlined,
   ArrowRightOutlined,
+  PicCenterOutlined,
 } from "@ant-design/icons";
 
 import {
@@ -124,8 +125,13 @@ const UserChallenge = ({ challengers, pagination }) => {
       return (
         <Flex
           gap="small"
-          align="center"
-          style={{ marginTop: "5px", marginBottom: "10px" }}
+          align="end"
+          style={{
+            marginTop: "5px",
+            marginBottom: "10px",
+            padding: "5px",
+            borderRadius: "15px",
+          }}
         >
           <Button
             shape="round"
@@ -134,18 +140,40 @@ const UserChallenge = ({ challengers, pagination }) => {
             disabled={currentInterval >= challengers.length - 1}
           >
             <ArrowLeftOutlined />
-            <div style={{ fontSize: "11px", marginLeft: "5px" }}>
+            <div style={{ fontSize: "10px", marginLeft: "5px" }}>
               {currentInterval < challengers.length - 1 ? (
                 <>
-                  {challengers[currentInterval + 1].start_date}
+                  <CalendarOutlined />{" "}
+                  {new Date(
+                    new Date(
+                      challengers[currentInterval + 1].start_date
+                    ).setDate(
+                      new Date(
+                        challengers[currentInterval + 1].start_date
+                      ).getDate() + 1
+                    )
+                  ).toLocaleDateString("es-ES", {
+                    day: "2-digit",
+                    month: "short",
+                  })}
                   <br />
-                  {challengers[currentInterval + 1].end_date}
+                  <CalendarFilled />{" "}
+                  {new Date(
+                    new Date(challengers[currentInterval + 1].end_date).setDate(
+                      new Date(
+                        challengers[currentInterval + 1].end_date
+                      ).getDate() + 1
+                    )
+                  ).toLocaleDateString("es-ES", {
+                    day: "2-digit",
+                    month: "short",
+                  })}
                 </>
               ) : (
                 <>
-                  YY-MM-DD
+                  dd-m
                   <br />
-                  YY-MM-DD
+                  dd-m
                 </>
               )}
             </div>
@@ -153,17 +181,29 @@ const UserChallenge = ({ challengers, pagination }) => {
           <div
             size="small"
             style={{
-              textAlign: "center",
-              paddingTop: "-10px",
-              backgroundColor: "white",
-              padding: "5px",
-              fontSize: "14px",
-              borderRadius: "5px",
+              fontSize: "12px",
             }}
           >
-            <CalendarOutlined /> {challengers[currentInterval].start_date}
+            <center>
+              <CalendarOutlined style={{ textAlign: "center" }} />
+            </center>
+            {new Date(
+              new Date(challengers[currentInterval].start_date).setDate(
+                new Date(challengers[currentInterval].start_date).getDate() + 1
+              )
+            ).toLocaleDateString("es-ES", {
+              day: "2-digit",
+              month: "short",
+            })}
             <br />
-            <CalendarFilled /> {challengers[currentInterval].end_date}
+            {new Date(
+              new Date(challengers[currentInterval].end_date).setDate(
+                new Date(challengers[currentInterval].end_date).getDate() + 1
+              )
+            ).toLocaleDateString("es-ES", {
+              day: "2-digit",
+              month: "short",
+            })}
           </div>
           <Button
             shape="round"
@@ -171,18 +211,40 @@ const UserChallenge = ({ challengers, pagination }) => {
             onClick={previousInterval}
             disabled={currentInterval === 0}
           >
-            <div style={{ fontSize: "11px", marginRight: "5px" }}>
+            <div style={{ fontSize: "10px", marginRight: "5px" }}>
               {currentInterval > 0 ? (
                 <>
-                  {challengers[currentInterval - 1].start_date}
+                  {new Date(
+                    new Date(
+                      challengers[currentInterval - 1].start_date
+                    ).setDate(
+                      new Date(
+                        challengers[currentInterval - 1].start_date
+                      ).getDate() + 1
+                    )
+                  ).toLocaleDateString("es-ES", {
+                    day: "2-digit",
+                    month: "short",
+                  })}{" "}
+                  <CalendarOutlined />
                   <br />
-                  {challengers[currentInterval - 1].end_date}
+                  {new Date(
+                    new Date(challengers[currentInterval - 1].end_date).setDate(
+                      new Date(
+                        challengers[currentInterval - 1].end_date
+                      ).getDate() + 1
+                    )
+                  ).toLocaleDateString("es-ES", {
+                    day: "2-digit",
+                    month: "short",
+                  })}{" "}
+                  <CalendarFilled />
                 </>
               ) : (
                 <>
-                  YY-MM-DD
+                  dd-m
                   <br />
-                  YY-MM-DD
+                  dd-m
                 </>
               )}
             </div>
@@ -221,11 +283,13 @@ const UserChallenge = ({ challengers, pagination }) => {
     <Card
       title={
         <Flex gap="small" align="center" justify="space-between">
-          <OrderedListOutlined />{" "}
-          {location.pathname === "/profile_competition"
-            ? "Tus pruebas en competencía"
-            : "Tus pruebas"}
-          {extra()}
+          <Flex gap="small">
+            <OrderedListOutlined />{" "}
+            {location.pathname === "/profile_competition"
+              ? "Tus pruebas en competencía"
+              : "Tus pruebas"}
+          </Flex>
+          <Flex>{extra()}</Flex>
         </Flex>
       }
       style={{

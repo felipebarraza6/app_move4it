@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Typography,
   Row,
@@ -6,7 +6,7 @@ import {
   Card,
   Tag,
   Statistic,
-  Pagination,
+  Flex,
   Table,
   Button,
   Select,
@@ -20,6 +20,10 @@ import {
 } from "@ant-design/icons";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { Area } from "@ant-design/plots";
+import Ranking from "../components/webapp/Competence/Ranking";
+import AvgAllGroups from "../components/webapp/Competence/AvgAllGroups";
+import IntervalsTable from "../components/webapp/Competence/IntervalsTable";
+import { AppContext } from "../App";
 import "react-circular-progressbar/dist/styles.css";
 
 const { Title } = Typography;
@@ -67,329 +71,70 @@ const Enterpise = () => {
     { numero: 10, equipo: "Equipo10", puntos: "1" },
   ];
 
+  const { state } = useContext(AppContext);
+
   return (
     <Row justify={"space-between"} align="top">
-      <Col xs={24} xl={7} style={{ paddingRight: "10px" }}>
-        <Card
-          style={{ ...styles.card, paddingBottom: "0px", minHeight: "75vh" }}
-          hoverable
-        >
-          <Title level={3} style={{ color: "white" }}>
-            NOMBRE EMPRESA
-          </Title>
-          <Title level={4} style={{ color: "white" }}>
-            RANKING
-          </Title>
-          <Row justify={"start"}>
-            <Col span={24}>
-              <hr />
-            </Col>
-            <Col span={4}>#</Col>
-            <Col span={10}>Equipo</Col>
-            <Col span={10}>Puntos</Col>
-            <Col span={24}>
-              <hr />
-            </Col>
-            {dataSource.map((e) => (
-              <>
-                <Col span={4} style={{ marginBottom: "10px" }}>
-                  {e.star ? (
-                    <Tag color={"geekblue-inverse"}>{e.numero}</Tag>
-                  ) : (
-                    <Tag color={"geekblue"}>{e.numero}</Tag>
-                  )}
-                </Col>
-                <Col span={10}>
-                  {e.star ? (
-                    <Tag color={"geekblue-inverse"}>{e.equipo}</Tag>
-                  ) : (
-                    <Tag color={"geekblue"}>{e.equipo}</Tag>
-                  )}
-                </Col>
-                <Col span={10}>
-                  {e.star ? (
-                    <Tag color={"geekblue-inverse"}>{e.puntos}</Tag>
-                  ) : (
-                    <Tag color={"geekblue"}>{e.puntos}</Tag>
-                  )}
-                </Col>
-              </>
-            ))}
-            <Col style={{ marginTop: "10px" }}>
-              <Button
-                style={{ marginRight: "10px" }}
-                icon={<ArrowLeftOutlined />}
-                type="primary"
-              ></Button>
-            </Col>
-            <Col style={{ marginTop: "10px" }}>
-              <Button type="primary" icon={<ArrowRightOutlined />}></Button>
-            </Col>
-          </Row>
-        </Card>
-      </Col>
-      <Col xs={24} xl={17}>
-        {window.innerWidth > 900 ? (
-          <Row justify={"space-between"} align={"middle"}>
-            <Col xs={12} xl={5} style={{ paddingRight: "5px" }}>
-              <Statistic
-                value={1.7}
-                precision={2}
-                style={styles.static}
-                title={
-                  <Title
-                    style={{ color: "white", marginTop: "-5px" }}
-                    level={4}
-                  >
-                    <RiseOutlined style={{ marginRight: "5px" }} /> Estatura
-                  </Title>
-                }
-                valueStyle={styles.cardS}
-                suffix="m"
-              />
-            </Col>
-            <Col xs={12} xl={5}>
-              <Statistic
-                value={23}
-                precision={1}
-                style={styles.static}
-                title={
-                  <Title
-                    style={{ color: "white", marginTop: "-5px" }}
-                    level={4}
-                  >
-                    <FallOutlined style={{ marginRight: "5px" }} />% Grasa
-                  </Title>
-                }
-                valueStyle={styles.cardS}
-                suffix="%"
-              />
-            </Col>
-            <Col xs={12} xl={5} style={{ paddingRight: "5px" }}>
-              <Statistic
-                value={78}
-                precision={1}
-                style={styles.static}
-                title={
-                  <Title
-                    style={{ color: "white", marginTop: "-5px" }}
-                    level={4}
-                  >
-                    <RiseOutlined style={{ marginRight: "5px" }} />
-                    Peso
-                  </Title>
-                }
-                valueStyle={styles.cardS}
-                suffix="kg"
-              />
-            </Col>
-            <Col xs={12} xl={6}>
-              <center>
-                <Card style={{ ...styles.cardC, width: "100%" }} hoverable>
-                  <UserOutlined
-                    style={{
-                      color: "white",
-                      fontSize: window.innerWidth > 900 ? "100px" : "40px",
-                    }}
-                  />
-                </Card>
-              </center>
-            </Col>
-          </Row>
-        ) : (
-          <Row justify={"space-between"} align={"middle"}>
-            <Col xs={12} xl={5} style={{ paddingRight: "5px" }}>
-              <Statistic
-                value={1.7}
-                precision={2}
-                style={styles.static}
-                title={
-                  <Title
-                    style={{ color: "white", marginTop: "-5px" }}
-                    level={4}
-                  >
-                    <RiseOutlined style={{ marginRight: "5px" }} />
-                    Estatura
-                  </Title>
-                }
-                valueStyle={styles.cardS}
-                suffix="m"
-              />
-
-              <Statistic
-                value={78}
-                precision={1}
-                style={styles.static}
-                title={
-                  <Title
-                    style={{ color: "white", marginTop: "-5px" }}
-                    level={4}
-                  >
-                    <RiseOutlined style={{ marginRight: "5px" }} />
-                    Peso
-                  </Title>
-                }
-                valueStyle={styles.cardS}
-                suffix="kg"
-              />
-              <Statistic
-                value={23}
-                precision={1}
-                style={styles.static}
-                title={
-                  <Title
-                    style={{ color: "white", marginTop: "-5px" }}
-                    level={4}
-                  >
-                    <FallOutlined style={{ marginRight: "5px" }} />% Grasa
-                  </Title>
-                }
-                valueStyle={styles.cardS}
-                suffix="%"
-              />
-            </Col>
-
-            <Col xs={12} xl={6}>
-              <center>
-                <Card style={{ ...styles.cardC, width: "100%" }} hoverable>
-                  <UserOutlined
-                    style={{
-                      color: "white",
-                      fontSize: window.innerWidth > 900 ? "100px" : "70px",
-                    }}
-                  />
-                </Card>
-              </center>
-            </Col>
-          </Row>
-        )}
-
-        <Row
-          justify={"space-evenly"}
-          style={{ paddingLeft: "0px", marginTop: "-20px" }}
-        >
-          <Col span={24}>
-            <Title>Pruebas</Title>
-            <Title level={4}>
-              <Button
-                type="primary"
-                icon={<ArrowLeftOutlined />}
-                size="small"
-                style={{ marginRight: "5px" }}
-              />
-              Semana #5
-              <Button
-                type="primary"
-                icon={<ArrowRightOutlined />}
-                size="small"
-                style={{ marginLeft: "5px" }}
-              />
-            </Title>
-          </Col>
-          <Col span={24}>
-            {window.innerWidth > 900 ? (
-              <Table
-                bordered
-                pagination={false}
-                dataSource={[
-                  { nombre: "5k Trote", puntos: "x", metas: "", metodo: "App" },
-                  {
-                    nombre: "10km Bicicleta",
-                    puntos: "x",
-                    metas: "",
-                    metodo: "App",
-                  },
-                  {
-                    nombre: "1 Trekking",
-                    puntos: "x",
-                    metas: "",
-                    metodo: "Foto",
-                  },
-                  {
-                    nombre: "10.000 pasos",
-                    puntos: "",
-                    metas: "x",
-                    metodo: "App",
-                  },
-                  { nombre: "Almuerzo", puntos: "", metas: "x", metodo: "App" },
-                ]}
-                columns={[
-                  { title: "Prueba", dataIndex: "nombre" },
-                  { title: "Individual", dataIndex: "puntos" },
-                  { title: "Equipo", dataIndex: "metas" },
-                  { title: "Metodo medicion", dataIndex: "metodo" },
-                ]}
-              />
-            ) : (
-              <Table
-                bordered
-                size={"small"}
-                pagination={false}
-                dataSource={[
-                  {
-                    nombre: "5k Trote",
-                    puntos: "Individual",
-                    metas: "",
-                    metodo: "App",
-                  },
-                  {
-                    nombre: "10km Bicicleta",
-                    puntos: "Grupal",
-                    metas: "",
-                    metodo: "App",
-                  },
-                  {
-                    nombre: "1 Trekking",
-                    puntos: "Individual",
-                    metas: "",
-                    metodo: "Foto",
-                  },
-                  {
-                    nombre: "10.000 pasos",
-                    puntos: "Grupal",
-                    metas: "x",
-                    metodo: "App",
-                  },
-                  {
-                    nombre: "Almuerzo",
-                    puntos: "Grupal",
-                    metas: "x",
-                    metodo: "App",
-                  },
-                ]}
-                columns={[
-                  { title: "Prueba", dataIndex: "nombre" },
-                  { title: "Individual/Grupal", dataIndex: "puntos" },
-                  { title: "Medicion", dataIndex: "metodo" },
-                ]}
-              />
-            )}
-          </Col>
-        </Row>
+      <Col xs={24} xl={24} style={{ paddingRight: "10px" }}>
+        <Flex gap={"large"} align="top" justify="space-between" vertical>
+          <Flex style={{ width: "100%" }} gap={"large"} align="top">
+            <Flex align="top" style={{ width: "400px" }}>
+              <Ranking />
+            </Flex>
+            <Flex vertical style={{ width: "100%" }} gap="large">
+              <AvgAllGroups />
+              <IntervalsTable />
+            </Flex>
+          </Flex>
+          <Flex gap={"large"} align="top" justify="center">
+            <Table
+              bordered
+              style={{ width: window.innerWidth > 900 ? "50%" : "100%" }}
+              pagination={false}
+              dataSource={[
+                {
+                  nombre:
+                    state.user.enterprise_competition_overflow.last_competence
+                      .days_remaining_interval,
+                  puntos:
+                    state.user.enterprise_competition_overflow.last_competence
+                      .days_remaining_competence,
+                  metas: 1,
+                },
+              ]}
+              columns={[
+                {
+                  title: (
+                    <span style={{ fontSize: "12px" }}>
+                      El intervalo actual finaliza en
+                    </span>
+                  ),
+                  dataIndex: "nombre",
+                  width: "50%",
+                  render: (text) => (
+                    <span style={{ fontSize: "15px" }}>{text} Días</span>
+                  ),
+                },
+                {
+                  title: (
+                    <span style={{ fontSize: "12px" }}>
+                      La competencía finaliza en
+                    </span>
+                  ),
+                  dataIndex: "puntos",
+                  width: "50%",
+                  render: (text) => (
+                    <span style={{ fontSize: "15px" }}>{text} Días</span>
+                  ),
+                },
+              ]}
+            />
+          </Flex>
+        </Flex>
       </Col>
 
       <Col span={24}>
-        <Title level={4}>Duracion competencia</Title>
-      </Col>
-      <Col span={24}>
-        <center>
-          <Table
-            bordered
-            style={{ width: window.innerWidth > 900 ? "50%" : "100%" }}
-            pagination={false}
-            dataSource={[
-              {
-                nombre: "1 día 19 horas",
-                puntos: "60 días 15 horas",
-                metas: 1,
-              },
-            ]}
-            columns={[
-              { title: "Semanal", dataIndex: "nombre", width: "57%" },
-              { title: "Total", dataIndex: "puntos", width: "43%" },
-            ]}
-          />
-        </center>
+        <center></center>
       </Col>
     </Row>
   );
