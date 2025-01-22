@@ -1,11 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
 import { AppContext } from "../../../App";
-import { Descriptions, Button, Card, Flex } from "antd";
+import { Descriptions, Button, Card, Flex, List, Tag } from "antd";
 import {
   CalendarFilled,
   CalendarOutlined,
   ArrowLeftOutlined,
   ArrowRightOutlined,
+  UnorderedListOutlined,
 } from "@ant-design/icons";
 
 const IntervalsTable = () => {
@@ -27,50 +28,65 @@ const IntervalsTable = () => {
   useEffect(() => {
     setCurrentInterval(0);
   }, [intervals]);
-
   return (
     <Flex vertical style={{ width: "100%" }}>
       {intervals.length > 0 && (
         <Card
           key={intervals[currentInterval].interval_id}
+          title={intervals[currentInterval].name}
           style={{
             background:
-              "radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(185,189,201,1) 81%)",
+              "radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(170,184,193,1) 81%)",
           }}
         >
-          <Descriptions bordered column={1}>
+          <Descriptions bordered column={2}>
             <Descriptions.Item
               label={
                 <>
                   <CalendarOutlined style={{ marginRight: 8 }} /> Fecha inicio
                 </>
               }
+              style={{ color: "black" }}
             >
-              {intervals[currentInterval].start_date}
+              <Tag color="blue-inverse">
+                {intervals[currentInterval].start_date}
+              </Tag>
             </Descriptions.Item>
             <Descriptions.Item
+              style={{ color: "black" }}
               label={
                 <>
                   <CalendarFilled style={{ marginRight: 8 }} /> Fecha termino
                 </>
               }
             >
-              {intervals[currentInterval].end_date}
+              <Tag color="red-inverse">
+                {intervals[currentInterval].end_date}
+              </Tag>
             </Descriptions.Item>
             <Descriptions.Item
+              style={{ color: "black" }}
               label={
                 <>
-                  <CalendarFilled style={{ marginRight: 8 }} /> Pruebas
+                  <UnorderedListOutlined style={{ marginRight: 8 }} /> Pruebas
                 </>
               }
             >
-              <ul>
-                {intervals[currentInterval].activities.map(
-                  (activity, index) => (
-                    <li key={index}>{activity}</li>
-                  )
+              <List
+                dataSource={intervals[currentInterval].activities}
+                grid={{ gutter: 16, column: 3 }}
+                renderItem={(r) => (
+                  <List.Item>
+                    <Card
+                      hoverable
+                      style={{ background: "white" }}
+                      size="small"
+                    >
+                      {r}
+                    </Card>
+                  </List.Item>
                 )}
-              </ul>
+              />
             </Descriptions.Item>
           </Descriptions>
         </Card>

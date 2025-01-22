@@ -43,12 +43,8 @@ const MenuNav = () => {
   ];
 
   return (
-    <Flex gap="large">
-      <Button
-        icon={<UserOutlined />}
-        type="primary"
-        onClick={() => navigate("/profile_user")}
-      >
+    <Flex gap="large" align="center" style={{ marginTop: "15px" }}>
+      <Button icon={<UserOutlined />} onClick={() => navigate("/profile_user")}>
         {window.innerWidth > 900 && state.user.username}
       </Button>
 

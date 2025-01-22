@@ -1,157 +1,93 @@
 import React, { useState, useEffect } from "react";
-import { Menu, Typography, Row, Col, Affix } from "antd";
+import { Typography, Flex } from "antd";
+import { useNavigate, useLocation } from "react-router-dom";
+import logo from "../../assets/img/logo_dark.png";
 import {
   UserOutlined,
   TrophyOutlined,
   TeamOutlined,
   HomeFilled,
-  FireOutlined,
-  StarFilled,
   HomeOutlined,
 } from "@ant-design/icons";
-import { useNavigate, Link } from "react-router-dom";
 
-const { Title, Paragraph } = Typography;
+const { Text } = Typography;
 
 const NavBar = () => {
-  const [option, setOption] = useState("home");
+  const [option, setOption] = useState(null);
   const navigate = useNavigate();
-  function getItem(label, key, icon, children, type) {
-    return {
-      key,
-      icon,
-      label,
-      children,
-      type,
-    };
-  }
+  const location = useLocation();
 
   const onChangeOption = (item) => {
-    if (item.key === "profile_competition") {
-      navigate("/profile_competition");
-    } else if (item.key === "team") {
-      navigate("/team");
-    } else if (item.key === "enterprise") {
-      navigate("/enterprise");
-    } else if (item.key === "home") {
-      navigate("/");
-    }
+    navigate(`/${item.key}`);
   };
 
   const items = [
-    getItem("Inicio", "home", <HomeFilled />),
-    getItem("Perfil", "profile_competition", <UserOutlined />),
-    getItem("Equipo", "team", <TeamOutlined />),
-    getItem("Competencía", "enterprise", <TrophyOutlined />),
+    { label: "Inicio", key: "", icon: <HomeFilled /> },
+    {
+      label: " Perfil",
+      key: "profile_competition",
+      icon: <UserOutlined />,
+    },
+    { label: "Equipo", key: "team", icon: <TeamOutlined /> },
+    { label: "Competencia", key: "enterprise", icon: <TrophyOutlined /> },
   ];
 
   useEffect(() => {
-    if (window.location.pathname === "/profile_competition") {
-      setOption("profile_competition");
-    } else if (window.location.pathname === "/team") {
-      setOption("team");
-    } else if (window.location.pathname === "/enterprise") {
-      setOption("enterprise");
-    } else if (window.location.pathname === "/") {
-      setOption("home");
+    const currentPath = location.pathname;
+    const selectedItem = items.find((item) => `/${item.key}` === currentPath);
+    if (selectedItem) {
+      setOption(selectedItem.key);
+    } else {
+      setOption(null);
     }
-  }, [option, onChangeOption]);
+  }, [location.pathname]);
+
   return (
-    <div style={{ paddingLeft: "5px" }}>
+    <Flex vertical gap="large" align="top">
+      <img src={logo} alt="logo" style={styles.logo} />
       {window.innerWidth > 900 ? (
-        <Menu
-          onClick={onChangeOption}
-          style={styles.menu}
-          theme={"dark"}
-          selectedKeys={[option]}
-          items={items}
-        ></Menu>
-      ) : (
-        <Row
-          justify={"center"}
-          align={"middle"}
+        <Flex
+          direction="row"
+          vertical
+          justify="center"
           style={{
-            borderRadius: "20px",
-            padding: "10px",
-            border: "2px solid #001529",
+            color: "white",
+            paddingLeft: "10px",
+            paddingRight: "10px",
+            borderRadius: "10px",
+            backdropFilter: "blur(10px)", // Add backdrop filter for blurring effect
           }}
         >
-          <Col span={24}>
-            <Link to="/">
-              <HomeOutlined
-                style={{
-                  fontSize: "25px",
-                  marginBottom: "20px",
-                  color: "rgb(0, 21, 41)",
-                }}
-              />
-            </Link>
-          </Col>
-          <Col span={24}>
-            <Link to="/profile_competition">
-              <UserOutlined
-                style={{
-                  fontSize: "25px",
-                  marginBottom: "20px",
-                  color: "rgb(0, 21, 41)",
-                }}
-              />
-            </Link>
-          </Col>
-          <Col span={24}>
-            <Link to="/team">
-              <TeamOutlined
-                style={{
-                  fontSize: "25px",
-                  marginBottom: "20px",
-                  color: "rgb(0, 21, 41)",
-                }}
-              />
-            </Link>
-          </Col>
-          <Col span={24}>
-            <Link to="/enterprise">
-              <TrophyOutlined
-                style={{
-                  fontSize: "25px",
-                  marginBottom: "20px",
-                  color: "rgb(0, 21, 41)",
-                }}
-              />
-            </Link>
-          </Col>
-          <Col span={24}>
-            <Link to="/challenges">
-              <FireOutlined
-                style={{
-                  fontSize: "25px",
-                  marginBottom: "20px",
-                  color: "rgb(0, 21, 41)",
-                }}
-              />
-            </Link>
-          </Col>
-          <Col span={24}>
-            <Link to="/achievements">
-              <StarFilled
-                style={{
-                  fontSize: "25px",
-                  marginBottom: "20px",
-                  color: "rgb(0, 21, 41)",
-                }}
-              />
-            </Link>
-          </Col>
-        </Row>
-      )}
-    </div>
+          {items.map((item) => (
+            <Flex
+              key={item.key}
+              align="center"
+              onClick={() => onChangeOption(item)}
+              style={{
+                padding: "10px",
+                cursor: "pointer",
+                borderRadius: "10px",
+                backgroundColor:
+                  option === item.key ? "#595959" : "transparent",
+              }}
+            >
+              {item.icon}
+              <span style={{ marginLeft: "10px" }}>{item.label}</span>
+            </Flex>
+          ))}
+        </Flex>
+      ) : null}
+    </Flex>
   );
 };
 
 const styles = {
-  menu: {
-    borderRadius: "10px",
-    height: "90vh",
+  logo: {
+    width: "70%",
+    height: "auto",
+    marginBottom: "20px",
+    marginLeft: "auto",
+    marginRight: "auto",
   },
 };
 

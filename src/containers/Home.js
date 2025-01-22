@@ -26,37 +26,52 @@ const Home = () => {
 
   return (
     <Layout>
-      <Affix>
-        <Header>
-          <Flex justify="space-between" align="center">
-            <img src={logo} alt="logo" style={styles.logo} />
-            <MenuNav />
-          </Flex>
-        </Header>
-      </Affix>
-      <Content style={styles.content}>
-        <Flex gap={"small"}>
-          <Affix offsetTop={70}>
-            <NavBar />
-          </Affix>
-          <Card style={{ minHeight: "85vh", width: "100%" }}>
-            <Routes>
-              <Route path="*" element={<Dashboard />} />
-              <Route path="/profile_user" element={<ProfileUser />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route
-                path="/profile_competition"
-                element={<ProfileUserCompetition />}
-              />
-              <Route path="/team" element={<Team />} />
-              <Route path="/enterprise" element={<Enterprise />} />
-              <Route path="/challenges" element={<Challenges />} />
+      <Sider
+        width={200}
+        style={{
+          background:
+            "linear-gradient(169deg, rgba(15,120,142,1) 0%, rgba(77,180,202,0.2217480742296919) 99%, rgba(60,87,93,1) 100%)",
+        }}
+      >
+        <Affix offsetTop={70}>
+          <NavBar />
+        </Affix>
+      </Sider>
 
-              <Route path="/achievements" element={<Achievements />} />
-            </Routes>
-          </Card>
-        </Flex>
-      </Content>
+      <Layout>
+        <Affix>
+          <Header
+            style={{
+              background:
+                "linear-gradient(169deg, rgba(15,120,142,1) 0%, rgba(122,160,168,1) 35%, rgba(60,87,93,1) 100%)",
+            }}
+          >
+            <Flex justify="end" align="center">
+              <MenuNav />
+            </Flex>
+          </Header>
+        </Affix>
+        <Content style={styles.content}>
+          <Flex gap={"small"}>
+            <Card style={{ minHeight: "85vh", width: "100%" }}>
+              <Routes>
+                <Route path="*" element={<Dashboard />} />
+                <Route path="/profile_user" element={<ProfileUser />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route
+                  path="/profile_competition"
+                  element={<ProfileUserCompetition />}
+                />
+                <Route path="/team" element={<Team />} />
+                <Route path="/enterprise" element={<Enterprise />} />
+                <Route path="/challenges" element={<Challenges />} />
+
+                <Route path="/achievements" element={<Achievements />} />
+              </Routes>
+            </Card>
+          </Flex>
+        </Content>
+      </Layout>
     </Layout>
   );
 };

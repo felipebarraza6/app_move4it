@@ -11,6 +11,7 @@ import {
   Descriptions,
 } from "antd";
 import { useLocation } from "react-router-dom";
+import AddAnswerUser from "./AddAnswerUser";
 import {
   ArrowLeftOutlined,
   CalendarOutlined,
@@ -88,14 +89,10 @@ const UserChallenge = ({ challengers, pagination }) => {
       hidden: location.pathname === "/profile_competition",
       align: "center",
       render: (state) => (
-        <Button
-          shape="round"
-          type="primary"
-          icon={<CloudUploadOutlined />}
-          disabled={disabledActionButton(state.finish_date_time, state)}
-        >
-          Realizar
-        </Button>
+        <AddAnswerUser
+          state={state}
+          disabledAction={disabledActionButton(state.finish_date_time, state)}
+        />
       ),
     },
   ];

@@ -20,7 +20,11 @@ const FormData = () => {
   useEffect(() => {}, []);
 
   return (
-    <Form initialValues={state.user} onFinish={onFinish} form={form}>
+    <Form
+      initialValues={{ ...state.user, ...state.user.profile }}
+      onFinish={onFinish}
+      form={form}
+    >
       <Item name="identification_number">
         <Input placeholder="Rut" />
       </Item>
