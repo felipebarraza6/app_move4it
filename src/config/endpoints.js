@@ -82,6 +82,17 @@ const retrieve_register_activity = async (interval, interval_exact, user) => {
   return request.data;
 };
 
+// Nuevas funciones para competence
+const list_competences = async () => {
+  const request = await methods.GET("competences/");
+  return request.data;
+};
+
+const retrieve_competence = async (id) => {
+  const request = await methods.GET(`competences/${id}/`);
+  return request.data;
+};
+
 export const endpoints = {
   auth: {
     login: login,
@@ -98,5 +109,10 @@ export const endpoints = {
   },
   blog: {
     list: blog_list,
+  },
+  // Añadir endpoints para competence
+  competence: {
+    list: list_competences,
+    retrieve: retrieve_competence,
   },
 };
