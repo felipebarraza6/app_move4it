@@ -23,7 +23,6 @@ const Ranking = () => {
 
   return (
     <Card
-      hoverable
       size="small"
       style={{
         background:

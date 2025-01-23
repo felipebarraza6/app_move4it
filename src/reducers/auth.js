@@ -6,7 +6,7 @@ export const authReducer = (state, action) => {
         JSON.stringify(action.payload.access_token)
       );
       localStorage.setItem("user", JSON.stringify(action.payload.user));
-      
+
       return {
         ...state,
         isAuth: true,
@@ -24,10 +24,9 @@ export const authReducer = (state, action) => {
       };
 
     case "SET_ACTIVITIES":
-
       return {
         ...state,
-        dashboard: { ...state.dashboard,activities: action.payload },
+        dashboard: { ...state.dashboard, activities: action.payload },
       };
 
     case "SET_STATS_USER":
@@ -36,7 +35,6 @@ export const authReducer = (state, action) => {
         dashboard: { ...state.dashboard, stats_personal: action.payload },
       };
 
-    
     case "LOGOUT":
       localStorage.clear();
       return {
@@ -45,7 +43,9 @@ export const authReducer = (state, action) => {
         token: null,
         user: null,
       };
+      console.log(state);
 
+    // ... other actions
     default:
       return state;
   }

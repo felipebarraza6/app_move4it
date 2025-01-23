@@ -30,13 +30,13 @@ const App = () => {
           },
         });
       });
-return rq
+      return rq;
     }
   };
 
   useEffect(() => {
     updateApp();
-  }, []);
+  }, [state.update]);
 
   const router = createBrowserRouter([
     {
@@ -64,10 +64,12 @@ return rq
         {
           path: "achievements",
         },
+        {
+          path: "global_viewer",
+        },
       ],
     },
   ]);
-
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>

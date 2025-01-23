@@ -37,12 +37,64 @@ const blog_list = async (type) => {
   return request.data;
 };
 
+const list_register_activities = async () => {
+  const request = await methods.GET("register-activities/");
+  return request.data;
+};
+
+const create_register_activity = async (data) => {
+  const request = await methods.POST("register-activities/", data);
+  return request.data;
+};
+
+const update_register_activity = async (data) => {
+  console.log(data);
+  const formData = new FormData();
+  for (const key in data) {
+    if (key === "file" && data[key][0] && data[key][0].originFileObj) {
+      formData.append(key, data[key][0].originFileObj);
+    } else {
+      formData.append(key, data[key]);
+    }
+  }
+
+  const request = await methods.PATCH(
+    `register-activities/${data.id}/`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+  return request.data;
+};
+
+const delete_register_activity = async (data) => {
+  const request = await methods.DELETE(`register-activities/${data.id}/`);
+  return request.data;
+};
+
+const retrieve_register_activity = async (interval, interval_exact, user) => {
+  const request = await methods.GET(
+    `register-activities/?interval=${interval}&interval_exact=${interval_exact}&user=${user}`
+  );
+  return request.data;
+};
+
 export const endpoints = {
   auth: {
     login: login,
     profile: get_profile,
     update_user: update_user,
     reset_password: update_password,
+  },
+  register_activities: {
+    list: list_register_activities,
+    create: create_register_activity,
+    update: update_register_activity,
+    delete: delete_register_activity,
+    retrieve: retrieve_register_activity,
   },
   blog: {
     list: blog_list,

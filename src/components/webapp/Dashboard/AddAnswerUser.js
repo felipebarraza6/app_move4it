@@ -3,7 +3,11 @@ import {
   CloudUploadOutlined,
   PlusCircleOutlined,
   FilterFilled,
+  DeleteOutlined,
   SendOutlined,
+  PlusOutlined,
+  CheckCircleFilled,
+  CheckSquareFilled,
 } from "@ant-design/icons";
 import {
   Button,
@@ -16,10 +20,11 @@ import {
   Card,
 } from "antd";
 import { AppContext } from "../../../App";
+import { endpoints } from "../../../config/endpoints";
 const { Paragraph } = Typography;
 
-const AddAnswerUser = ({ state, disabledAction }) => {
-  const { state: AppState } = useContext(AppContext);
+const AddAnswerUser = ({ state, disabledAction, updateActivityState }) => {
+  const { state: AppState, dispatch } = useContext(AppContext);
   const myteam =
     AppState.user.enterprise_competition_overflow.last_competence.stats
       .current_interval_data.my_group;
@@ -27,6 +32,7 @@ const AddAnswerUser = ({ state, disabledAction }) => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
   const [expanded, setExpanded] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const showModal = () => {
     setVisible(true);
@@ -39,37 +45,67 @@ const AddAnswerUser = ({ state, disabledAction }) => {
   const handleOk = () => {
     form
       .validateFields()
-      .then((values) => {
-        console.log("Received values of form: ", values);
-        // Aquí puedes manejar el envío de los datos del formulario
+      .then(async () => {
+        setLoading(true);
+
+        form.resetFields();
         setVisible(false);
+        setLoading(false);
       })
       .catch((info) => {
         console.log("Validate Failed:", info);
+        setLoading(false);
       });
   };
 
   return (
     <div>
-      <Button type="primary" onClick={showModal} icon={<CloudUploadOutlined />}>
-        Realizar
-      </Button>
+      {!state.is_completed ? (
+        <Button
+          type="primary"
+          onClick={showModal}
+          icon={
+            state.is_completed ? (
+              <CheckCircleFilled />
+            ) : !state.is_load ? (
+              <PlusOutlined />
+            ) : (
+              <CheckCircleFilled />
+            )
+          }
+          disabled={state.is_completed || state.is_load}
+        >
+          {state.is_load && !state.is_completed
+            ? "Envíado..."
+            : state.is_completed
+            ? "Completado"
+            : "Realizar"}
+        </Button>
+      ) : (
+        <Flex gap="small" justify="center">
+          {" "}
+          <CheckSquareFilled style={{ color: "green" }} />
+          Completado
+        </Flex>
+      )}
       <Modal
         title={`Cargar evidencía para actividad "${state.activity.name}"`}
         visible={visible}
         onOk={handleOk}
+        width={700}
         onCancel={handleCancel}
         extra={state.activity.points}
         footer={[
-          <Button key="back" onClick={handleCancel}>
+          <Button key="back" onClick={handleCancel} disabled={loading}>
             Cancelar
           </Button>,
           <Button
             key="submit"
             type="primary"
             onClick={handleOk}
-            disabled={disabledAction}
             icon={<SendOutlined />}
+            loading={loading}
+            disabled={loading}
           >
             Enviar
           </Button>,
@@ -82,7 +118,7 @@ const AddAnswerUser = ({ state, disabledAction }) => {
           style={{ marginTop: "20px" }}
         >
           {state.activity.description && (
-            <div style={{ position: "relative" }}>
+            <div style={{ position: "relative", width: "100%" }}>
               <Paragraph
                 style={{ textAlign: "justify", marginBottom: "0px" }}
                 ellipsis={
@@ -135,28 +171,96 @@ const AddAnswerUser = ({ state, disabledAction }) => {
           </Flex>
         </Flex>
 
-        <Form form={form} layout="vertical">
-          <Form.Item name="description" label="Nota">
-            <Input.TextArea col={5} autoSize={{ minRows: 2, maxRows: 6 }} />
-          </Form.Item>
-
-          <Form.Item
-            name="upload"
-            label="Cargar evidencía"
-            valuePropName="fileList"
-            getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList)}
-            rules={[
-              { required: true, message: "La evidencía es obligatoria!" },
-            ]}
+        <Form form={form} layout="vertical" style={{ marginTop: "20px" }}>
+          <Flex
+            gap={"large"}
+            justify="center"
+            style={{ width: "100%" }}
+            align="center"
           >
-            <Upload
-              name="evidence"
-              listType="picture"
-              beforeUpload={() => false}
-            >
-              <Button icon={<CloudUploadOutlined />}>Subir archivo</Button>
-            </Upload>
-          </Form.Item>
+            <Flex>
+              <Form.Item
+                name="description"
+                label="Nota"
+                style={{ width: "100%" }}
+              >
+                <Input.TextArea
+                  rows={7}
+                  placeholder="Describe tu nota..."
+                  style={{ width: "350px" }}
+                />
+              </Form.Item>
+            </Flex>
+            <Flex>
+              <Form.Item
+                name="upload"
+                valuePropName="fileList"
+                getValueFromEvent={(e) =>
+                  Array.isArray(e) ? e : e && e.fileList
+                }
+                rules={[
+                  { required: true, message: "La evidencía es obligatoria!" },
+                ]}
+                style={{ width: "100%" }}
+              >
+                <Upload
+                  name="evidence"
+                  listType="text"
+                  itemRender={(originNode, file, currFileList, actions) => (
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <CloudUploadOutlined style={{ marginRight: "8px" }} />
+                      <span style={{ flex: 1 }}>
+                        {file.name.length > 20
+                          ? `${file.name.slice(0, 20)}...`
+                          : file.name}
+                      </span>
+                      <Button
+                        type="link"
+                        onClick={() => actions.remove(file)}
+                        icon={<DeleteOutlined />}
+                      />
+                    </div>
+                  )}
+                  beforeUpload={() => false}
+                  maxCount={1}
+                  showUploadList={{
+                    showPreviewIcon: true,
+                    showRemoveIcon: true,
+                    showDownloadIcon: false,
+                    showPreviewIcon: true,
+                    onChange(info) {
+                      if (info.file.status !== "uploading") {
+                        console.log(info.file, info.fileList);
+                      }
+                    },
+                    onPreview(file) {
+                      window.open(file.url || file.thumbUrl);
+                    },
+                    onRemove(file) {
+                      console.log("Removed file:", file);
+                    },
+                  }}
+                >
+                  <Card
+                    hoverable
+                    size="small"
+                    style={{ width: "100%", backgroundColor: "#f0f0f0" }}
+                  >
+                    <Button
+                      size="large"
+                      style={{ color: "#1890ff" }}
+                      type="link"
+                    >
+                      <Flex gap="small" align="center">
+                        <CloudUploadOutlined />
+                        <span>Adjunta tu evidencía</span>
+                      </Flex>
+                    </Button>
+                  </Card>
+                </Upload>
+              </Form.Item>
+            </Flex>
+          </Flex>
         </Form>
       </Modal>
     </div>

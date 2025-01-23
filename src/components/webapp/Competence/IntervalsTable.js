@@ -36,7 +36,7 @@ const IntervalsTable = () => {
           title={intervals[currentInterval].name}
           style={{
             background:
-              "radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(170,184,193,1) 81%)",
+              "linear-gradient(39deg, rgba(62,65,73,1) 0%, rgba(134,184,200,1) 100%)",
           }}
         >
           <Descriptions bordered column={2}>
@@ -46,14 +46,14 @@ const IntervalsTable = () => {
                   <CalendarOutlined style={{ marginRight: 8 }} /> Fecha inicio
                 </>
               }
-              style={{ color: "black" }}
+              style={{ color: "white" }}
             >
               <Tag color="blue-inverse">
                 {intervals[currentInterval].start_date}
               </Tag>
             </Descriptions.Item>
             <Descriptions.Item
-              style={{ color: "black" }}
+              style={{ color: "white" }}
               label={
                 <>
                   <CalendarFilled style={{ marginRight: 8 }} /> Fecha termino
@@ -65,7 +65,7 @@ const IntervalsTable = () => {
               </Tag>
             </Descriptions.Item>
             <Descriptions.Item
-              style={{ color: "black" }}
+              style={{ color: "white" }}
               label={
                 <>
                   <UnorderedListOutlined style={{ marginRight: 8 }} /> Pruebas

@@ -17,6 +17,7 @@ import Enterprise from "./Enterprise";
 import Dashboard from "./Dashboard";
 import Challenges from "./Challenges";
 import Achievements from "./Achievements";
+import GlobalViewer from "./GlobalViewer";
 
 const { Content, Header, Sider } = Layout;
 
@@ -29,11 +30,14 @@ const Home = () => {
       <Sider
         width={200}
         style={{
+          zIndex: 1000,
+
           background:
-            "linear-gradient(169deg, rgba(15,120,142,1) 0%, rgba(77,180,202,0.2217480742296919) 99%, rgba(60,87,93,1) 100%)",
+            "linear-gradient(100deg, rgba(15,120,142,1) 100%, rgba(77,180,202,0.2217480742296919) 100%, rgba(60,87,93,1) 100%)",
+          boxShadow: "1px 0px 20px 1px black",
         }}
       >
-        <Affix offsetTop={70}>
+        <Affix>
           <NavBar />
         </Affix>
       </Sider>
@@ -67,6 +71,7 @@ const Home = () => {
                 <Route path="/challenges" element={<Challenges />} />
 
                 <Route path="/achievements" element={<Achievements />} />
+                <Route path="/global_viewer" element={<GlobalViewer />} />
               </Routes>
             </Card>
           </Flex>
@@ -79,7 +84,7 @@ const Home = () => {
 const styles = {
   content: {
     minHeight: "90vh",
-    marginTop: "10px",
+    margin: "10px",
   },
   logo: {
     width: "70px",
