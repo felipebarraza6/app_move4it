@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { AppContext } from "../../../App";
-import { Descriptions, Button, Card, Flex, List, Tag } from "antd";
+import { Descriptions, Button, Card, Flex, List, Tag, Typography } from "antd";
 import {
   CalendarFilled,
   CalendarOutlined,
@@ -8,6 +8,8 @@ import {
   ArrowRightOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons";
+
+const { Text } = Typography;
 
 const IntervalsTable = () => {
   const { state } = useContext(AppContext);
@@ -39,7 +41,15 @@ const IntervalsTable = () => {
               "linear-gradient(39deg, rgba(62,65,73,1) 0%, rgba(134,184,200,1) 100%)",
           }}
         >
-          <Descriptions bordered column={2}>
+          <Descriptions
+            bordered
+            column={2}
+            title={
+              <Text style={{ fontSize: "20px", color: "white" }}>
+                Pruebas por intervalo
+              </Text>
+            }
+          >
             <Descriptions.Item
               label={
                 <>
