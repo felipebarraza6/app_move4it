@@ -21,7 +21,7 @@ const GlobalViewer = () => {
   const getCompetitions = async () => {
     try {
       const data = await endpoints.competence.list();
-      setCompetitions(data.results);
+      setCompetitions(data.results.reverse());
     } catch (err) {
       setError(err.message);
       console.error(err);
@@ -52,11 +52,19 @@ const GlobalViewer = () => {
 
   const handleIntervalChange = (value) => {
     console.log(value);
-    console.log(
-      `selected ${intervals.find((interval) => interval.interval_id === value)}`
+    const selectedInterval = intervals.find(
+      (interval) => interval.interval_id === value
     );
-    //setRankingList({ ...rankingList, interval: value });
+    console.log("Selected Interval:", selectedInterval.ranking);
+    setRankingList(selectedInterval.ranking);
   };
+
+  var data = rankingList.map((team, index) => ({
+    key: index,
+    position: index + 1,
+    name: team.team_name,
+    points: team.points,
+  }));
 
   return (
     <Flex justify="space-between" align="top" gap={"small"}>
