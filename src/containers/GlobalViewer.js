@@ -5,6 +5,7 @@ import {
   TrophyFilled,
   FilterOutlined,
   RightCircleFilled,
+  CalendarOutlined,
 } from "@ant-design/icons";
 
 const { Text, Title } = Typography;
@@ -15,6 +16,7 @@ const GlobalViewer = () => {
   const [selectedCompetition, setSelectedCompetition] = useState(null);
   const [rankingList, setRankingList] = useState([]);
   const [error, setError] = useState(null);
+  const [intervals, setIntervals] = useState(null);
 
   const getCompetitions = async () => {
     try {
@@ -29,32 +31,32 @@ const GlobalViewer = () => {
   const getRanking = async (competitionId) => {
     try {
       const data = await endpoints.competence.retrieve(competitionId);
-      if (data && data.ranking && data.ranking.teams) {
-        setRankingList(data.ranking.teams);
-      } else {
-        throw new Error("Invalid ranking data");
-      }
+      setRankingList(data.ranking.teams);
+      console.log(data.ranking.intervals);
+      setIntervals(data.ranking.intervals);
     } catch (err) {
       setError(err.message);
       console.error(err);
     }
   };
+
   const handleCompetitionChange = (value) => {
     setSelectedCompetition(value);
+
     getRanking(value);
   };
+
   useEffect(() => {
     getCompetitions();
   }, []);
 
-  console.log(selectedCompetition);
-
-  const data = rankingList.map((team, index) => ({
-    key: index,
-    position: index + 1,
-    name: team.team_name,
-    points: team.points,
-  }));
+  const handleIntervalChange = (value) => {
+    console.log(value);
+    console.log(
+      `selected ${intervals.find((interval) => interval.interval_id === value)}`
+    );
+    //setRankingList({ ...rankingList, interval: value });
+  };
 
   return (
     <Flex justify="space-between" align="top" gap={"small"}>
@@ -120,6 +122,23 @@ const GlobalViewer = () => {
                     </>
                   ))}{" "}
                 </Select>
+                {intervals && (
+                  <Select
+                    suffixIcon={<CalendarOutlined />}
+                    onSelect={handleIntervalChange}
+                    placeholder="Selecciona un intervalo"
+                  >
+                    {intervals.map((interval) => (
+                      <Option
+                        key={interval.interval_id}
+                        value={interval.interval_id}
+                      >
+                        <CalendarOutlined /> {interval.start_date.slice(5, 10)}{" "}
+                        / {interval.end_date.slice(5, 10)}
+                      </Option>
+                    ))}
+                  </Select>
+                )}
                 <Flex
                   justify="start"
                   align="top"
