@@ -18,6 +18,11 @@ const GlobalViewer = () => {
   const [error, setError] = useState(null);
   const [intervals, setIntervals] = useState(null);
   const [selectedInterval, setSelectedInterval] = useState(null);
+  const [dataOverflow, setDataOverflow] = useState(null);
+
+  useEffect(() => {
+    getCompetitions();
+  }, []);
 
   const getCompetitions = async () => {
     try {
@@ -36,6 +41,13 @@ const GlobalViewer = () => {
         setRankingList(
           data.ranking.intervals[data.ranking.intervals.length - 1].ranking
         );
+        if (data.ranking.intervals.length > 0) {
+          setSelectedInterval(
+            data.ranking.intervals[data.ranking.intervals.length - 1]
+              .interval_id
+          );
+        }
+        setDataOverflow(data);
       }
       console.log(data.ranking.teams);
       setIntervals(data.ranking.intervals.reverse());
@@ -47,13 +59,8 @@ const GlobalViewer = () => {
 
   const handleCompetitionChange = (value) => {
     setSelectedCompetition(value);
-
     getRanking(value);
   };
-
-  useEffect(() => {
-    getCompetitions();
-  }, []);
 
   const handleIntervalChange = (value) => {
     console.log(value);
@@ -65,60 +72,45 @@ const GlobalViewer = () => {
     setSelectedInterval(value);
   };
 
-  var data = rankingList.map((team, index) => ({
+  const data = rankingList.map((team, index) => ({
     key: index,
     position: index + 1,
     name: team.team_name,
     points: team.points,
   }));
 
+  console.log(dataOverflow);
+
   return (
-    <Flex justify="space-between" align="top" gap={"small"}>
+    <Flex justify="center" align="top" gap={"small"}>
       <Flex justify="center" style={{ marginBottom: 20 }} gap="small">
-        <Card
-          size="small"
-          style={{
-            width: "350px",
-            background:
-              "linear-gradient(0deg, rgba(15,120,142,0.056481967787114895) 0%, rgba(197,239,255,0.1153054971988795) 35%, rgba(60,87,93,1) 100%)",
-          }}
-        >
+        <Card size="small" style={cardStyle}>
           <List
             size="small"
             dataSource={data}
             renderItem={(item) => (
-              <List.Item style={{ textAlign: "left" }}>
-                <Flex
-                  justify="space-between"
-                  align="top"
-                  style={{ width: "100%" }}
-                >
-                  <Flex align="top" style={{ width: "100%" }}>
-                    <Tag color="#d4b106">{item.position}</Tag>
-                    <Tag color="#0f788e" style={{ width: "100px" }}>
-                      {item.name}
-                    </Tag>
-                    <Tag
-                      color="#cfb224"
-                      style={{ width: "50px", textAlign: "center" }}
-                    >
-                      {item.points}
-                    </Tag>
+              <Flex justify="">
+                <List.Item style={{ textAlign: "left" }}>
+                  <Flex
+                    justify="space-between"
+                    align="top"
+                    style={{ width: "100%" }}
+                  >
+                    <Flex align="top" style={{ width: "100%" }}>
+                      <Tag color="#d4b106">{item.position}</Tag>
+                      <Tag color="#0f788e" style={{ width: "100px" }}>
+                        {item.name}
+                      </Tag>
+                      <Tag
+                        color="#cfb224"
+                        style={{ width: "50px", textAlign: "center" }}
+                      >
+                        {item.points}
+                      </Tag>
+                    </Flex>
                   </Flex>
-                  <Flex align="top">
-                    <Button
-                      size="small"
-                      style={{
-                        backgroundColor: "#0f788e",
-                        color: "white",
-                        borderColor: "#0f788e",
-                      }}
-                    >
-                      ACTIVIDAD{<RightCircleFilled />}
-                    </Button>
-                  </Flex>
-                </Flex>
-              </List.Item>
+                </List.Item>
+              </Flex>
             )}
             header={
               <Flex vertical gap={"large"}>
@@ -127,13 +119,7 @@ const GlobalViewer = () => {
                   style={{ width: "100%" }}
                   suffixIcon={<FilterOutlined />}
                   placeholder="Selecciona una competencia"
-                  dropdownStyle={{
-                    backgroundColor: "#0f788e",
-                    color: "white",
-                  }}
-                  dropdownRender={(menu) => (
-                    <div style={{ color: "white" }}>{menu}</div>
-                  )}
+                  dropdownRender={(menu) => <div>{menu}</div>}
                 >
                   {competitions.map((competition) => (
                     <Option
@@ -143,7 +129,7 @@ const GlobalViewer = () => {
                         color:
                           selectedCompetition === competition.id
                             ? "black"
-                            : "white",
+                            : "black",
                       }}
                     >
                       {competition.name}
@@ -152,14 +138,16 @@ const GlobalViewer = () => {
                 </Select>
                 {intervals && (
                   <Select
-                    suffixIcon={<CalendarOutlined />}
-                    dropdownAlign={{ offset: ["101%", "-50%"] }}
+                    suffixIcon={
+                      <CalendarOutlined style={{ marginRight: "10px" }} />
+                    }
+                    dropdownAlign={{ offset: ["200px", "0%"] }}
                     onSelect={handleIntervalChange}
-                    defaultValue={intervals[0].interval_id}
+                    defaultValue={
+                      intervals.length > 0 && intervals[0].interval_id
+                    }
                     placeholder="Selecciona un intervalo"
-                    dropdownStyle={{
-                      backgroundColor: "#0f788e",
-                    }}
+                    dropdownStyle={dropdownStyle}
                     dropdownRender={(menu) => (
                       <div style={{ color: "white" }}>{menu}</div>
                     )}
@@ -168,10 +156,7 @@ const GlobalViewer = () => {
                       <Option
                         key={interval.interval_id}
                         value={interval.interval_id}
-                        style={{
-                          backgroundColor: "#0f788e",
-                          color: "white",
-                        }}
+                        style={{ backgroundColor: "#0f788e", color: "white" }}
                       >
                         <CalendarOutlined
                           style={{
@@ -183,12 +168,11 @@ const GlobalViewer = () => {
                               selectedInterval == interval.interval_id
                                 ? "white"
                                 : "#0f788e",
-
                             borderRadius: "50%",
                             padding: "5px",
+                            marginRight: "5px",
                           }}
-                        />{" "}
-                        {interval.start_date.slice(5, 10)} /{" "}
+                        />
                         {interval.end_date.slice(5, 10)}
                       </Option>
                     ))}
@@ -233,34 +217,33 @@ const GlobalViewer = () => {
           {error && <p style={{ color: "red" }}>Error: {error}</p>}
         </Card>
       </Flex>
-      <Flex align="top">
-        <Card
-          size="small"
-          style={{
-            width: "650px",
-            background:
-              "linear-gradient(50deg, rgba(15,120,142,0.056481967787114895) 0%, rgba(197,239,255,0.1153054971988795) 35%, rgba(60,87,93,1) 100%)",
-          }}
-        >
-          {selectedCompetition ? (
-            <>
-              <Title level={3} style={{ color: "grey" }}>
-                Detalle de actividad en competencía
-              </Title>
-              <Table />
-            </>
-          ) : (
-            <>
-              <Title level={3} style={{ color: "grey" }}>
-                Ranking competencía
-              </Title>
-              <Table />
-            </>
-          )}
-        </Card>
-      </Flex>
+      <Flex align="top"></Flex>
     </Flex>
   );
+};
+
+const cardStyle = {
+  width: "450px",
+  background:
+    "linear-gradient(0deg, rgba(15,120,142,0.056481967787114895) 0%, rgba(197,239,255,0.1153054971988795) 35%, rgba(60,87,93,1) 100%)",
+};
+
+const buttonStyle = {
+  backgroundColor: "#0f788e",
+  color: "white",
+  borderColor: "#0f788e",
+};
+
+const dropdownStyle = {
+  backgroundColor: "#0f788e",
+  color: "white",
+  width: "10%",
+};
+
+const detailCardStyle = {
+  width: "650px",
+  background:
+    "linear-gradient(50deg, rgba(15,120,142,0.056481967787114895) 0%, rgba(197,239,255,0.1153054971988795) 35%, rgba(60,87,93,1) 100%)",
 };
 
 export default GlobalViewer;
