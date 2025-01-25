@@ -17,6 +17,7 @@ const GlobalViewer = () => {
   const [rankingList, setRankingList] = useState([]);
   const [error, setError] = useState(null);
   const [intervals, setIntervals] = useState(null);
+  const [selectedInterval, setSelectedInterval] = useState(null);
 
   const getCompetitions = async () => {
     try {
@@ -31,9 +32,13 @@ const GlobalViewer = () => {
   const getRanking = async (competitionId) => {
     try {
       const data = await endpoints.competence.retrieve(competitionId);
-      setRankingList(data.ranking.teams);
-      console.log(data.ranking.intervals);
-      setIntervals(data.ranking.intervals);
+      if (data.ranking.intervals.length > 0) {
+        setRankingList(
+          data.ranking.intervals[data.ranking.intervals.length - 1].ranking
+        );
+      }
+      console.log(data.ranking.teams);
+      setIntervals(data.ranking.intervals.reverse());
     } catch (err) {
       setError(err.message);
       console.error(err);
@@ -57,6 +62,7 @@ const GlobalViewer = () => {
     );
     console.log("Selected Interval:", selectedInterval.ranking);
     setRankingList(selectedInterval.ranking);
+    setSelectedInterval(value);
   };
 
   var data = rankingList.map((team, index) => ({
@@ -121,28 +127,69 @@ const GlobalViewer = () => {
                   style={{ width: "100%" }}
                   suffixIcon={<FilterOutlined />}
                   placeholder="Selecciona una competencia"
+                  dropdownStyle={{
+                    backgroundColor: "#0f788e",
+                    color: "white",
+                  }}
+                  dropdownRender={(menu) => (
+                    <div style={{ color: "white" }}>{menu}</div>
+                  )}
                 >
                   {competitions.map((competition) => (
-                    <>
-                      <Option key={competition.id} value={competition.id}>
-                        {competition.name}
-                      </Option>
-                    </>
-                  ))}{" "}
+                    <Option
+                      key={competition.id}
+                      value={competition.id}
+                      style={{
+                        color:
+                          selectedCompetition === competition.id
+                            ? "black"
+                            : "white",
+                      }}
+                    >
+                      {competition.name}
+                    </Option>
+                  ))}
                 </Select>
                 {intervals && (
                   <Select
                     suffixIcon={<CalendarOutlined />}
+                    dropdownAlign={{ offset: ["101%", "-50%"] }}
                     onSelect={handleIntervalChange}
+                    defaultValue={intervals[0].interval_id}
                     placeholder="Selecciona un intervalo"
+                    dropdownStyle={{
+                      backgroundColor: "#0f788e",
+                    }}
+                    dropdownRender={(menu) => (
+                      <div style={{ color: "white" }}>{menu}</div>
+                    )}
                   >
-                    {intervals.map((interval) => (
+                    {intervals.map((interval, index) => (
                       <Option
                         key={interval.interval_id}
                         value={interval.interval_id}
+                        style={{
+                          backgroundColor: "#0f788e",
+                          color: "white",
+                        }}
                       >
-                        <CalendarOutlined /> {interval.start_date.slice(5, 10)}{" "}
-                        / {interval.end_date.slice(5, 10)}
+                        <CalendarOutlined
+                          style={{
+                            color:
+                              selectedInterval == interval.interval_id
+                                ? "black"
+                                : "white",
+                            backgroundColor:
+                              selectedInterval == interval.interval_id
+                                ? "white"
+                                : "#0f788e",
+
+                            borderRadius: "50%",
+                            padding: "5px",
+                          }}
+                        />{" "}
+                        {interval.start_date.slice(5, 10)} /{" "}
+                        {interval.end_date.slice(5, 10)}
                       </Option>
                     ))}
                   </Select>
