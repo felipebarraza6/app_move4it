@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { Form, Input, Button, notification } from "antd";
+import { Form, Input, Button, notification, Card } from "antd";
 import { AppContext } from "../../../App";
 import { ArrowUpOutlined } from "@ant-design/icons";
 import { endpoints } from "../../../config/endpoints";
@@ -20,35 +20,45 @@ const FormData = () => {
   useEffect(() => {}, []);
 
   return (
-    <Form
-      initialValues={{ ...state.user, ...state.user.profile }}
-      onFinish={onFinish}
-      form={form}
+    <Card
+      style={{
+        background:
+          "linear-gradient(169deg, rgba(15,120,142,1) 0%, rgba(77,180,202,0.2217480742296919) 99%, rgba(60,87,93,1) 100%)",
+        marginBottom: "20px",
+      }}
     >
-      <Item name="identification_number">
-        <Input placeholder="Rut" />
-      </Item>
-      <Item name="first_name">
-        <Input placeholder="Nombre" />
-      </Item>
-      <Item name="last_name">
-        <Input placeholder="Apellido" />
-      </Item>
-      <Item name="date_of_birth">
-        <Input placeholder="Fecha de nacimiento" />
-      </Item>
-      <Item name="phone_number">
-        <Input placeholder="Teléfono" />
-      </Item>
-      <Item name="bio">
-        <Input.TextArea rows={4} placeholder="Descripción" />
-      </Item>
-      <Item>
-        <Button type="primary" icon={<ArrowUpOutlined />} htmlType="submit">
-          Actualizar
-        </Button>
-      </Item>
-    </Form>
+      <Form
+        initialValues={{ ...state.user, ...state.user.profile }}
+        onFinish={onFinish}
+        form={form}
+      >
+        <Item name="identification_number">
+          <Input placeholder="Rut" addonBefore={"RUT"} />
+        </Item>
+        <Item name="first_name">
+          <Input placeholder="Nombre" addonBefore={"Nombre"} />
+        </Item>
+        <Item name="last_name">
+          <Input placeholder="Apellido" addonBefore={"Apellido"} />
+        </Item>
+        <Item name="date_of_birth" addonBefore={"Fecha de nacimiento"}>
+          <Input
+            placeholder="Fecha de nacimiento"
+            disabled
+            addonBefore={"Fecha de nacimiento"}
+          />
+        </Item>
+        <Item name="phone_number">
+          <Input placeholder="Teléfono" addonBefore={"Telefono"} />
+        </Item>
+
+        <Item>
+          <Button type="primary" icon={<ArrowUpOutlined />} htmlType="submit">
+            Actualizar
+          </Button>
+        </Item>
+      </Form>
+    </Card>
   );
 };
 
