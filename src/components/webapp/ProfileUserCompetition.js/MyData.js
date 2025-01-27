@@ -11,7 +11,7 @@ const MyData = () => {
     .charAt(0)
     .toUpperCase()}${state.user.last_name.slice(1)}`;
 
-  const date_of_birth = state.user.profile.date_of_birth || "1990-01-01";
+  const date_of_birth = state.user.date_of_birth || "1990-01-01";
   const date = new Date();
   const age = date.getFullYear() - parseInt(date_of_birth.split("-")[0]);
 

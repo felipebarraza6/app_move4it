@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { endpoints } from "../config/endpoints";
-import { List, Typography, Tag, Card, Select, Flex, Button, Table } from "antd";
+import {
+  List,
+  Typography,
+  Tag,
+  Card,
+  Select,
+  Flex,
+  Button,
+  Table,
+  Segmented,
+} from "antd";
 import {
   TrophyFilled,
   FilterOutlined,
   RightCircleFilled,
   CalendarOutlined,
+  CalendarFilled,
 } from "@ant-design/icons";
 
 const { Text, Title } = Typography;
@@ -50,7 +61,8 @@ const GlobalViewer = () => {
         setDataOverflow(data);
       }
       console.log(data.ranking.teams);
-      setIntervals(data.ranking.intervals.reverse());
+      const reversedIntervals = data.ranking.intervals.reverse();
+      setIntervals(reversedIntervals);
     } catch (err) {
       setError(err.message);
       console.error(err);
@@ -78,8 +90,6 @@ const GlobalViewer = () => {
     name: team.team_name,
     points: team.points,
   }));
-
-  console.log(dataOverflow);
 
   return (
     <Flex justify="center" align="top" gap={"small"}>
@@ -137,46 +147,34 @@ const GlobalViewer = () => {
                   ))}
                 </Select>
                 {intervals && (
-                  <Select
-                    suffixIcon={
-                      <CalendarOutlined style={{ marginRight: "10px" }} />
-                    }
-                    dropdownAlign={{ offset: ["200px", "0%"] }}
-                    onSelect={handleIntervalChange}
-                    defaultValue={
-                      intervals.length > 0 && intervals[0].interval_id
-                    }
-                    placeholder="Selecciona un intervalo"
-                    dropdownStyle={dropdownStyle}
-                    dropdownRender={(menu) => (
-                      <div style={{ color: "white" }}>{menu}</div>
-                    )}
-                  >
-                    {intervals.map((interval, index) => (
-                      <Option
-                        key={interval.interval_id}
-                        value={interval.interval_id}
-                        style={{ backgroundColor: "#0f788e", color: "white" }}
-                      >
-                        <CalendarOutlined
-                          style={{
-                            color:
-                              selectedInterval == interval.interval_id
-                                ? "black"
-                                : "white",
-                            backgroundColor:
-                              selectedInterval == interval.interval_id
-                                ? "white"
-                                : "#0f788e",
-                            borderRadius: "50%",
-                            padding: "5px",
-                            marginRight: "5px",
-                          }}
-                        />
-                        {interval.end_date.slice(5, 10)}
-                      </Option>
-                    ))}
-                  </Select>
+                  <Flex>
+                    <Segmented
+                      vertical
+                      block
+                      options={intervals.map((interval) => ({
+                        label: (
+                          <span>
+                            {interval.interval_id === selectedInterval ? (
+                              <CalendarFilled
+                                style={{ marginRight: "5px", color: "#d4b106" }}
+                              />
+                            ) : (
+                              <CalendarOutlined
+                                style={{ marginRight: "5px" }}
+                              />
+                            )}
+
+                            {interval.end_date}
+                          </span>
+                        ),
+
+                        value: interval.interval_id,
+                      }))}
+                      onChange={handleIntervalChange}
+                      value={selectedInterval}
+                      style={{ width: "100%", marginTop: "10px" }}
+                    />
+                  </Flex>
                 )}
                 <Flex
                   justify="start"

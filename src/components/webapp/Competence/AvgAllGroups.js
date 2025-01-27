@@ -1,13 +1,16 @@
 import React, { useContext } from "react";
 import { Statistic, Card, Flex, Typography } from "antd";
 import { AppContext } from "../../../App";
-const { Text, Title } = Typography;
+const { Text } = Typography;
 const AvgAllGroups = () => {
   const { state } = useContext(AppContext);
 
-  const avg =
+  const firstAvg =
     state.user.enterprise_competition_overflow.last_competence
-      .avg_corporal_meditions;
+      .avg_corporal_meditions.first_avg;
+  const lastAvg =
+    state.user.enterprise_competition_overflow.last_competence
+      .avg_corporal_meditions.last_avg;
 
   return (
     <Flex
@@ -31,27 +34,78 @@ const AvgAllGroups = () => {
             </Text>
           }
         >
-          <Flex gap="large" justify="center" align="center">
-            <Card hoverable style={{ ...styles.static, textAlign: "center" }}>
+          <Flex
+            gap="large"
+            justify="center"
+            align="center"
+            style={{ marginBottom: "10px" }}
+          >
+            <Card
+              size="small"
+              hoverable
+              style={{ ...styles.static, textAlign: "center" }}
+            >
               <Statistic
-                title="Estatura "
-                value={avg.height.toFixed(2)}
+                title="Estatura Inicial" // eslint-disable-line
+                value={firstAvg.height.toFixed(2)}
                 suffix={<Text>mt</Text>}
               />
             </Card>
-            <Card hoverable style={{ ...styles.static, textAlign: "center" }}>
+            <Card
+              size="small"
+              hoverable
+              style={{ ...styles.static, textAlign: "center" }}
+            >
               <Statistic
-                title="Grasa "
-                value={avg.fat.toFixed(1)}
+                title="Grasa Inicial" // eslint-disable-line
+                value={firstAvg.fat.toFixed(1)}
                 suffix={<Text>%</Text>}
               />
             </Card>
-            <Card hoverable style={{ ...styles.static, textAlign: "center" }}>
+            <Card
+              size="small"
+              hoverable
+              style={{ ...styles.static, textAlign: "center" }}
+            >
               <Statistic
-                title="Peso "
+                title="Peso Inicial" // eslint-disable-line
+                value={firstAvg.weight.toFixed(1)}
                 suffix={<Text>Kg</Text>}
-                kg
-                value={avg.weight.toFixed(1)}
+              />
+            </Card>
+          </Flex>
+          <Flex gap="large" justify="center" align="center">
+            <Card
+              size="small"
+              hoverable
+              style={{ ...styles.static, textAlign: "center" }}
+            >
+              <Statistic
+                title="Estatura Actual" // eslint-disable-line
+                value={lastAvg.height.toFixed(2)}
+                suffix={<Text>mt</Text>}
+              />
+            </Card>
+            <Card
+              size="small"
+              hoverable
+              style={{ ...styles.static, textAlign: "center" }}
+            >
+              <Statistic
+                title="Grasa Actual" // eslint-disable-line
+                value={lastAvg.fat.toFixed(1)}
+                suffix={<Text>%</Text>}
+              />
+            </Card>
+            <Card
+              size="small"
+              hoverable
+              style={{ ...styles.static, textAlign: "center" }}
+            >
+              <Statistic
+                title="Peso Actual"
+                value={lastAvg.weight.toFixed(1)}
+                suffix={<Text>Kg</Text>}
               />
             </Card>
           </Flex>
