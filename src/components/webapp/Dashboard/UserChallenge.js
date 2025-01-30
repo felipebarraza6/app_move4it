@@ -24,22 +24,21 @@ import {
   PlusCircleOutlined,
   FilterFilled,
   DeleteOutlined,
-  BorderOutlined,
   SendOutlined,
   PlusOutlined,
   CheckCircleFilled,
   CheckSquareFilled,
 } from "@ant-design/icons";
 import { AppContext } from "../../../App";
-import { endpoints } from "../../../config/endpoints";
+
 const { Paragraph } = Typography;
 
-const AddAnswerUser = ({ state, disabledAction, updateActivityState }) => {
-  const { state: AppState, dispatch } = useContext(AppContext);
-  const myteam =
+const AddAnswerUser = ({ state, updateActivityState }) => {
+  const { state: AppState } = useContext(AppContext);
+  const myTeam =
     AppState.user.enterprise_competition_overflow.last_competence.stats
       .current_interval_data.my_group;
-  const quantity_participants = Object.keys(myteam).length;
+  const quantity_participants = Object.keys(myTeam).length;
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
   const [expanded, setExpanded] = useState(false);
@@ -64,14 +63,11 @@ const AddAnswerUser = ({ state, disabledAction, updateActivityState }) => {
           is_load: true,
         };
         console.log("Received values of form: ", values);
-        const rq = await endpoints.register_activities
-          .update(values)
-          .then((res) =>
-            updateActivityState({
-              ...state,
-              is_load: true,
-            })
-          );
+
+        updateActivityState({
+          ...state,
+          is_load: true,
+        });
 
         form.resetFields();
         setVisible(false);
@@ -101,21 +97,20 @@ const AddAnswerUser = ({ state, disabledAction, updateActivityState }) => {
           disabled={state.is_completed || state.is_load}
         >
           {state.is_load && !state.is_completed
-            ? "Envíado..."
+            ? "Enviado..."
             : state.is_completed
             ? "Completado"
             : "Realizar"}
         </Button>
       ) : (
         <Flex gap="small" justify="center">
-          {" "}
           <CheckSquareFilled style={{ color: "green" }} />
           Completado
         </Flex>
       )}
       <Modal
-        title={`Cargar evidencía para actividad "${state.activity.name}"`}
-        visible={visible}
+        title={`Cargar evidencia para actividad "${state.activity.name}"`}
+        open={visible}
         onOk={handleOk}
         width={700}
         onCancel={handleCancel}
@@ -224,14 +219,14 @@ const AddAnswerUser = ({ state, disabledAction, updateActivityState }) => {
                   Array.isArray(e) ? e : e && e.fileList
                 }
                 rules={[
-                  { required: true, message: "La evidencía es obligatoria!" },
+                  { required: true, message: "La evidencia es obligatoria!" },
                 ]}
                 style={{ width: "100%" }}
               >
                 <Upload
                   name="evidence"
                   listType="text"
-                  itemRender={(originNode, file, currFileList, actions) => (
+                  itemRender={(file, actions) => (
                     <div style={{ display: "flex", alignItems: "center" }}>
                       <CloudUploadOutlined style={{ marginRight: "8px" }} />
                       <span style={{ flex: 1 }}>
@@ -277,7 +272,7 @@ const AddAnswerUser = ({ state, disabledAction, updateActivityState }) => {
                     >
                       <Flex gap="small" align="center">
                         <CloudUploadOutlined />
-                        <span>Adjunta tu evidencía</span>
+                        <span>Adjunta tu evidencia</span>
                       </Flex>
                     </Button>
                   </Card>
@@ -291,7 +286,7 @@ const AddAnswerUser = ({ state, disabledAction, updateActivityState }) => {
   );
 };
 
-const UserChallenge = ({ challengers, pagination }) => {
+const UserChallenge = ({ challengers }) => {
   const location = useLocation();
   const [data, setData] = useState([]);
   const [currentInterval, setCurrentInterval] = useState(0);
@@ -330,7 +325,7 @@ const UserChallenge = ({ challengers, pagination }) => {
       width: 100,
       align: "center",
       render: (state) => (
-        <Tag color="green-inverse"> {state.interval.start_date}</Tag>
+        <Tag color="green-inverse"> {state.interval?.start_date || "N/A"}</Tag>
       ),
     },
     {
@@ -338,7 +333,7 @@ const UserChallenge = ({ challengers, pagination }) => {
       width: 100,
       align: "center",
       render: (state) => (
-        <Tag color="geekblue-inverse">{state.interval.end_date}</Tag>
+        <Tag color="geekblue-inverse">{state.interval?.end_date || "N/A"}</Tag>
       ),
     },
     {
@@ -376,7 +371,13 @@ const UserChallenge = ({ challengers, pagination }) => {
   ];
 
   const dataSource = () => {
-    if (location.pathname === "/profile_competition") {
+    if (!challengers) {
+      return [];
+    }
+    if (
+      location.pathname === "/profile_competition" &&
+      challengers.length > 0
+    ) {
       setData(challengers[0].data.user.activities);
       return challengers[0].data.user.activities;
     } else {
@@ -528,7 +529,9 @@ const UserChallenge = ({ challengers, pagination }) => {
         </Flex>
       );
     } else {
-      return `${challengers.start_date} / ${challengers.end_date}`;
+      return `${challengers?.start_date || "MM-DD"} / ${
+        challengers?.end_date || "MM-DD"
+      }`;
     }
   };
 
@@ -538,6 +541,9 @@ const UserChallenge = ({ challengers, pagination }) => {
   }, [challengers]);
 
   const totalPoints = () => {
+    if (!challengers) {
+      return 0;
+    }
     const process = data
       .filter((state) => state.is_completed)
       .reduce((acc, state) => acc + state.activity.points, 0);

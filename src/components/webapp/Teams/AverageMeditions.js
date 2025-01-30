@@ -16,9 +16,11 @@ const AverageMeditions = () => {
   const avg =
     state.user.enterprise_competition_overflow.last_competence.stats.my_team
       .medition_avg;
-  const my_team_u =
-    state.user.enterprise_competition_overflow.last_competence.stats
-      .current_interval_data.my_group;
+  const my_team_u = state.user.enterprise_competition_overflow.last_competence
+    .stats.current_interval_data
+    ? state.user.enterprise_competition_overflow.last_competence.stats
+        .current_interval_data.my_group
+    : [];
   console.log(my_team_u);
   const my_team =
     state.user.enterprise_competition_overflow.last_competence.stats
