@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Row, Col, Typography } from "antd";
+import { Row, Col, Typography, Flex } from "antd";
 import FormData from "../components/webapp/ProfileUser/FormData";
 import Stats from "../components/webapp/ProfileUser/Stats";
 import UpdatePassword from "../components/webapp/ProfileUser/UpdatePassword";
@@ -8,20 +8,17 @@ import { AppContext } from "../App";
 const { Title } = Typography;
 
 const ProfileUser = () => {
-  const { state, dispatch } = useContext(AppContext);
+  const { state } = useContext(AppContext);
   return (
-    <Row justify={"space-evenly"}>
-      <Col span={24}>
-        <Title level={3}>@{state.user.username}</Title>
-      </Col>
-      <Col span={8} style={styles.col}>
+    <Flex justify="space-around">
+      <Col span={8}>
         <FormData />
         <UpdatePassword />
       </Col>
       <Col span={10}>
         <Stats />
       </Col>
-    </Row>
+    </Flex>
   );
 };
 

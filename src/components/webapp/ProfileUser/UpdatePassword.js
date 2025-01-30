@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Form, Input, Button, notification } from "antd";
+import { Form, Input, Button, notification, Card } from "antd";
 import { endpoints } from "../../../config/endpoints";
 import { AppContext } from "../../../App";
 const { Item } = Form;
@@ -23,22 +23,29 @@ const UpdatePassword = () => {
   };
 
   return (
-    <Form form={form} onFinish={onFinish}>
-      <Item name="first_password">
-        <Input type="password" placeholder="Nueva contraseña" />
-      </Item>
-      <Item name="password">
-        <Input type="password" placeholder="Confirmar nueva contraseña" />
-      </Item>
-      <Item>
-        <Button type="primary" style={styles.btn} htmlType="submit">
-          Guardar
-        </Button>
-        <Button type="primary" danger onClick={() => form.resetFields()}>
-          Cancelar
-        </Button>
-      </Item>
-    </Form>
+    <Card
+      style={{
+        background:
+          "linear-gradient(169deg, rgba(15,120,142,1) 0%, rgba(77,180,202,0.2217480742296919) 99%, rgba(60,87,93,1) 100%)",
+      }}
+    >
+      <Form form={form} onFinish={onFinish}>
+        <Item name="first_password">
+          <Input type="password" placeholder="Nueva contraseña" />
+        </Item>
+        <Item name="password">
+          <Input type="password" placeholder="Confirmar nueva contraseña" />
+        </Item>
+        <Item>
+          <Button type="primary" style={styles.btn} htmlType="submit">
+            Cambiar contraseña
+          </Button>
+          <Button type="primary" danger onClick={() => form.resetFields()}>
+            Cancelar
+          </Button>
+        </Item>
+      </Form>
+    </Card>
   );
 };
 
