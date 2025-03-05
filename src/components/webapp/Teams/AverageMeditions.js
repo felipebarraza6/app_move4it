@@ -13,9 +13,6 @@ const AverageMeditions = () => {
     state.user.enterprise_competition_overflow.last_competence
       .avg_corporal_meditions_teams.last_avg;
 
-  const avg =
-    state.user.enterprise_competition_overflow.last_competence.stats.my_team
-      .medition_avg;
   const my_team_u = state.user.enterprise_competition_overflow.last_competence
     .stats.current_interval_data
     ? state.user.enterprise_competition_overflow.last_competence.stats

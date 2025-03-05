@@ -23,8 +23,6 @@ const UserActivity = () => {
     return acc.concat(activity.data.my_team.activities);
   }, []);
 
-  console.log(allActivitiesGroup);
-
   const groupedActivities = allActivitiesGroup.reduce((acc, activity) => {
     const intervalId = activity.interval.id;
     if (!acc[intervalId]) {
@@ -51,7 +49,6 @@ const UserActivity = () => {
     delete groupedActivities[intervalId].participants;
   });
 
-  console.log(groupedActivities);
   const averagePointsPerParticipant = Object.keys(groupedActivities).reduce(
     (acc, intervalId) => {
       const interval = groupedActivities[intervalId];
@@ -67,13 +64,10 @@ const UserActivity = () => {
     {}
   );
 
-  console.log(averagePointsPerParticipant);
   const totalAveragePoints = Object.values(averagePointsPerParticipant).reduce(
     (acc, interval) => acc + interval.averagePoints,
     0
   );
-
-  console.log(Math.round(totalAveragePoints));
 
   const completedActivities = allActivities.filter(
     (activity) => activity.is_completed

@@ -34,7 +34,7 @@ const MyData = () => {
           {state.user.enterprise_competition_overflow.name.toUpperCase()}
         </Descriptions.Item>
         <Descriptions.Item label="Equipo" span={3}>
-          {state.user.enterprise_competition_overflow.last_competence.stats.my_team.name.toUpperCase()}
+          {state.user.group_participation.name.toUpperCase()}
         </Descriptions.Item>
       </Descriptions>
     </Card>

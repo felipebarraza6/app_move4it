@@ -18,17 +18,35 @@ const CompetitionSummary = () => {
     state.user.enterprise_competition_overflow.last_competence.stats.teams
       .length;
 
-  const name_team =
-    state.user.enterprise_competition_overflow.last_competence.stats.my_team
-      .name;
+  var name_team = null;
 
-  const points =
-    state.user.enterprise_competition_overflow.last_competence.stats.my_team
-      .points;
+  if (state.user.group_participation.name) {
+    name_team = state.user.group_participation.name;
+  }
 
-  const ranking =
-    state.user.enterprise_competition_overflow.last_competence.stats.my_team
-      .position;
+  var points = 0;
+  var ranking = "0";
+  const quantity = new Date(
+    state.user.enterprise_competition_overflow.last_competence.days_for_interval
+  );
+  const endDate = new Date(
+    state.user.enterprise_competition_overflow.last_competence.start_date
+  );
+  endDate.setDate(endDate.getDate() + quantity.getDate());
+  const today = new Date();
+
+  if (endDate > today) {
+    if (
+      state.user.enterprise_competition_overflow.last_competence.stats.my_team
+    ) {
+      points =
+        state.user.enterprise_competition_overflow.last_competence.stats.my_team
+          .points;
+      ranking =
+        state.user.enterprise_competition_overflow.last_competence.stats.my_team
+          .position;
+    }
+  }
 
   return (
     <Card
@@ -60,7 +78,6 @@ const CompetitionSummary = () => {
           valueStyle={styles.valueStyle}
           value={ranking}
           prefix={<FieldNumberOutlined />}
-          suffix={`/${team_player}`}
         />
       </Flex>
     </Card>

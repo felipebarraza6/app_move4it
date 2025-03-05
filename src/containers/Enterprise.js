@@ -41,20 +41,10 @@ const Enterpise = () => {
       },
     },
   };
-  const dataSource = [
-    { numero: 1, equipo: "Equipo1", puntos: "100005" },
-    { numero: 2, equipo: "Equipo2", puntos: "100004" },
-    { numero: 3, equipo: "Equipo3", puntos: "100003" },
-    { numero: 4, equipo: "Equipo4", puntos: "100002" },
-    { numero: 5, equipo: "Equipo5", puntos: "100001", star: true },
-    { numero: 6, equipo: "Equipo6", puntos: "10000" },
-    { numero: 7, equipo: "Equipo7", puntos: "1000" },
-    { numero: 8, equipo: "Equipo8", puntos: "100" },
-    { numero: 9, equipo: "Equipo9", puntos: "10" },
-    { numero: 10, equipo: "Equipo10", puntos: "1" },
-  ];
 
   const { state } = useContext(AppContext);
+  const sourceValidate =
+    state.user.enterprise_competition_overflow.last_competence.stats.my_team;
 
   return (
     <Row justify={"space-between"} align="top">
@@ -72,20 +62,23 @@ const Enterpise = () => {
             >
               <AvgAllGroups />
               <IntervalsTable />
+
               <Table
                 bordered
                 pagination={false}
-                dataSource={[
-                  {
-                    nombre:
-                      state.user.enterprise_competition_overflow.last_competence
-                        .days_remaining_interval,
-                    puntos:
-                      state.user.enterprise_competition_overflow.last_competence
-                        .days_remaining_competence,
-                    metas: 1,
-                  },
-                ]}
+                dataSource={
+                  sourceValidate && [
+                    {
+                      nombre:
+                        state.user.enterprise_competition_overflow
+                          .last_competence.days_remaining_interval,
+                      puntos:
+                        state.user.enterprise_competition_overflow
+                          .last_competence.days_remaining_competence,
+                      metas: 1,
+                    },
+                  ]
+                }
                 columns={[
                   {
                     title: (

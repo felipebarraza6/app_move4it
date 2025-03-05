@@ -21,9 +21,7 @@ const { Text } = Typography;
 
 const Ranking = () => {
   const { state } = useContext(AppContext);
-  const name_my_team =
-    state.user.enterprise_competition_overflow.last_competence.stats.my_team
-      .name;
+  const name_my_team = state.user.group_participation.name;
   const teams =
     state.user.enterprise_competition_overflow.last_competence.stats.teams;
 

@@ -30,6 +30,7 @@ import {
   CheckSquareFilled,
 } from "@ant-design/icons";
 import { AppContext } from "../../../App";
+import { endpoints } from "../../../config/endpoints";
 
 const { Paragraph } = Typography;
 
@@ -38,8 +39,10 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
   const myTeam =
     AppState.user.enterprise_competition_overflow.last_competence.stats
       .current_interval_data.my_group;
+  console.log(AppState);
   const quantity_participants = Object.keys(myTeam).length;
   const [visible, setVisible] = useState(false);
+  const [listFile, setListFile] = useState([]);
   const [form] = Form.useForm();
   const [expanded, setExpanded] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -64,13 +67,18 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
         };
         console.log("Received values of form: ", values);
 
+        const rq = await endpoints.register_activities
+          .update(values)
+          .then((x) => {
+            console.log(x);
+            form.resetFields();
+          });
+
+        setVisible(false);
         updateActivityState({
           ...state,
           is_load: true,
         });
-
-        form.resetFields();
-        setVisible(false);
         setLoading(false);
       })
       .catch((info) => {
@@ -213,7 +221,7 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
             </Flex>
             <Flex>
               <Form.Item
-                name="upload"
+                name="file"
                 valuePropName="fileList"
                 getValueFromEvent={(e) =>
                   Array.isArray(e) ? e : e && e.fileList
@@ -226,19 +234,11 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
                 <Upload
                   name="evidence"
                   listType="text"
+                  fileList={listFile}
                   itemRender={(file, actions) => (
                     <div style={{ display: "flex", alignItems: "center" }}>
                       <CloudUploadOutlined style={{ marginRight: "8px" }} />
-                      <span style={{ flex: 1 }}>
-                        {file.name.length > 20
-                          ? `${file.name.slice(0, 20)}...`
-                          : file.name}
-                      </span>
-                      <Button
-                        type="link"
-                        onClick={() => actions.remove(file)}
-                        icon={<DeleteOutlined />}
-                      />
+                      <span style={{ flex: 1 }}>{actions.name}</span>
                     </div>
                   )}
                   beforeUpload={() => false}
@@ -256,6 +256,7 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
                       window.open(file.url || file.thumbUrl);
                     },
                     onRemove(file) {
+                      setListFile([]);
                       console.log("Removed file:", file);
                     },
                   }}
@@ -409,123 +410,141 @@ const UserChallenge = ({ challengers }) => {
             borderRadius: "15px",
           }}
         >
-          <Button
-            shape="round"
-            type="primary"
-            onClick={nextInterval}
-            disabled={currentInterval >= challengers.length - 1}
-          >
-            <ArrowLeftOutlined />
-            <div style={{ fontSize: "10px", marginLeft: "5px" }}>
-              {currentInterval < challengers.length - 1 ? (
-                <>
-                  <CalendarOutlined />{" "}
-                  {new Date(
+          {data.length > 0 && (
+            <>
+              <Button
+                shape="round"
+                type="default"
+                onClick={nextInterval}
+                disabled={currentInterval >= challengers.length - 1}
+              >
+                <ArrowLeftOutlined />
+                <div style={{ fontSize: "10px", marginLeft: "5px" }}>
+                  {currentInterval < challengers.length - 1 ? (
+                    <>
+                      <CalendarOutlined />{" "}
+                      {new Date(
+                        new Date(
+                          challengers[currentInterval + 1].start_date
+                        ).setDate(
+                          new Date(
+                            challengers[currentInterval + 1].start_date
+                          ).getDate() + 1
+                        )
+                      ).toLocaleDateString("es-ES", {
+                        day: "2-digit",
+                        month: "short",
+                      })}
+                      <br />
+                      <CalendarFilled />{" "}
+                      {new Date(
+                        new Date(
+                          challengers[currentInterval + 1].end_date
+                        ).setDate(
+                          new Date(
+                            challengers[currentInterval + 1].end_date
+                          ).getDate() + 1
+                        )
+                      ).toLocaleDateString("es-ES", {
+                        day: "2-digit",
+                        month: "short",
+                      })}
+                    </>
+                  ) : (
+                    <>
+                      dd-m
+                      <br />
+                      dd-m
+                    </>
+                  )}
+                </div>
+              </Button>
+              <div
+                size="small"
+                style={{
+                  fontSize: "12px",
+                  backgroundColor: "#1677ff",
+                  padding: "5px",
+                  borderRadius: "15px",
+                  color: "white",
+                  fontWeight: "500",
+                }}
+              >
+                <center>
+                  <CalendarOutlined
+                    style={{ textAlign: "center", color: "white" }}
+                  />
+                </center>
+                {new Date(
+                  new Date(challengers[currentInterval].start_date).setDate(
                     new Date(
-                      challengers[currentInterval + 1].start_date
-                    ).setDate(
-                      new Date(
-                        challengers[currentInterval + 1].start_date
-                      ).getDate() + 1
-                    )
-                  ).toLocaleDateString("es-ES", {
-                    day: "2-digit",
-                    month: "short",
-                  })}
-                  <br />
-                  <CalendarFilled />{" "}
-                  {new Date(
-                    new Date(challengers[currentInterval + 1].end_date).setDate(
-                      new Date(
-                        challengers[currentInterval + 1].end_date
-                      ).getDate() + 1
-                    )
-                  ).toLocaleDateString("es-ES", {
-                    day: "2-digit",
-                    month: "short",
-                  })}
-                </>
-              ) : (
-                <>
-                  dd-m
-                  <br />
-                  dd-m
-                </>
-              )}
-            </div>
-          </Button>
-          <div
-            size="small"
-            style={{
-              fontSize: "12px",
-            }}
-          >
-            <center>
-              <CalendarOutlined style={{ textAlign: "center" }} />
-            </center>
-            {new Date(
-              new Date(challengers[currentInterval].start_date).setDate(
-                new Date(challengers[currentInterval].start_date).getDate() + 1
-              )
-            ).toLocaleDateString("es-ES", {
-              day: "2-digit",
-              month: "short",
-            })}
-            <br />
-            {new Date(
-              new Date(challengers[currentInterval].end_date).setDate(
-                new Date(challengers[currentInterval].end_date).getDate() + 1
-              )
-            ).toLocaleDateString("es-ES", {
-              day: "2-digit",
-              month: "short",
-            })}
-          </div>
-          <Button
-            shape="round"
-            type={"primary"}
-            onClick={previousInterval}
-            disabled={currentInterval === 0}
-          >
-            <div style={{ fontSize: "10px", marginRight: "5px" }}>
-              {currentInterval > 0 ? (
-                <>
-                  {new Date(
-                    new Date(
-                      challengers[currentInterval - 1].start_date
-                    ).setDate(
-                      new Date(
-                        challengers[currentInterval - 1].start_date
-                      ).getDate() + 1
-                    )
-                  ).toLocaleDateString("es-ES", {
-                    day: "2-digit",
-                    month: "short",
-                  })}{" "}
-                  <CalendarOutlined />
-                  <br />
-                  {new Date(
-                    new Date(challengers[currentInterval - 1].end_date).setDate(
-                      new Date(
-                        challengers[currentInterval - 1].end_date
-                      ).getDate() + 1
-                    )
-                  ).toLocaleDateString("es-ES", {
-                    day: "2-digit",
-                    month: "short",
-                  })}{" "}
-                  <CalendarFilled />
-                </>
-              ) : (
-                <>
-                  dd-m
-                  <br />
-                  dd-m
-                </>
-              )}
-            </div>
-            <ArrowRightOutlined />
-          </Button>
+                      challengers[currentInterval].start_date
+                    ).getDate() + 1
+                  )
+                ).toLocaleDateString("es-ES", {
+                  day: "2-digit",
+                  month: "short",
+                })}
+                <br />
+                {new Date(
+                  new Date(challengers[currentInterval].end_date).setDate(
+                    new Date(challengers[currentInterval].end_date).getDate() +
+                      1
+                  )
+                ).toLocaleDateString("es-ES", {
+                  day: "2-digit",
+                  month: "short",
+                })}
+              </div>
+              <Button
+                shape="round"
+                type={"default"}
+                onClick={previousInterval}
+                disabled={currentInterval === 0}
+              >
+                <div style={{ fontSize: "10px", marginRight: "5px" }}>
+                  {currentInterval > 0 ? (
+                    <>
+                      {new Date(
+                        new Date(
+                          challengers[currentInterval - 1].start_date
+                        ).setDate(
+                          new Date(
+                            challengers[currentInterval - 1].start_date
+                          ).getDate() + 1
+                        )
+                      ).toLocaleDateString("es-ES", {
+                        day: "2-digit",
+                        month: "short",
+                      })}{" "}
+                      <CalendarOutlined />
+                      <br />
+                      {new Date(
+                        new Date(
+                          challengers[currentInterval - 1].end_date
+                        ).setDate(
+                          new Date(
+                            challengers[currentInterval - 1].end_date
+                          ).getDate() + 1
+                        )
+                      ).toLocaleDateString("es-ES", {
+                        day: "2-digit",
+                        month: "short",
+                      })}{" "}
+                      <CalendarFilled />
+                    </>
+                  ) : (
+                    <>
+                      dd-m
+                      <br />
+                      dd-m
+                    </>
+                  )}
+                </div>
+                <ArrowRightOutlined />
+              </Button>
+            </>
+          )}
         </Flex>
       );
     } else {
@@ -539,6 +558,7 @@ const UserChallenge = ({ challengers }) => {
     dataSource();
     setCurrentInterval(0);
   }, [challengers]);
+  console.log(data);
 
   const totalPoints = () => {
     if (!challengers) {

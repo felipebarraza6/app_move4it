@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Row, Col, Card, Tooltip, Drawer, Button, Flex } from "antd";
 import { EyeFilled, PaperClipOutlined } from "@ant-design/icons";
 import { endpoints } from "../config/endpoints";
 import { useNavigate } from "react-router-dom";
-
+import { AppContext } from "../App";
 const Blog = ({ type }) => {
   const [visible, setVisible] = useState(false); // initialize state for Drawer visibility
   const [blogSingle, setBlogSingle] = useState(null);
   const [blogs, setBlogs] = useState([]);
   const navigate = useNavigate();
+  const { state } = useContext(AppContext);
 
   const showDrawer = (blog) => {
     setBlogSingle({ ...blog });
@@ -19,9 +20,11 @@ const Blog = ({ type }) => {
     setVisible(false);
   };
   const getBlogs = async () => {
-    const request = await endpoints.blog.list(type).then((x) => {
-      setBlogs(x.results);
-    });
+    const request = await endpoints.blog
+      .list(type, state.user.enterprise_competition_overflow.last_competence.id)
+      .then((x) => {
+        setBlogs(x.results);
+      });
     return request;
   };
 

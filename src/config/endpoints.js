@@ -31,9 +31,11 @@ const update_password = async (new_password) => {
   return request.data;
 };
 
-const blog_list = async (type) => {
+const blog_list = async (type, competition) => {
   if (type === undefined) type = "";
-  const request = await methods.GET(`blogs/?type=${type}`);
+  const request = await methods.GET(
+    `blogs/?type=${type}&competence=${competition}`
+  );
   return request.data;
 };
 

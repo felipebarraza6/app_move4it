@@ -16,65 +16,14 @@ const MyTeamActivity = ({ team_data }) => {
   const location = useLocation();
   const [data, setData] = useState([]);
   const [currentInterval, setCurrentInterval] = useState(0);
-
-  const activityNames = Array.from(
-    new Set(
-      team_data.intervals[currentInterval].activities.map(
-        (activity) => activity.activity.name
-      )
-    )
-  );
-
-  const columns = [
-    {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-      align: "center",
-    },
-    ...activityNames.map((activity) => ({
-      title: activity,
-      dataIndex: activity,
-      key: activity,
-      align: "center",
-      render: (completed, record) => {
-        const activityData = team_data.intervals[
-          currentInterval
-        ].activities.find(
-          (act) =>
-            act.user.email === record.email && act.activity.name === activity
-        );
-        if (activityData) {
-          if (!activityData.is_completed && activityData.is_load) {
-            return <Spin />;
-          }
-        }
-        return typeof completed === "number" ? (
-          `${completed.toFixed(0)}%`
-        ) : completed ? (
-          <CheckCircleFilled style={{ color: "green" }} />
-        ) : (
-          <CloseCircleFilled style={{ color: "red" }} />
-        );
-      },
-    })),
-    {
-      title: "Puntos",
-      dataIndex: "points",
-      key: "points",
-      align: "center",
-    },
-    {
-      title: "Efectividad",
-      dataIndex: "percentage",
-      key: "percentage",
-      align: "center",
-      render: (percentage) => `${Number(percentage).toFixed(0)}%`,
-    },
-  ];
-
   const dataSource = () => {
-    if (team_data.intervals[currentInterval].activities.length === 0) {
+    if (
+      !team_data ||
+      !team_data.intervals ||
+      !team_data.intervals[currentInterval] ||
+      !team_data.intervals[currentInterval].activities ||
+      !team_data.intervals[currentInterval].activities.length
+    ) {
       setData([]);
       return;
     }
@@ -127,12 +76,12 @@ const MyTeamActivity = ({ team_data }) => {
       (acc, activity) => {
         const completedCount = team_data.intervals[
           currentInterval
-        ].activities.filter(
+        ]?.activities?.filter(
           (act) => act.activity.name === activity && act.is_completed
         ).length;
         const totalCount = team_data.intervals[
           currentInterval
-        ].activities.filter((act) => act.activity.name === activity).length;
+        ]?.activities?.filter((act) => act.activity.name === activity).length;
         acc[activity] = (completedCount / totalCount) * 100;
         return acc;
       },
@@ -156,6 +105,69 @@ const MyTeamActivity = ({ team_data }) => {
 
     setData([...dataWithPercentage, totalsRow]);
   };
+  useEffect(() => {
+    dataSource();
+  }, [team_data, currentInterval]);
+
+  if (!team_data || !team_data.intervals || team_data.intervals.length === 0) {
+    return <div>No hay datos disponibles</div>;
+  }
+
+  const activityNames = Array.from(
+    new Set(
+      team_data.intervals[currentInterval]?.activities?.map(
+        (activity) => activity.activity.name
+      ) || []
+    )
+  );
+
+  const columns = [
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+      align: "center",
+    },
+    ...activityNames.map((activity) => ({
+      title: activity,
+      dataIndex: activity,
+      key: activity,
+      align: "center",
+      render: (completed, record) => {
+        const activityData = team_data.intervals[
+          currentInterval
+        ]?.activities?.find(
+          (act) =>
+            act.user.email === record.email && act.activity.name === activity
+        );
+        if (activityData) {
+          if (!activityData.is_completed && activityData.is_load) {
+            return <Spin />;
+          }
+        }
+        return typeof completed === "number" ? (
+          `${completed.toFixed(0)}%`
+        ) : completed ? (
+          <CheckCircleFilled style={{ color: "green" }} />
+        ) : (
+          <CloseCircleFilled style={{ color: "red" }} />
+        );
+      },
+    })),
+    {
+      title: "Puntos",
+      dataIndex: "points",
+      key: "points",
+      align: "center",
+    },
+    {
+      title: "Efectividad",
+      dataIndex: "percentage",
+      key: "percentage",
+      align: "center",
+      render: (percentage) => `${Number(percentage).toFixed(0)}%`,
+    },
+  ];
 
   const extra = () => {
     const nextInterval = () => {
@@ -180,7 +192,7 @@ const MyTeamActivity = ({ team_data }) => {
         {location.pathname === "/team" && (
           <Button
             shape="round"
-            type="primary"
+            type="default"
             onClick={previousInterval}
             disabled={currentInterval >= team_data.intervals.length - 1}
           >
@@ -191,10 +203,10 @@ const MyTeamActivity = ({ team_data }) => {
                   <CalendarOutlined />{" "}
                   {new Date(
                     new Date(
-                      team_data.intervals[currentInterval + 1].start_date
+                      team_data.intervals[currentInterval + 1]?.start_date
                     ).setDate(
                       new Date(
-                        team_data.intervals[currentInterval + 1].start_date
+                        team_data.intervals[currentInterval + 1]?.start_date
                       ).getDate() + 1
                     )
                   ).toLocaleDateString("es-ES", {
@@ -205,10 +217,10 @@ const MyTeamActivity = ({ team_data }) => {
                   <CalendarFilled />{" "}
                   {new Date(
                     new Date(
-                      team_data.intervals[currentInterval + 1].end_date
+                      team_data.intervals[currentInterval + 1]?.end_date
                     ).setDate(
                       new Date(
-                        team_data.intervals[currentInterval + 1].end_date
+                        team_data.intervals[currentInterval + 1]?.end_date
                       ).getDate() + 1
                     )
                   ).toLocaleDateString("es-ES", {
@@ -237,9 +249,9 @@ const MyTeamActivity = ({ team_data }) => {
             <CalendarOutlined style={{ textAlign: "center" }} />
           </center>
           {new Date(
-            new Date(team_data.intervals[currentInterval].start_date).setDate(
+            new Date(team_data.intervals[currentInterval]?.start_date).setDate(
               new Date(
-                team_data.intervals[currentInterval].start_date
+                team_data.intervals[currentInterval]?.start_date
               ).getDate() + 1
             )
           ).toLocaleDateString("es-ES", {
@@ -248,9 +260,9 @@ const MyTeamActivity = ({ team_data }) => {
           })}
           <br />
           {new Date(
-            new Date(team_data.intervals[currentInterval].end_date).setDate(
+            new Date(team_data.intervals[currentInterval]?.end_date).setDate(
               new Date(
-                team_data.intervals[currentInterval].end_date
+                team_data.intervals[currentInterval]?.end_date
               ).getDate() + 1
             )
           ).toLocaleDateString("es-ES", {
@@ -262,7 +274,7 @@ const MyTeamActivity = ({ team_data }) => {
         {location.pathname === "/team" && (
           <Button
             shape="round"
-            type="primary"
+            type="default"
             onClick={nextInterval}
             disabled={currentInterval === 0}
           >
@@ -273,10 +285,10 @@ const MyTeamActivity = ({ team_data }) => {
                   <CalendarOutlined />{" "}
                   {new Date(
                     new Date(
-                      team_data.intervals[currentInterval - 1].start_date
+                      team_data.intervals[currentInterval - 1]?.start_date
                     ).setDate(
                       new Date(
-                        team_data.intervals[currentInterval - 1].start_date
+                        team_data.intervals[currentInterval - 1]?.start_date
                       ).getDate() + 1
                     )
                   ).toLocaleDateString("es-ES", {
@@ -287,10 +299,10 @@ const MyTeamActivity = ({ team_data }) => {
                   <CalendarFilled />{" "}
                   {new Date(
                     new Date(
-                      team_data.intervals[currentInterval - 1].end_date
+                      team_data.intervals[currentInterval - 1]?.end_date
                     ).setDate(
                       new Date(
-                        team_data.intervals[currentInterval - 1].end_date
+                        team_data.intervals[currentInterval - 1]?.end_date
                       ).getDate() + 1
                     )
                   ).toLocaleDateString("es-ES", {
@@ -311,10 +323,6 @@ const MyTeamActivity = ({ team_data }) => {
       </Flex>
     );
   };
-
-  useEffect(() => {
-    dataSource();
-  }, [team_data, currentInterval]);
 
   return (
     <Card title="Actividad de mi equipo" style={styles.card} extra={extra()}>

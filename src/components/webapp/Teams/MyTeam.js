@@ -10,15 +10,25 @@ import {
 
 const MyTeam = () => {
   const { state } = useContext(AppContext);
-  const name =
+  const name = state.user.group_participation.name;
+  var points = "0";
+
+  if (
     state.user.enterprise_competition_overflow.last_competence.stats.my_team
-      .name;
-  const points =
+  ) {
+    points =
+      state.user.enterprise_competition_overflow.last_competence.stats.my_team
+        .points;
+  }
+
+  var position = "0";
+  if (
     state.user.enterprise_competition_overflow.last_competence.stats.my_team
-      .points;
-  const position =
-    state.user.enterprise_competition_overflow.last_competence.stats.my_team
-      .position;
+  ) {
+    position =
+      state.user.enterprise_competition_overflow.last_competence.stats.my_team
+        .position;
+  }
   console.log(state.user.enterprise_competition_overflow.name);
   const enterprise = state.user.enterprise_competition_overflow.name;
   return (

@@ -17,6 +17,9 @@ const IntervalsTable = () => {
     state.user.enterprise_competition_overflow.last_competence
       .intervals_to_back;
 
+  const sourcesActive =
+    state.user.enterprise_competition_overflow.last_competence.stats.my_team;
+
   const [currentInterval, setCurrentInterval] = useState(0);
 
   const nextInterval = () => {
@@ -58,9 +61,11 @@ const IntervalsTable = () => {
               }
               style={{ color: "white" }}
             >
-              <Tag color="blue-inverse">
-                {intervals[currentInterval].start_date}
-              </Tag>
+              {sourcesActive && (
+                <Tag color="blue-inverse">
+                  {intervals[currentInterval].start_date}
+                </Tag>
+              )}
             </Descriptions.Item>
             <Descriptions.Item
               style={{ color: "white" }}
@@ -70,9 +75,11 @@ const IntervalsTable = () => {
                 </>
               }
             >
-              <Tag color="red-inverse">
-                {intervals[currentInterval].end_date}
-              </Tag>
+              {sourcesActive && (
+                <Tag color="red-inverse">
+                  {intervals[currentInterval].end_date}
+                </Tag>
+              )}
             </Descriptions.Item>
             <Descriptions.Item
               style={{ color: "white" }}
@@ -102,23 +109,27 @@ const IntervalsTable = () => {
         </Card>
       )}
       <Flex gap="small" justify="center" style={{ marginTop: "10px" }}>
-        <Button
-          shape="round"
-          type="primary"
-          onClick={nextInterval}
-          disabled={currentInterval >= intervals.length - 1}
-        >
-          <ArrowLeftOutlined />
-          Anterior
-        </Button>
-        <Button
-          shape="round"
-          type="primary"
-          onClick={previousInterval}
-          disabled={currentInterval === 0}
-        >
-          Siguiente <ArrowRightOutlined />
-        </Button>
+        {sourcesActive && (
+          <>
+            <Button
+              shape="round"
+              type="primary"
+              onClick={nextInterval}
+              disabled={currentInterval >= intervals.length - 1}
+            >
+              <ArrowLeftOutlined />
+              Anterior
+            </Button>
+            <Button
+              shape="round"
+              type="primary"
+              onClick={previousInterval}
+              disabled={currentInterval === 0}
+            >
+              Siguiente <ArrowRightOutlined />
+            </Button>
+          </>
+        )}
       </Flex>
     </Flex>
   );

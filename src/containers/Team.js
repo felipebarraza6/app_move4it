@@ -1,32 +1,26 @@
 import React, { useContext } from "react";
-import { Typography, Row, Col, Card, Flex, Statistic, Table } from "antd";
-import {
-  RiseOutlined,
-  FallOutlined,
-  LineChartOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import { buildStyles } from "react-circular-progressbar";
+import { Row, Flex, Table } from "antd";
+
 import MyTeamActivity from "../components/webapp/Dashboard/MyTeamActivity";
 import "react-circular-progressbar/dist/styles.css";
 import { AppContext } from "../App";
 import MyTeam from "../components/webapp/Teams/MyTeam";
 import AverageMeditions from "../components/webapp/Teams/AverageMeditions";
 
-const { Title, Paragraph } = Typography;
-
 const Team = () => {
   const { state } = useContext(AppContext);
 
   const teamData =
     state.user.enterprise_competition_overflow.last_competence.stats.my_team;
-
-  const dataSource = teamData.intervals.map((interval, index) => ({
-    key: index,
-    start_date: interval.start_date,
-    end_date: interval.end_date,
-    puntos: interval.points,
-  }));
+  var dataSource = [];
+  if (dataSource.length > 0) {
+    dataSource = teamData.intervals.map((interval, index) => ({
+      key: index,
+      start_date: interval.start_date,
+      end_date: interval.end_date,
+      puntos: interval.points,
+    }));
+  }
 
   const columns = [
     { title: "Fecha Inicio", dataIndex: "start_date" },
