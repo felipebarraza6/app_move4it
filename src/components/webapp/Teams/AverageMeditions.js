@@ -6,6 +6,8 @@ const { Text, Title } = Typography;
 const AverageMeditions = () => {
   const { state } = useContext(AppContext);
 
+  console.log(state.user.enterprise_competition_overflow.last_competence);
+
   const firstAvg =
     state.user.enterprise_competition_overflow.last_competence
       .avg_corporal_meditions_teams.first_avg;
