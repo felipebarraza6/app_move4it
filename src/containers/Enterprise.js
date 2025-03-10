@@ -116,9 +116,7 @@ const Enterpise = () => {
         </Flex>
       </Col>
 
-      <Col span={24}>
-        <center></center>
-      </Col>
+      <Col span={24}></Col>
     </Row>
   );
 };

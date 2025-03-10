@@ -7,10 +7,10 @@ const AvgAllGroups = () => {
 
   const firstAvg =
     state.user.enterprise_competition_overflow.last_competence
-      .avg_corporal_meditions.first_avg;
+      .avg_corporal_meditions_competition.first_avg;
   const lastAvg =
     state.user.enterprise_competition_overflow.last_competence
-      .avg_corporal_meditions.last_avg;
+      .avg_corporal_meditions_competition.last_avg;
 
   return (
     <Flex
