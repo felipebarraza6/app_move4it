@@ -15,7 +15,17 @@ const MyTeamActivity = ({ team_data }) => {
   const { state } = useContext(AppContext);
   const location = useLocation();
   const [data, setData] = useState([]);
-  const [currentInterval, setCurrentInterval] = useState(0);
+
+  const current_interval =
+    state.user.enterprise_competition_overflow.last_competence.stats
+      .current_interval_data.id;
+  console.log(current_interval);
+  console.log(team_data);
+  const currentIntervalF = team_data.intervals.findIndex(
+    (challenger) => challenger.interval_id === current_interval
+  );
+
+  const [currentInterval, setCurrentInterval] = useState(currentIntervalF);
   const dataSource = () => {
     if (
       !team_data ||
@@ -276,7 +286,7 @@ const MyTeamActivity = ({ team_data }) => {
             shape="round"
             type="default"
             onClick={nextInterval}
-            disabled={currentInterval === 0}
+            disabled={currentInterval === team_data.intervals.length - 1}
           >
             <ArrowRightOutlined />
             <div style={{ fontSize: "10px", marginLeft: "5px" }}>

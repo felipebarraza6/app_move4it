@@ -23,7 +23,6 @@ import {
   CloudUploadOutlined,
   PlusCircleOutlined,
   FilterFilled,
-  DeleteOutlined,
   SendOutlined,
   PlusOutlined,
   CheckCircleFilled,
@@ -288,6 +287,7 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
 };
 
 const UserChallenge = ({ challengers }) => {
+  const { state } = useContext(AppContext);
   const location = useLocation();
   const [data, setData] = useState([]);
   const [currentInterval, setCurrentInterval] = useState(0);
@@ -379,7 +379,9 @@ const UserChallenge = ({ challengers }) => {
       location.pathname === "/profile_competition" &&
       challengers.length > 0
     ) {
-      setData(challengers[0].data.user.activities);
+      console.log(challengers);
+
+      setData(challengers[currentInterval].data.user.activities);
       return challengers[0].data.user.activities;
     } else {
       setData(challengers.user);
@@ -416,7 +418,10 @@ const UserChallenge = ({ challengers }) => {
                 shape="round"
                 type="default"
                 onClick={nextInterval}
-                disabled={currentInterval >= challengers.length - 1}
+                disabled={
+                  currentInterval >= challengers.length - 1 ||
+                  currentInterval >= challengers.length
+                }
               >
                 <ArrowLeftOutlined />
                 <div style={{ fontSize: "10px", marginLeft: "5px" }}>
@@ -500,7 +505,7 @@ const UserChallenge = ({ challengers }) => {
                 shape="round"
                 type={"default"}
                 onClick={previousInterval}
-                disabled={currentInterval === 0}
+                disabled={currentInterval === challengers.length - 1}
               >
                 <div style={{ fontSize: "10px", marginRight: "5px" }}>
                   {currentInterval > 0 ? (
@@ -555,9 +560,24 @@ const UserChallenge = ({ challengers }) => {
   };
 
   useEffect(() => {
-    dataSource();
-    setCurrentInterval(0);
-  }, [challengers]);
+    const current_interval =
+      state.user.enterprise_competition_overflow.last_competence.stats
+        .current_interval_data.id;
+    console.log(current_interval);
+    console.log(challengers);
+    if (location.pathname === "/profile_competition") {
+      const changeInterval = challengers.findIndex(
+        (challenger) => challenger.interval_id === current_interval
+      );
+      setCurrentInterval(changeInterval);
+
+      dataSource();
+    } else {
+      setCurrentInterval(0);
+
+      dataSource();
+    }
+  }, [challengers, currentInterval]);
   console.log(data);
 
   const totalPoints = () => {
