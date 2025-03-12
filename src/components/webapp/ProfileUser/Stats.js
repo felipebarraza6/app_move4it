@@ -70,7 +70,12 @@ const Stats = () => {
           name: "created",
           title: "Fecha",
           dataIndex: "created",
-          render: (d) => `${d.slice(0, 10)} / ${d.slice(11, 16)} hrs. `,
+          render: (d) => (
+            <Flex gap="small">
+              <div> {d.slice(0, 10)}</div>
+              <div> {d.slice(11, 16)} hrs.</div>
+            </Flex>
+          ),
         },
         { name: "fat", title: "% Grasa", dataIndex: "fat" },
         { name: "weight", title: "Peso(kg)", dataIndex: "weight" },

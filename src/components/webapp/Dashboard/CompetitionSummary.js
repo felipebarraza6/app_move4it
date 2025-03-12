@@ -10,13 +10,20 @@ import {
 
 const CompetitionSummary = () => {
   const { state } = useContext(AppContext);
+  const select_interval =
+    state.user.enterprise_competition_overflow.last_competence.stats
+      .current_interval_data.id;
+
+  const historical_data =
+    state.user.enterprise_competition_overflow.last_competence.stats
+      .historical_data;
+
+  const historical_data_last = historical_data[historical_data.length - 1];
+
+  console.log(historical_data_last.interval_id);
 
   const name_competition =
     state.user.enterprise_competition_overflow.last_competence.name.toUpperCase();
-
-  const team_player =
-    state.user.enterprise_competition_overflow.last_competence.stats.teams
-      .length;
 
   var name_team = null;
 
@@ -66,19 +73,23 @@ const CompetitionSummary = () => {
           value={name_team}
           prefix={<TeamOutlined />}
         />
-        <Statistic
-          title="Puntos"
-          valueStyle={styles.valueStyle}
-          value={points}
-          prefix={<FlagOutlined />}
-        />
+        {select_interval !== historical_data_last.interval_id && (
+          <>
+            <Statistic
+              title="Puntos"
+              valueStyle={styles.valueStyle}
+              value={points}
+              prefix={<FlagOutlined />}
+            />
 
-        <Statistic
-          title="Ranking"
-          valueStyle={styles.valueStyle}
-          value={ranking}
-          prefix={<FieldNumberOutlined />}
-        />
+            <Statistic
+              title="Ranking"
+              valueStyle={styles.valueStyle}
+              value={ranking}
+              prefix={<FieldNumberOutlined />}
+            />
+          </>
+        )}
       </Flex>
     </Card>
   );

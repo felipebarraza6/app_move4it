@@ -11,6 +11,17 @@ import {
 const MyTeam = () => {
   const { state } = useContext(AppContext);
   const name = state.user.group_participation.name;
+
+  const select_interval =
+    state.user.enterprise_competition_overflow.last_competence.stats
+      .current_interval_data.id;
+
+  const historical_data =
+    state.user.enterprise_competition_overflow.last_competence.stats
+      .historical_data;
+
+  const historical_data_last = historical_data[historical_data.length - 1];
+
   var points = "0";
 
   if (
@@ -42,24 +53,28 @@ const MyTeam = () => {
         }}
       >
         <Descriptions bordered column={1}>
-          <Descriptions.Item
-            label={
-              <>
-                <OrderedListOutlined style={{ color: "green" }} /> Puntos
-              </>
-            }
-          >
-            {points}
-          </Descriptions.Item>
-          <Descriptions.Item
-            label={
-              <>
-                <TrophyFilled style={{ color: "#d4b106" }} /> Ranking
-              </>
-            }
-          >
-            #{position}
-          </Descriptions.Item>
+          {select_interval !== historical_data_last.interval_id && (
+            <>
+              <Descriptions.Item
+                label={
+                  <>
+                    <OrderedListOutlined style={{ color: "green" }} /> Puntos
+                  </>
+                }
+              >
+                {points}
+              </Descriptions.Item>
+              <Descriptions.Item
+                label={
+                  <>
+                    <TrophyFilled style={{ color: "#d4b106" }} /> Ranking
+                  </>
+                }
+              >
+                #{position}
+              </Descriptions.Item>
+            </>
+          )}
           <Descriptions.Item
             label={
               <>

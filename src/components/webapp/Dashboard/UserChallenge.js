@@ -38,7 +38,6 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
   const myTeam =
     AppState.user.enterprise_competition_overflow.last_competence.stats
       .current_interval_data.my_group;
-  console.log(AppState);
   const quantity_participants = Object.keys(myTeam).length;
   const [visible, setVisible] = useState(false);
   const [listFile, setListFile] = useState([]);
@@ -391,13 +390,15 @@ const UserChallenge = ({ challengers }) => {
 
   const extra = () => {
     const nextInterval = () => {
+      setCurrentInterval(currentInterval + 1);
+      console.log(challengers[currentInterval + 1].data.user.activities);
       setData(challengers[currentInterval + 1].data.user.activities);
-      setCurrentInterval((prevInterval) => prevInterval + 1);
     };
 
     const previousInterval = () => {
+      setCurrentInterval(currentInterval - 1);
+      console.log(currentInterval - 1);
       setData(challengers[currentInterval - 1].data.user.activities);
-      setCurrentInterval((prevInterval) => prevInterval - 1);
     };
 
     if (location.pathname === "/profile_competition") {
@@ -418,10 +419,7 @@ const UserChallenge = ({ challengers }) => {
                 shape="round"
                 type="default"
                 onClick={nextInterval}
-                disabled={
-                  currentInterval >= challengers.length - 1 ||
-                  currentInterval >= challengers.length
-                }
+                disabled={currentInterval - 1 > 0 ? true : false}
               >
                 <ArrowLeftOutlined />
                 <div style={{ fontSize: "10px", marginLeft: "5px" }}>
@@ -505,7 +503,7 @@ const UserChallenge = ({ challengers }) => {
                 shape="round"
                 type={"default"}
                 onClick={previousInterval}
-                disabled={currentInterval === challengers.length - 1}
+                disabled={currentInterval === 0}
               >
                 <div style={{ fontSize: "10px", marginRight: "5px" }}>
                   {currentInterval > 0 ? (
@@ -563,13 +561,10 @@ const UserChallenge = ({ challengers }) => {
     const current_interval =
       state.user.enterprise_competition_overflow.last_competence.stats
         .current_interval_data.id;
-    console.log(current_interval);
-    console.log(challengers);
     if (location.pathname === "/profile_competition") {
       const changeInterval = challengers.findIndex(
         (challenger) => challenger.interval_id === current_interval
       );
-      setCurrentInterval(changeInterval);
 
       dataSource();
     } else {
@@ -577,28 +572,7 @@ const UserChallenge = ({ challengers }) => {
 
       dataSource();
     }
-  }, [challengers, currentInterval]);
-  console.log(data);
-
-  const totalPoints = () => {
-    if (!challengers) {
-      return 0;
-    }
-    const process = data
-      .filter((state) => state.is_completed)
-      .reduce((acc, state) => acc + state.activity.points, 0);
-    const participants = challengers[currentInterval].data.my_team.activities;
-    const uniqueUsers = [
-      ...new Set(participants.map((activity) => activity.user.id)),
-    ];
-    const numParticipants = uniqueUsers.length;
-    const divide = parseInt(process / numParticipants);
-    var value = 0;
-    if (divide > 0) {
-      value = divide;
-    }
-    return value;
-  };
+  }, [challengers]);
 
   return (
     <Card
@@ -639,13 +613,6 @@ const UserChallenge = ({ challengers }) => {
               <Statistic
                 value={data.filter((state) => !state.is_completed).length}
                 title="No completadas"
-                valueStyle={{ textAlign: "center" }}
-              />
-            </Card>
-            <Card size="small" hoverable style={{ width: "100%" }}>
-              <Statistic
-                title={"Puntos"}
-                value={totalPoints()}
                 valueStyle={{ textAlign: "center" }}
               />
             </Card>

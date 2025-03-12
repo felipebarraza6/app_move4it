@@ -19,8 +19,6 @@ const MyTeamActivity = ({ team_data }) => {
   const current_interval =
     state.user.enterprise_competition_overflow.last_competence.stats
       .current_interval_data.id;
-  console.log(current_interval);
-  console.log(team_data);
   const currentIntervalF = team_data.intervals.findIndex(
     (challenger) => challenger.interval_id === current_interval
   );
@@ -188,6 +186,9 @@ const MyTeamActivity = ({ team_data }) => {
       setCurrentInterval((prevInterval) => prevInterval + 1);
     };
 
+    const today = new Date();
+    console.log(today);
+
     return (
       <Flex
         gap="small"
@@ -286,7 +287,9 @@ const MyTeamActivity = ({ team_data }) => {
             shape="round"
             type="default"
             onClick={nextInterval}
-            disabled={currentInterval === team_data.intervals.length - 1}
+            disabled={
+              team_data.intervals[currentInterval - 1]?.start_date > today
+            }
           >
             <ArrowRightOutlined />
             <div style={{ fontSize: "10px", marginLeft: "5px" }}>
