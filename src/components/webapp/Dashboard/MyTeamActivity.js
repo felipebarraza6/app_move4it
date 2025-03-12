@@ -18,10 +18,15 @@ const MyTeamActivity = ({ team_data }) => {
 
   const current_interval =
     state.user.enterprise_competition_overflow.last_competence.stats
-      .current_interval_data.id;
-  const currentIntervalF = team_data.intervals.findIndex(
-    (challenger) => challenger.interval_id === current_interval
-  );
+      ?.current_interval_data?.id;
+
+  console.log(current_interval);
+  let currentIntervalF = [];
+  if (current_interval) {
+    currentIntervalF = team_data.intervals.findIndex(
+      (challenger) => challenger.interval_id === current_interval
+    );
+  }
 
   const [currentInterval, setCurrentInterval] = useState(currentIntervalF);
   const dataSource = () => {
@@ -186,8 +191,9 @@ const MyTeamActivity = ({ team_data }) => {
       setCurrentInterval((prevInterval) => prevInterval + 1);
     };
 
-    const today = new Date();
+    const today = new Date().toISOString().split("T")[0];
     console.log(today);
+    console.log(team_data.intervals[currentInterval]?.start_date);
 
     return (
       <Flex
@@ -254,6 +260,11 @@ const MyTeamActivity = ({ team_data }) => {
           size="small"
           style={{
             fontSize: "12px",
+            backgroundColor: "#1677ff",
+            padding: "5px",
+            borderRadius: "15px",
+            color: "white",
+            fontWeight: "500",
           }}
         >
           <center>
@@ -288,7 +299,9 @@ const MyTeamActivity = ({ team_data }) => {
             type="default"
             onClick={nextInterval}
             disabled={
-              team_data.intervals[currentInterval - 1]?.start_date > today
+              currentInterval === 0
+                ? true
+                : team_data.intervals[currentInterval - 1]?.start_date > today
             }
           >
             <ArrowRightOutlined />

@@ -12,7 +12,7 @@ const CompetitionSummary = () => {
   const { state } = useContext(AppContext);
   const select_interval =
     state.user.enterprise_competition_overflow.last_competence.stats
-      .current_interval_data.id;
+      .current_interval_data?.id;
 
   const historical_data =
     state.user.enterprise_competition_overflow.last_competence.stats
@@ -31,8 +31,8 @@ const CompetitionSummary = () => {
     name_team = state.user.group_participation.name;
   }
 
-  var points = 0;
-  var ranking = "0";
+  var points = "S/P";
+  var ranking = "S/R";
   const quantity = new Date(
     state.user.enterprise_competition_overflow.last_competence.days_for_interval
   );
@@ -43,15 +43,13 @@ const CompetitionSummary = () => {
   const today = new Date();
 
   if (endDate > today) {
-    if (
-      state.user.enterprise_competition_overflow.last_competence.stats.my_team
-    ) {
-      points =
-        state.user.enterprise_competition_overflow.last_competence.stats.my_team
-          .points;
-      ranking =
-        state.user.enterprise_competition_overflow.last_competence.stats.my_team
-          .position;
+    if (state.user.enterprise_competition_overflow.last_competence.ranking) {
+      var _ob =
+        state.user.enterprise_competition_overflow.last_competence.ranking
+          .teams;
+      var get_points = _ob.find((team) => team.team_name === name_team);
+      points = get_points.points;
+      ranking = get_points.position;
     }
   }
 

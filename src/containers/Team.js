@@ -12,6 +12,15 @@ const Team = () => {
 
   const teamData =
     state.user.enterprise_competition_overflow.last_competence.stats.my_team;
+  console.log(teamData);
+
+  const today = new Date();
+
+  if (teamData && teamData.intervals) {
+    teamData.intervals = teamData.intervals.filter(
+      (interval) => new Date(interval.start_date) <= today
+    );
+  }
   var dataSource = [];
   if (dataSource.length > 0) {
     dataSource = teamData.intervals.map((interval, index) => ({
@@ -25,14 +34,15 @@ const Team = () => {
   const columns = [
     { title: "Fecha Inicio", dataIndex: "start_date" },
     { title: "Fecha Fin", dataIndex: "end_date" },
-    { title: "Puntos", dataIndex: "puntos" },
+    { title: "Puntos", dataIndex: "points" },
   ];
 
-  const totalPoints = dataSource.reduce(
-    (total, record) => total + record.puntos,
-    0
-  );
-
+  let totalPoints = 0;
+  if (teamData && teamData.intervals) {
+    teamData.intervals.slice(1).forEach((interval) => {
+      totalPoints += interval.points;
+    });
+  }
   return (
     <Row
       justify={window.innerWidth > 900 ? "space-between" : "center"}
@@ -55,11 +65,11 @@ const Team = () => {
         <Table
           title={() => "Historial de Puntos"}
           style={{
-            width: window.innerWidth > 900 ? "50%" : "100%",
+            width: window.innerWidth > 900 ? "100%" : "100%",
             margin: "0 auto",
           }}
           bordered
-          dataSource={dataSource}
+          dataSource={teamData ? teamData.intervals.slice(1) : []}
           columns={columns}
           pagination={false}
           summary={() => (

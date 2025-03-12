@@ -14,7 +14,7 @@ const MyTeam = () => {
 
   const select_interval =
     state.user.enterprise_competition_overflow.last_competence.stats
-      .current_interval_data.id;
+      .current_interval_data?.id;
 
   const historical_data =
     state.user.enterprise_competition_overflow.last_competence.stats
@@ -22,26 +22,25 @@ const MyTeam = () => {
 
   const historical_data_last = historical_data[historical_data.length - 1];
 
-  var points = "0";
+  var points = "S/P";
 
-  if (
-    state.user.enterprise_competition_overflow.last_competence.stats.my_team
-  ) {
-    points =
-      state.user.enterprise_competition_overflow.last_competence.stats.my_team
-        .points;
-  }
-
-  var position = "0";
-  if (
-    state.user.enterprise_competition_overflow.last_competence.stats.my_team
-  ) {
-    position =
-      state.user.enterprise_competition_overflow.last_competence.stats.my_team
-        .position;
-  }
-  console.log(state.user.enterprise_competition_overflow.name);
   const enterprise = state.user.enterprise_competition_overflow.name;
+  var name_team = null;
+
+  if (state.user.group_participation.name) {
+    name_team = state.user.group_participation.name;
+  }
+
+  var position = "S/R";
+  if (state.user.enterprise_competition_overflow.last_competence.ranking) {
+    var _ob =
+      state.user.enterprise_competition_overflow.last_competence.ranking.teams;
+    var get_points = _ob.find((team) => team.team_name === name_team);
+    points = get_points.points;
+    position = get_points.position;
+    console.log(enterprise);
+  }
+
   return (
     <Flex>
       <Card

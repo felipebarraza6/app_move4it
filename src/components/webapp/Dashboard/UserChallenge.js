@@ -289,7 +289,21 @@ const UserChallenge = ({ challengers }) => {
   const { state } = useContext(AppContext);
   const location = useLocation();
   const [data, setData] = useState([]);
-  const [currentInterval, setCurrentInterval] = useState(0);
+
+  const current_interval =
+    state.user.enterprise_competition_overflow.last_competence.stats
+      ?.current_interval_data?.id || null;
+  let currentIntervalF = [];
+
+  if (current_interval) {
+    currentIntervalF =
+      challengers.length &&
+      challengers.findIndex(
+        (challenger) => challenger.interval_id === current_interval
+      );
+  }
+
+  const [currentInterval, setCurrentInterval] = useState(currentIntervalF);
 
   const disabledActionButton = (finish_date_time, state) => {
     const currentDate = new Date();
@@ -380,7 +394,7 @@ const UserChallenge = ({ challengers }) => {
     ) {
       console.log(challengers);
 
-      setData(challengers[currentInterval].data.user.activities);
+      setData(challengers[currentInterval]?.data?.user.activities ?? []);
       return challengers[0].data.user.activities;
     } else {
       setData(challengers.user);
@@ -503,8 +517,14 @@ const UserChallenge = ({ challengers }) => {
                 shape="round"
                 type={"default"}
                 onClick={previousInterval}
-                disabled={currentInterval === 0}
+                disabled={
+                  currentInterval === 0
+                    ? true
+                    : challengers[currentInterval - 1]?.start_date > today
+                }
               >
+                {console.log(challengers.length)}
+                {console.log(currentInterval)}
                 <div style={{ fontSize: "10px", marginRight: "5px" }}>
                   {currentInterval > 0 ? (
                     <>
@@ -559,8 +579,8 @@ const UserChallenge = ({ challengers }) => {
 
   useEffect(() => {
     const current_interval =
-      state.user.enterprise_competition_overflow.last_competence.stats
-        .current_interval_data.id;
+      state?.user?.enterprise_competition_overflow?.last_competence?.stats
+        ?.current_interval_data?.id;
     if (location.pathname === "/profile_competition") {
       const changeInterval = challengers.findIndex(
         (challenger) => challenger.interval_id === current_interval
@@ -573,7 +593,7 @@ const UserChallenge = ({ challengers }) => {
       dataSource();
     }
   }, [challengers]);
-
+  const today = new Date().toISOString().split("T")[0];
   return (
     <Card
       title={
