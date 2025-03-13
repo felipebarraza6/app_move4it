@@ -12,7 +12,6 @@ const Team = () => {
 
   const teamData =
     state.user.enterprise_competition_overflow.last_competence.stats.my_team;
-  console.log(teamData);
 
   const today = new Date();
 

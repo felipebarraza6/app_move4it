@@ -20,8 +20,6 @@ const CompetitionSummary = () => {
 
   const historical_data_last = historical_data[historical_data.length - 1];
 
-  console.log(historical_data_last.interval_id);
-
   const name_competition =
     state.user.enterprise_competition_overflow.last_competence.name.toUpperCase();
 
@@ -48,8 +46,8 @@ const CompetitionSummary = () => {
         state.user.enterprise_competition_overflow.last_competence.ranking
           .teams;
       var get_points = _ob.find((team) => team.team_name === name_team);
-      points = get_points.points;
-      ranking = get_points.position;
+      points = get_points?.points;
+      ranking = get_points?.position;
     }
   }
 
@@ -71,7 +69,7 @@ const CompetitionSummary = () => {
           value={name_team}
           prefix={<TeamOutlined />}
         />
-        {select_interval !== historical_data_last.interval_id && (
+        {points && (
           <>
             <Statistic
               title="Puntos"

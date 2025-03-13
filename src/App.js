@@ -38,6 +38,8 @@ const App = () => {
     updateApp();
   }, [state.update]);
 
+  console.log(state);
+
   const router = createBrowserRouter([
     {
       path: "/",

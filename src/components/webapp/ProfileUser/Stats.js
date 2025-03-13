@@ -8,7 +8,6 @@ const Stats = () => {
   const { state } = useContext(AppContext);
   const location = useLocation();
   const navigate = useNavigate();
-  console.log(location.pathname);
 
   var meditions = state.user.profile.corporal_meditions
     .slice()

@@ -60,7 +60,6 @@ const GlobalViewer = () => {
         }
         setDataOverflow(data);
       }
-      console.log(data.ranking.teams);
       const reversedIntervals = data.ranking.intervals.reverse();
       setIntervals(reversedIntervals);
     } catch (err) {
@@ -75,11 +74,9 @@ const GlobalViewer = () => {
   };
 
   const handleIntervalChange = (value) => {
-    console.log(value);
     const selectedInterval = intervals.find(
       (interval) => interval.interval_id === value
     );
-    console.log("Selected Interval:", selectedInterval.ranking);
     setRankingList(selectedInterval.ranking);
     setSelectedInterval(value);
   };

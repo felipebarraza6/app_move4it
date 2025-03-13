@@ -53,7 +53,6 @@ const AddAnswerUser = ({ state, disabledAction, updateActivityState }) => {
         setLoading(false);
       })
       .catch((info) => {
-        console.log("Validate Failed:", info);
         setLoading(false);
       });
   };

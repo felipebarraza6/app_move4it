@@ -14,7 +14,6 @@ const FormData = () => {
     const rq = await endpoints.auth.update_user(values).then((r) => {
       notification.success({ message: "Usuario actualizado correctamente" });
     });
-    console.log(values);
   };
 
   useEffect(() => {}, []);
