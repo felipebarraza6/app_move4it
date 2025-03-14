@@ -6,8 +6,6 @@ const { Text, Title } = Typography;
 const AverageMeditions = () => {
   const { state } = useContext(AppContext);
 
-  console.log(state.user.enterprise_competition_overflow.last_competence);
-
   const firstAvg =
     state.user.enterprise_competition_overflow.last_competence
       .avg_corporal_meditions_teams.first_avg;
@@ -20,7 +18,6 @@ const AverageMeditions = () => {
     ? state.user.enterprise_competition_overflow.last_competence.stats
         .current_interval_data.my_group
     : [];
-  console.log(my_team_u);
   const my_team =
     state.user.enterprise_competition_overflow.last_competence.stats
       .historical_data;

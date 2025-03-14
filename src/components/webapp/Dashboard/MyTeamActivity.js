@@ -20,7 +20,6 @@ const MyTeamActivity = ({ team_data }) => {
     state.user.enterprise_competition_overflow.last_competence.stats
       ?.current_interval_data?.id;
 
-  console.log(current_interval);
   let currentIntervalF = [];
   if (current_interval) {
     currentIntervalF = team_data.intervals.findIndex(
@@ -192,8 +191,6 @@ const MyTeamActivity = ({ team_data }) => {
     };
 
     const today = new Date().toISOString().split("T")[0];
-    console.log(today);
-    console.log(team_data.intervals[currentInterval]?.start_date);
 
     return (
       <Flex

@@ -9,7 +9,6 @@ const Stats = () => {
   const location = useLocation();
   const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
-  console.log(location.pathname);
 
   var meditions = state.user.profile.corporal_meditions
     .slice()

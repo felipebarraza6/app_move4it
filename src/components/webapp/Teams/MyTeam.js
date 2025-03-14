@@ -12,16 +12,6 @@ const MyTeam = () => {
   const { state } = useContext(AppContext);
   const name = state.user.group_participation.name;
 
-  const select_interval =
-    state.user.enterprise_competition_overflow.last_competence.stats
-      .current_interval_data?.id;
-
-  const historical_data =
-    state.user.enterprise_competition_overflow.last_competence.stats
-      .historical_data;
-
-  const historical_data_last = historical_data[historical_data.length - 1];
-
   var points = "S/P";
 
   const enterprise = state.user.enterprise_competition_overflow.name;
@@ -36,9 +26,8 @@ const MyTeam = () => {
     var _ob =
       state.user.enterprise_competition_overflow.last_competence.ranking.teams;
     var get_points = _ob.find((team) => team.team_name === name_team);
-    points = get_points.points;
-    position = get_points.position;
-    console.log(enterprise);
+    points = get_points?.points;
+    position = get_points?.position;
   }
 
   return (
@@ -52,7 +41,7 @@ const MyTeam = () => {
         }}
       >
         <Descriptions bordered column={1}>
-          {select_interval !== historical_data_last.interval_id && (
+          {position && (
             <>
               <Descriptions.Item
                 label={

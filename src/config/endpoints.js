@@ -50,7 +50,6 @@ const create_register_activity = async (data) => {
 };
 
 const update_register_activity = async (data) => {
-  console.log(data);
   const formData = new FormData();
   for (const key in data) {
     if (key === "file" && data[key][0] && data[key][0].originFileObj) {

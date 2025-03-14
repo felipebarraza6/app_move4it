@@ -34,7 +34,7 @@ import { endpoints } from "../../../config/endpoints";
 const { Paragraph } = Typography;
 
 const AddAnswerUser = ({ state, updateActivityState }) => {
-  const { state: AppState } = useContext(AppContext);
+  const { state: AppState, dispatch } = useContext(AppContext);
   const myTeam =
     AppState.user.enterprise_competition_overflow.last_competence.stats
       .current_interval_data.my_group;
@@ -63,13 +63,15 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
           id: state.id,
           is_load: true,
         };
-        console.log("Received values of form: ", values);
 
         const rq = await endpoints.register_activities
           .update(values)
           .then((x) => {
-            console.log(x);
             form.resetFields();
+            dispatch({
+              type: "UPDATE_ACTIVITIES",
+              update_activity: x,
+            });
           });
 
         setVisible(false);
@@ -80,7 +82,6 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
         setLoading(false);
       })
       .catch((info) => {
-        console.log("Validate Failed:", info);
         setLoading(false);
       });
   };
@@ -286,13 +287,15 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
 };
 
 const UserChallenge = ({ challengers }) => {
-  const { state } = useContext(AppContext);
+  console.log(challengers);
+  const { state, dispatch } = useContext(AppContext);
   const location = useLocation();
   const [data, setData] = useState([]);
 
   const current_interval =
     state.user.enterprise_competition_overflow.last_competence.stats
       ?.current_interval_data?.id || null;
+
   let currentIntervalF = [];
 
   if (current_interval) {
@@ -392,8 +395,6 @@ const UserChallenge = ({ challengers }) => {
       location.pathname === "/profile_competition" &&
       challengers.length > 0
     ) {
-      console.log(challengers);
-
       setData(challengers[currentInterval]?.data?.user.activities ?? []);
       return challengers[0].data.user.activities;
     } else {
@@ -405,13 +406,11 @@ const UserChallenge = ({ challengers }) => {
   const extra = () => {
     const nextInterval = () => {
       setCurrentInterval(currentInterval + 1);
-      console.log(challengers[currentInterval + 1].data.user.activities);
       setData(challengers[currentInterval + 1].data.user.activities);
     };
 
     const previousInterval = () => {
       setCurrentInterval(currentInterval - 1);
-      console.log(currentInterval - 1);
       setData(challengers[currentInterval - 1].data.user.activities);
     };
 
@@ -523,8 +522,6 @@ const UserChallenge = ({ challengers }) => {
                     : challengers[currentInterval - 1]?.start_date > today
                 }
               >
-                {console.log(challengers.length)}
-                {console.log(currentInterval)}
                 <div style={{ fontSize: "10px", marginRight: "5px" }}>
                   {currentInterval > 0 ? (
                     <>
@@ -593,7 +590,9 @@ const UserChallenge = ({ challengers }) => {
       dataSource();
     }
   }, [challengers]);
+
   const today = new Date().toISOString().split("T")[0];
+
   return (
     <Card
       title={

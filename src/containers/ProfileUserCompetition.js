@@ -24,7 +24,6 @@ const ProfileUserCompetition = () => {
           }
           pagination={true}
         />
-        <UserActivity />
       </Flex>
     </Flex>
   );
