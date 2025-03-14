@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 const Stats = () => {
   const { state } = useContext(AppContext);
   const location = useLocation();
+  const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
   console.log(location.pathname);
 
@@ -41,6 +42,11 @@ const Stats = () => {
       setData(meditions.slice(0, 1));
     } else if (location.pathname == "/profile_competition") {
       setData(meditions.slice(0, 3));
+    }
+    if (window.innerWidth < 768) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
     }
   }, []);
 
@@ -77,9 +83,21 @@ const Stats = () => {
             </Flex>
           ),
         },
-        { name: "fat", title: "% Grasa", dataIndex: "fat" },
-        { name: "weight", title: "Peso(kg)", dataIndex: "weight" },
-        { name: "height", title: "Altura(mt)", dataIndex: "height" },
+        {
+          name: "fat",
+          title: isMobile ? "grasa" : "% Grasa",
+          dataIndex: "fat",
+        },
+        {
+          name: "weight",
+          title: isMobile ? "peso" : "Peso(kg)",
+          dataIndex: "weight",
+        },
+        {
+          name: "height",
+          title: isMobile ? "altura" : "Altura(mt)",
+          dataIndex: "height",
+        },
       ]}
       dataSource={data}
       pagination={sourcePagination()}

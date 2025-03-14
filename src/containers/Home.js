@@ -1,8 +1,7 @@
-import React from "react";
-import { Layout, Row, Col, Card, Button, Flex, Affix } from "antd";
+import React, { useState, useEffect } from "react";
+import { Layout, Card, Flex, Affix } from "antd";
 
-import logo from "../assets/img/logo.png";
-import { Route, Routes, Link, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 
 // Nav
 import MenuNav from "../components/webapp/MenuNav";
@@ -23,24 +22,35 @@ const { Content, Header, Sider } = Layout;
 
 const Home = () => {
   const location = useLocation();
+  const [isMobile, setIsMobile] = useState(false);
   const { pathname } = location;
+
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+  }, [pathname]);
 
   return (
     <Layout>
-      <Sider
-        width={200}
-        style={{
-          zIndex: 1000,
+      {!isMobile && (
+        <Sider
+          width={200}
+          style={{
+            zIndex: 1000,
 
-          background:
-            "linear-gradient(100deg, rgba(15,120,142,1) 100%, rgba(77,180,202,0.2217480742296919) 100%, rgba(60,87,93,1) 100%)",
-          boxShadow: "1px 0px 20px 1px black",
-        }}
-      >
-        <Affix>
-          <NavBar />
-        </Affix>
-      </Sider>
+            background:
+              "linear-gradient(100deg, rgba(15,120,142,1) 100%, rgba(77,180,202,0.2217480742296919) 100%, rgba(60,87,93,1) 100%)",
+            boxShadow: "1px 0px 20px 1px black",
+          }}
+        >
+          <Affix>
+            <NavBar />
+          </Affix>
+        </Sider>
+      )}
 
       <Layout>
         <Affix>

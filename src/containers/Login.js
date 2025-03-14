@@ -41,12 +41,13 @@ const Login = () => {
       align={"middle"}
       style={{
         minHeight: "100vh",
+        padding: "10px",
         background:
           "radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(0,21,41,1) 100%)",
       }}
     >
-      <Col>
-        <Card style={{ width: "400px", marginBottom: "10px", zIndex: 99 }}>
+      <Col xl={7} xs={24}>
+        <Card style={{ width: "100%", marginBottom: "10px", zIndex: 99 }}>
           <center>
             <img
               src={logo}
@@ -90,7 +91,7 @@ const Login = () => {
             </Form.Item>
           </Form>
         </Card>
-        <Card style={{ width: "400px", textAlign: "center" }} size="small">
+        <Card style={{ width: "100%", textAlign: "center" }} size="small">
           Producto desarrollado por:
           <br />
           <u> fbarraza - dev</u> 👨‍💻☕ / LATAM 🇨🇱

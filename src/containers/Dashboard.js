@@ -13,12 +13,19 @@ const { Title } = Typography;
 
 const Dashboard = () => {
   const { state, dispatch } = useContext(AppContext);
+  const [isMobile, setIsMobile] = useState(false);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+  }, []);
 
   return (
-    <Flex vertical gap="large">
-      <Flex gap="small" justify="space-between">
+    <Flex gap="large" vertical>
+      <Flex gap="small" justify="space-between" vertical={isMobile}>
         <Welcome />
         <Stats />
         <CompetitionSummary />
