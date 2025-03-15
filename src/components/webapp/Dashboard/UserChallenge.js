@@ -44,6 +44,7 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
   const [form] = Form.useForm();
   const [expanded, setExpanded] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isMobile, setIsMoile] = useState(false);
 
   const showModal = () => {
     setVisible(true);
@@ -291,6 +292,7 @@ const UserChallenge = ({ challengers }) => {
   const { state, dispatch } = useContext(AppContext);
   const location = useLocation();
   const [data, setData] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
 
   const current_interval =
     state.user.enterprise_competition_overflow.last_competence.stats
@@ -334,20 +336,35 @@ const UserChallenge = ({ challengers }) => {
     },
     {
       width: 100,
+      hidden: isMobile,
       title: "Categoría",
       render: (state) => <Tag color="blue">{state.activity.category.name}</Tag>,
     },
     {
       title: "Inicia",
       width: 100,
+      hidden: isMobile,
       align: "center",
       render: (state) => (
         <Tag color="green-inverse"> {state.interval?.start_date || "N/A"}</Tag>
       ),
     },
     {
+      title: "Fechas",
+      width: 100,
+      hidden: !isMobile,
+      align: "center",
+      render: (x) => (
+        <Flex gap="small" align="center" vertical>
+          <Tag color="green-inverse"> {x.interval?.start_date || "N/A"}</Tag>
+          <Tag color="geekblue-inverse">{x.interval?.end_date || "N/A"}</Tag>
+        </Flex>
+      ),
+    },
+    {
       title: "Finaliza",
       width: 100,
+      hidden: isMobile,
       align: "center",
       render: (state) => (
         <Tag color="geekblue-inverse">{state.interval?.end_date || "N/A"}</Tag>
@@ -588,6 +605,11 @@ const UserChallenge = ({ challengers }) => {
       setCurrentInterval(0);
 
       dataSource();
+    }
+    if (window.innerWidth < 768) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
     }
   }, [challengers]);
 
