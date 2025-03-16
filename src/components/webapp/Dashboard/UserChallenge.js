@@ -634,7 +634,7 @@ const UserChallenge = ({ challengers }) => {
     >
       <Flex gap="large" vertical justify="space-between">
         {location.pathname === "/profile_competition" && (
-          <Flex gap="small" justify="space-between">
+          <Flex gap="small" justify="space-between" vertical={isMobile}>
             <Card size="small" hoverable style={{ width: "100%" }}>
               <Statistic
                 value={data.length}

@@ -54,7 +54,12 @@ const Team = () => {
         style={{ width: "100%" }}
         vertical
       >
-        <Flex gap="large" justify="space-between" align="middle">
+        <Flex
+          gap="large"
+          justify="space-between"
+          align="middle"
+          vertical={window.innerWidth > 900 ? false : true}
+        >
           <MyTeam />
           <AverageMeditions />
         </Flex>

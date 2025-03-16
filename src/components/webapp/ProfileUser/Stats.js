@@ -76,9 +76,12 @@ const Stats = () => {
           title: "Fecha",
           dataIndex: "created",
           render: (d) => (
-            <Flex gap="small">
+            <Flex gap="small" vertical>
               <div> {d.slice(0, 10)}</div>
-              <div> {d.slice(11, 16)} hrs.</div>
+              <div>
+                {" "}
+                <b>{d.slice(11, 16)} hrs.</b>
+              </div>
             </Flex>
           ),
         },

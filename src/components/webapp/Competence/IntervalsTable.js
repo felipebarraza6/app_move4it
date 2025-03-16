@@ -60,6 +60,7 @@ const IntervalsTable = () => {
                 </>
               }
               style={{ color: "white" }}
+              span={window.innerWidth > 900 ? 1 : 3}
             >
               {sourcesActive && (
                 <Tag color="blue-inverse">
@@ -69,6 +70,7 @@ const IntervalsTable = () => {
             </Descriptions.Item>
             <Descriptions.Item
               style={{ color: "white" }}
+              span={window.innerWidth > 900 ? 1 : 3}
               label={
                 <>
                   <CalendarFilled style={{ marginRight: 8 }} /> Fecha termino
@@ -91,7 +93,10 @@ const IntervalsTable = () => {
             >
               <List
                 dataSource={intervals[currentInterval].activities}
-                grid={{ gutter: 16, column: 3 }}
+                grid={{
+                  gutter: window.innerWidth > 900 ? 16 : 1,
+                  column: window.innerWidth > 900 ? 4 : 1,
+                }}
                 renderItem={(r) => (
                   <List.Item>
                     <Card

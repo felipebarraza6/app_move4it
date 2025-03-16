@@ -39,6 +39,7 @@ const AvgAllGroups = () => {
             justify="center"
             align="center"
             style={{ marginBottom: "10px" }}
+            vertical={window.innerWidth > 900 ? false : true}
           >
             <Card
               size="small"
@@ -74,7 +75,12 @@ const AvgAllGroups = () => {
               />
             </Card>
           </Flex>
-          <Flex gap="large" justify="center" align="center">
+          <Flex
+            gap="large"
+            justify="center"
+            align="center"
+            vertical={window.innerWidth > 900 ? false : true}
+          >
             <Card
               size="small"
               hoverable

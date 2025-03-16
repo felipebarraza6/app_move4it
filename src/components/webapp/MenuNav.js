@@ -8,6 +8,7 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../App";
+import logo from "../../assets/img/logo.png";
 
 const MenuNav = () => {
   const { state, dispatch } = useContext(AppContext);
@@ -43,24 +44,41 @@ const MenuNav = () => {
   ];
 
   return (
-    <Flex gap="large" align="center" style={{ marginTop: "15px" }}>
-      <Button icon={<UserOutlined />} onClick={() => navigate("/profile_user")}>
-        {window.innerWidth > 900 && state.user.username}
-      </Button>
+    <Flex
+      gap="small"
+      justify="space-between"
+      align="center"
+      style={{
+        background:
+          "linear-gradient(169deg, rgba(15,120,142,1) 0%, rgba(122,160,168,1) 35%, rgba(60,87,93,1) 100%)",
+        padding: "10px",
+      }}
+    >
+      {window.innerWidth < 900 && (
+        <img src={logo} alt="logo" style={{ width: "70px" }} />
+      )}
+      <Flex gap="small">
+        <Button
+          icon={<UserOutlined />}
+          onClick={() => navigate("/profile_user")}
+        >
+          {window.innerWidth > 900 && state.user.username}
+        </Button>
 
-      <Button icon={<SnippetsOutlined />} onClick={() => navigate("/blog")}>
-        {window.innerWidth > 900 && "Blog"}
-      </Button>
+        <Button icon={<SnippetsOutlined />} onClick={() => navigate("/blog")}>
+          {window.innerWidth > 900 && "Blog"}
+        </Button>
 
-      <Button
-        icon={<LogoutOutlined />}
-        onClick={() => {
-          dispatch({ type: "LOGOUT" });
-          navigate("/");
-        }}
-      >
-        Salir
-      </Button>
+        <Button
+          icon={<LogoutOutlined />}
+          onClick={() => {
+            dispatch({ type: "LOGOUT" });
+            navigate("/");
+          }}
+        >
+          Salir
+        </Button>
+      </Flex>
     </Flex>
   );
 };

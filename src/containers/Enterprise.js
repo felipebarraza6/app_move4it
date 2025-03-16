@@ -50,7 +50,12 @@ const Enterpise = () => {
     <Row justify={"space-between"} align="top">
       <Col xs={24} xl={24} style={{ paddingRight: "10px" }}>
         <Flex gap={"large"} align="top" justify="space-between" vertical>
-          <Flex style={{ width: "100%" }} gap={"large"} align="top">
+          <Flex
+            style={{ width: "100%" }}
+            gap={"large"}
+            align="top"
+            vertical={window.innerWidth > 900 ? false : true}
+          >
             <Flex align="top" style={{ width: "400px" }}>
               <Ranking />
             </Flex>

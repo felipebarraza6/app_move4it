@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Card, Flex, Affix } from "antd";
+import { Layout, Card, Flex, Affix, Button } from "antd";
 
-import { Route, Routes, useLocation } from "react-router-dom";
+import {
+  UserOutlined,
+  TrophyOutlined,
+  TeamOutlined,
+  DatabaseOutlined,
+  DashboardFilled,
+} from "@ant-design/icons";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
 // Nav
 import MenuNav from "../components/webapp/MenuNav";
@@ -22,20 +29,13 @@ const { Content, Header, Sider } = Layout;
 
 const Home = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
   const { pathname } = location;
 
-  useEffect(() => {
-    if (window.innerWidth < 768) {
-      setIsMobile(true);
-    } else {
-      setIsMobile(false);
-    }
-  }, [pathname]);
-
   return (
     <Layout>
-      {!isMobile && (
+      {window.innerWidth > 768 && (
         <Sider
           width={200}
           style={{
@@ -54,18 +54,128 @@ const Home = () => {
 
       <Layout>
         <Affix>
-          <Header
-            style={{
-              background:
-                "linear-gradient(169deg, rgba(15,120,142,1) 0%, rgba(122,160,168,1) 35%, rgba(60,87,93,1) 100%)",
-            }}
-          >
-            <Flex justify="end" align="center">
-              <MenuNav />
-            </Flex>
-          </Header>
+          <MenuNav />
         </Affix>
         <Content style={styles.content}>
+          {window.innerWidth < 900 && (
+            <Affix offsetTop={70}>
+              <Flex
+                gap={"small"}
+                justify="space-around"
+                align="center"
+                style={{
+                  marginBottom: "10px",
+                  background: "white",
+                  padding: "10px",
+                }}
+              >
+                <Button
+                  type={"primary"}
+                  icon={
+                    <DashboardFilled
+                      style={{
+                        borderColor: "rgba(122,160,168)",
+                        color:
+                          location.pathname !== "/"
+                            ? "rgba(122,160,168)"
+                            : "white",
+                      }}
+                    />
+                  }
+                  shape="round"
+                  onClick={() => navigate("/")}
+                  style={{
+                    background:
+                      location.pathname == "/" ? "rgba(122,160,168)" : "white",
+                    borderColor: "rgba(122,160,168)",
+                    color:
+                      location.pathname == "/" ? "white" : "rgba(122,160,168)",
+                  }}
+                />
+                <Button
+                  type={"primary"}
+                  icon={
+                    <UserOutlined
+                      style={{
+                        borderColor: "rgba(122,160,168)",
+                        color:
+                          location.pathname !== "/profile_competition"
+                            ? "rgba(122,160,168)"
+                            : "white",
+                      }}
+                    />
+                  }
+                  shape="round"
+                  onClick={() => navigate("/profile_competition")}
+                  style={{
+                    background:
+                      location.pathname == "/profile_competition"
+                        ? "rgba(122,160,168)"
+                        : "white",
+                    borderColor: "rgba(122,160,168)",
+                    color:
+                      location.pathname == "/profile_competition"
+                        ? "white"
+                        : "rgba(122,160,168)",
+                  }}
+                />
+                <Button
+                  type={"primary"}
+                  icon={
+                    <TeamOutlined
+                      style={{
+                        borderColor: "rgba(122,160,168)",
+                        color:
+                          location.pathname !== "/team"
+                            ? "rgba(122,160,168)"
+                            : "white",
+                      }}
+                    />
+                  }
+                  shape="round"
+                  onClick={() => navigate("/team")}
+                  style={{
+                    background:
+                      location.pathname == "/team"
+                        ? "rgba(122,160,168)"
+                        : "white",
+                    borderColor: "rgba(122,160,168)",
+                    color:
+                      location.pathname == "/team"
+                        ? "white"
+                        : "rgba(122,160,168)",
+                  }}
+                />
+                <Button
+                  type={"primary"}
+                  icon={
+                    <TrophyOutlined
+                      style={{
+                        borderColor: "rgba(122,160,168)",
+                        color:
+                          location.pathname !== "/enterprise"
+                            ? "rgba(122,160,168)"
+                            : "white",
+                      }}
+                    />
+                  }
+                  shape="round"
+                  onClick={() => navigate("/enterprise")}
+                  style={{
+                    background:
+                      location.pathname == "/enterprise"
+                        ? "rgba(122,160,168)"
+                        : "white",
+                    borderColor: "rgba(122,160,168)",
+                    color:
+                      location.pathname == "/enterprise"
+                        ? "white"
+                        : "rgba(122,160,168)",
+                  }}
+                />
+              </Flex>
+            </Affix>
+          )}
           <Flex gap={"small"}>
             <Card style={{ minHeight: "85vh", width: "100%" }}>
               <Routes>
@@ -94,7 +204,6 @@ const Home = () => {
 const styles = {
   content: {
     minHeight: "90vh",
-    margin: "10px",
   },
   logo: {
     width: "70px",

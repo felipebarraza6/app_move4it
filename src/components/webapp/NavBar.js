@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Typography, Flex } from "antd";
+import { Flex } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/img/logo.png";
 import { AppContext } from "../../App";
@@ -7,13 +7,9 @@ import {
   UserOutlined,
   TrophyOutlined,
   TeamOutlined,
-  HomeFilled,
   DatabaseOutlined,
   DashboardFilled,
-  HomeOutlined,
 } from "@ant-design/icons";
-
-const { Text } = Typography;
 
 const NavBar = () => {
   const [option, setOption] = useState(null);

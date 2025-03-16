@@ -13,6 +13,18 @@ import { useLocation } from "react-router-dom";
 
 const MyTeamActivity = ({ team_data }) => {
   const { state } = useContext(AppContext);
+  const last_competence_end =
+    state.user.enterprise_competition_overflow.last_competence.end_date;
+
+  const active_competence = () => {
+    const today = new Date().toISOString().split("T")[0];
+    if (last_competence_end < today) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+  console.log(last_competence_end);
   const location = useLocation();
   const [data, setData] = useState([]);
 
@@ -348,9 +360,22 @@ const MyTeamActivity = ({ team_data }) => {
   };
 
   return (
-    <Card title="Actividad de mi equipo" style={styles.card} extra={extra()}>
-      <Table bordered columns={columns} pagination={false} dataSource={data} />
-    </Card>
+    <>
+      {active_competence() && (
+        <Card
+          title="Actividad de mi equipo"
+          style={styles.card}
+          extra={extra()}
+        >
+          <Table
+            bordered
+            columns={columns}
+            pagination={false}
+            dataSource={data}
+          />
+        </Card>
+      )}
+    </>
   );
 };
 

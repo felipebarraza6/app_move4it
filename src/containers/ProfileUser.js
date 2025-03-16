@@ -10,12 +10,15 @@ const { Title } = Typography;
 const ProfileUser = () => {
   const { state } = useContext(AppContext);
   return (
-    <Flex justify="space-around">
-      <Col span={8}>
+    <Flex
+      justify="space-around"
+      vertical={window.innerWidth > 900 ? false : true}
+    >
+      <Col>
         <FormData />
         <UpdatePassword />
       </Col>
-      <Col span={10}>
+      <Col style={{ marginTop: "10px" }}>
         <Stats />
       </Col>
     </Flex>

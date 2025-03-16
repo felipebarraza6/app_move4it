@@ -59,7 +59,6 @@ const Ranking = () => {
     <Card
       size="small"
       style={{
-        width: "350px",
         background:
           "linear-gradient(0deg, rgba(15,120,142,0.056481967787114895) 0%, rgba(197,239,255,0.1153054971988795) 35%, rgba(60,87,93,1) 100%)",
       }}

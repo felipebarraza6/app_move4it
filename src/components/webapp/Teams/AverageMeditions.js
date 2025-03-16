@@ -40,7 +40,12 @@ const AverageMeditions = () => {
       style={{ width: "100%" }}
       vertical
     >
-      <Flex style={{ width: "100%" }} justify="center" align="center">
+      <Flex
+        style={{ width: "100%" }}
+        justify="center"
+        align="center"
+        vertical={window.innerWidth > 900 ? false : true}
+      >
         <Card
           style={{
             backgroundColor: "#c9d3d9",
@@ -59,6 +64,7 @@ const AverageMeditions = () => {
             justify="center"
             align="center"
             style={{ marginBottom: "10px" }}
+            vertical={window.innerWidth > 900 ? false : true}
           >
             <Card
               size="small"
@@ -94,7 +100,12 @@ const AverageMeditions = () => {
               />
             </Card>
           </Flex>
-          <Flex gap="large" justify="center" align="center">
+          <Flex
+            gap="large"
+            justify="center"
+            align="center"
+            vertical={window.innerWidth > 900 ? false : true}
+          >
             <Card
               size="small"
               hoverable
@@ -137,6 +148,7 @@ const AverageMeditions = () => {
         style={{ width: "100%" }}
         justify="center"
         align="center"
+        vertical={window.innerWidth > 900 ? false : true}
       >
         <Card
           hoverable

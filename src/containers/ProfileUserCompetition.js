@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Flex } from "antd";
 import "react-circular-progressbar/dist/styles.css";
 import { AppContext } from "../App";
@@ -9,10 +9,19 @@ import UserActivity from "../components/webapp/Dashboard/UserActivity";
 
 const ProfileUserCompetition = () => {
   const { state } = useContext(AppContext);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+  }, []);
 
   return (
     <Flex align={"middle"} vertical gap={"large"}>
-      <Flex justify="center" align="middle" gap={"large"}>
+      <Flex justify="center" align="middle" gap={"large"} vertical={isMobile}>
         <MyData />
         <Stats />
       </Flex>
