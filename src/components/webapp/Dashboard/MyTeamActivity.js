@@ -374,7 +374,7 @@ const MyTeamActivity = ({ team_data }) => {
 
   return (
     <Card
-      title={location.pathname === "/" ? "Actividad de mi equipo" : <></>}
+      title={window.innerWidth > 726 ? "Actividad de mi equipo" : <></>}
       style={styles.card}
       extra={extra()}
     >
@@ -382,44 +382,51 @@ const MyTeamActivity = ({ team_data }) => {
         size="small"
         bordered
         columns={columns}
-        expandable={{
-          expandedRowKeys: expandedRows,
-          onExpandedRowsChange: (newExpandedRows) => {
-            setExpandedRows(newExpandedRows);
-          },
-          expandedRowRender: (record) => (
-            <p style={{ margin: 0 }}>
-              {activityNames.map((activity) => (
-                <div key={activity} style={{ marginBottom: "10px" }}>
-                  <strong>{activity}: </strong>
-                  {(() => {
-                    const activityData = team_data.intervals[
-                      currentInterval
-                    ]?.activities?.find(
-                      (act) =>
-                        act.user.email === record.email &&
-                        act.activity.name === activity
-                    );
+        expandable={
+          isMobile
+            ? {
+                expandedRowKeys: expandedRows,
+                onExpandedRowsChange: (newExpandedRows) => {
+                  setExpandedRows(newExpandedRows);
+                },
+                expandedRowRender: (record) => (
+                  <p style={{ margin: 0 }}>
+                    {activityNames.map((activity) => (
+                      <div key={activity} style={{ marginBottom: "10px" }}>
+                        <strong>{activity}: </strong>
+                        {(() => {
+                          const activityData = team_data.intervals[
+                            currentInterval
+                          ]?.activities?.find(
+                            (act) =>
+                              act.user.email === record.email &&
+                              act.activity.name === activity
+                          );
 
-                    if (activityData) {
-                      if (!activityData.is_completed && activityData.is_load) {
-                        return <Spin />;
-                      }
-                      return activityData.is_completed ? (
-                        <CheckCircleFilled style={{ color: "green" }} />
-                      ) : (
-                        <CloseCircleFilled style={{ color: "red" }} />
-                      );
-                    }
-                    return null;
-                  })()}
-                </div>
-              ))}
-              {console.log(record)}
-            </p>
-          ),
-          rowExpandable: (record) => record.email !== "Total",
-        }}
+                          if (activityData) {
+                            if (
+                              !activityData.is_completed &&
+                              activityData.is_load
+                            ) {
+                              return <Spin />;
+                            }
+                            return activityData.is_completed ? (
+                              <CheckCircleFilled style={{ color: "green" }} />
+                            ) : (
+                              <CloseCircleFilled style={{ color: "red" }} />
+                            );
+                          }
+                          return null;
+                        })()}
+                      </div>
+                    ))}
+                    {console.log(record)}
+                  </p>
+                ),
+                rowExpandable: (record) => record.email !== "Total",
+              }
+            : false
+        }
         pagination={false}
         dataSource={data}
       />

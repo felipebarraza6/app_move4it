@@ -35,6 +35,7 @@ const { Paragraph } = Typography;
 
 const AddAnswerUser = ({ state, updateActivityState }) => {
   const { state: AppState, dispatch } = useContext(AppContext);
+  const location = useLocation();
   const myTeam =
     AppState?.user?.enterprise_competition_overflow?.last_competence?.stats
       ?.current_interval_data?.my_group || {};
@@ -90,27 +91,39 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
   return (
     <div>
       {!state.is_completed ? (
-        <Button
-          type="primary"
-          size={window.innerWidth < 768 ? "small" : "large"}
-          onClick={showModal}
-          icon={
-            state.is_completed ? (
-              <CheckCircleFilled />
-            ) : !state.is_load ? (
-              <PlusOutlined />
-            ) : (
-              <CheckCircleFilled />
-            )
-          }
-          disabled={state.is_completed || state.is_load}
-        >
-          {state.is_load && !state.is_completed
-            ? "Enviado..."
-            : state.is_completed
-            ? "Completado"
-            : "Realizar"}
-        </Button>
+        <>
+          {location.pathname === "/" ? (
+            <Button
+              type="primary"
+              size={window.innerWidth < 768 ? "small" : "large"}
+              onClick={showModal}
+              icon={
+                state.is_completed ? (
+                  <CheckCircleFilled />
+                ) : !state.is_load ? (
+                  <PlusOutlined />
+                ) : (
+                  <CheckCircleFilled />
+                )
+              }
+              disabled={state.is_completed || state.is_load}
+            >
+              {state.is_load && !state.is_completed
+                ? "Enviado..."
+                : state.is_completed
+                ? "Completado"
+                : "Realizar"}
+            </Button>
+          ) : (
+            <span>
+              {state.is_load && !state.is_completed
+                ? "Enviado"
+                : state.is_completed
+                ? "Completado"
+                : "Sin realizar"}
+            </span>
+          )}
+        </>
       ) : (
         <Flex gap="small" justify="center">
           <CheckSquareFilled style={{ color: "green" }} />

@@ -46,7 +46,7 @@ const MenuNav = () => {
   return (
     <Flex
       gap="small"
-      justify="space-between"
+      justify={window.innerWidth < 726 ? "space-between" : "end"}
       align="center"
       style={{
         background:
