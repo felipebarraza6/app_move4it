@@ -35,7 +35,7 @@ const MyTeam = () => {
       <Card
         title={name}
         style={{
-          width: 300,
+          width: window.innerWidth > 726 ? "300px" : "100%",
           background:
             "radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(185,189,201,1) 81%)",
         }}

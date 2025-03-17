@@ -36,8 +36,8 @@ const { Paragraph } = Typography;
 const AddAnswerUser = ({ state, updateActivityState }) => {
   const { state: AppState, dispatch } = useContext(AppContext);
   const myTeam =
-    AppState.user.enterprise_competition_overflow.last_competence.stats
-      .current_interval_data.my_group;
+    AppState?.user?.enterprise_competition_overflow?.last_competence?.stats
+      ?.current_interval_data?.my_group || {};
   const quantity_participants = Object.keys(myTeam).length;
   const [visible, setVisible] = useState(false);
   const [listFile, setListFile] = useState([]);
@@ -92,6 +92,7 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
       {!state.is_completed ? (
         <Button
           type="primary"
+          size={window.innerWidth < 768 ? "small" : "large"}
           onClick={showModal}
           icon={
             state.is_completed ? (
@@ -205,6 +206,7 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
             justify="center"
             style={{ width: "100%" }}
             align="center"
+            vertical={window.innerWidth < 768 ? true : false}
           >
             <Flex>
               <Form.Item
@@ -294,7 +296,22 @@ const UserChallenge = ({ challengers }) => {
   const [data, setData] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
 
-  const current_interval =
+  const today = new Date().toISOString().split("T")[0];
+
+  const last_competence_end =
+    state.user.enterprise_competition_overflow.last_competence.end_date;
+
+  const active_competence = () => {
+    const today = new Date().toISOString().split("T")[0];
+
+    if (last_competence_end < today) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  var current_interval =
     state.user.enterprise_competition_overflow.last_competence.stats
       ?.current_interval_data?.id || null;
 
@@ -306,6 +323,12 @@ const UserChallenge = ({ challengers }) => {
       challengers.findIndex(
         (challenger) => challenger.interval_id === current_interval
       );
+  } else {
+    if (!active_competence()) {
+      console.log(challengers.length);
+      currentIntervalF = 0;
+      current_interval = 0;
+    }
   }
 
   const [currentInterval, setCurrentInterval] = useState(currentIntervalF);
@@ -358,6 +381,11 @@ const UserChallenge = ({ challengers }) => {
         <Flex gap="small" align="center" vertical>
           <Tag color="green-inverse"> {x.interval?.start_date || "N/A"}</Tag>
           <Tag color="geekblue-inverse">{x.interval?.end_date || "N/A"}</Tag>
+          <AddAnswerUser
+            state={x}
+            disabledAction={disabledActionButton(x.finish_date_time, x)}
+            updateActivityState={updateActivityState}
+          />
         </Flex>
       ),
     },
@@ -373,6 +401,7 @@ const UserChallenge = ({ challengers }) => {
     {
       title: "Estado",
       width: 100,
+      hidden: isMobile,
       align: "center",
       render: (state) => {
         if (state.is_completed) {
@@ -390,8 +419,9 @@ const UserChallenge = ({ challengers }) => {
     },
     {
       width: 100,
-      hidden: location.pathname === "/profile_competition",
+      hidden: location.pathname === "/profile_competition" || isMobile,
       align: "center",
+
       render: (state) => {
         return (
           <AddAnswerUser
@@ -403,22 +433,6 @@ const UserChallenge = ({ challengers }) => {
       },
     },
   ];
-
-  const dataSource = () => {
-    if (!challengers) {
-      return [];
-    }
-    if (
-      location.pathname === "/profile_competition" &&
-      challengers.length > 0
-    ) {
-      setData(challengers[currentInterval]?.data?.user.activities ?? []);
-      return challengers[0].data.user.activities;
-    } else {
-      setData(challengers.user);
-      return challengers.user;
-    }
-  };
 
   const extra = () => {
     const nextInterval = () => {
@@ -455,7 +469,6 @@ const UserChallenge = ({ challengers }) => {
                 <div style={{ fontSize: "10px", marginLeft: "5px" }}>
                   {currentInterval < challengers.length - 1 ? (
                     <>
-                      <CalendarOutlined />{" "}
                       {new Date(
                         new Date(
                           challengers[currentInterval + 1].start_date
@@ -469,7 +482,6 @@ const UserChallenge = ({ challengers }) => {
                         month: "short",
                       })}
                       <br />
-                      <CalendarFilled />{" "}
                       {new Date(
                         new Date(
                           challengers[currentInterval + 1].end_date
@@ -613,64 +625,84 @@ const UserChallenge = ({ challengers }) => {
     }
   }, [challengers]);
 
-  const today = new Date().toISOString().split("T")[0];
-
-  return (
-    <Card
-      title={
-        <Flex gap="small" align="center" justify="space-between">
-          <Flex gap="small">
-            <OrderedListOutlined />{" "}
-            {location.pathname === "/profile_competition"
-              ? "Tus pruebas en competencía"
-              : "Tus pruebas"}
-          </Flex>
-          <Flex>{extra()}</Flex>
-        </Flex>
+  const dataSource = () => {
+    if (!challengers) {
+      return [];
+    }
+    if (
+      location.pathname === "/profile_competition" &&
+      challengers.length > 0
+    ) {
+      if (active_competence()) {
+        setData(challengers[currentInterval]?.data?.user.activities ?? []);
+        console.log(challengers[0].data.user.activities);
+        return challengers[0].data.user.activities;
+      } else {
+        setData(challengers[0].data.user.activities);
       }
-      style={{
-        ...styles.table,
-      }}
-    >
-      <Flex gap="large" vertical justify="space-between">
-        {location.pathname === "/profile_competition" && (
-          <Flex gap="small" justify="space-between" vertical={isMobile}>
-            <Card size="small" hoverable style={{ width: "100%" }}>
-              <Statistic
-                value={data.length}
-                title="Total"
-                valueStyle={{ textAlign: "center" }}
-              />
-            </Card>
-            <Card size="small" hoverable style={{ width: "100%" }}>
-              <Statistic
-                value={data.filter((state) => state.is_completed).length}
-                title="Completadas"
-                valueStyle={{ textAlign: "center" }}
-              />
-            </Card>
-
-            <Card size="small" hoverable style={{ width: "100%" }}>
-              <Statistic
-                value={data.filter((state) => !state.is_completed).length}
-                title="No completadas"
-                valueStyle={{ textAlign: "center" }}
-              />
-            </Card>
+    } else {
+      setData(challengers.user);
+      return challengers.user;
+    }
+  };
+  return (
+    <>
+      <Card
+        title={
+          <Flex gap="small" align="center" justify="space-between">
+            <Flex gap="small">
+              {window.innerWidth > 726 && <OrderedListOutlined />}{" "}
+              {location.pathname === "/profile_competition"
+                ? window.innerWidth > 726 && "Tus pruebas en competencía"
+                : "Tus pruebas"}
+            </Flex>
+            <Flex>{extra()}</Flex>
           </Flex>
-        )}
+        }
+        style={{
+          ...styles.table,
+        }}
+      >
+        <Flex gap="large" vertical justify="space-between">
+          {location.pathname === "/profile_competition" && (
+            <Flex gap="small" justify="space-between" vertical={isMobile}>
+              <Card size="small" hoverable style={{ width: "100%" }}>
+                <Statistic
+                  value={data.length}
+                  title="Total"
+                  valueStyle={{ textAlign: "center" }}
+                />
+              </Card>
+              <Card size="small" hoverable style={{ width: "100%" }}>
+                <Statistic
+                  value={data.filter((state) => state.is_completed).length}
+                  title="Completadas"
+                  valueStyle={{ textAlign: "center" }}
+                />
+              </Card>
 
-        <Flex vertical>
-          <Table
-            size="small"
-            dataSource={data}
-            bordered={true}
-            pagination={false}
-            columns={columns}
-          />
+              <Card size="small" hoverable style={{ width: "100%" }}>
+                <Statistic
+                  value={data.filter((state) => !state.is_completed).length}
+                  title="No completadas"
+                  valueStyle={{ textAlign: "center" }}
+                />
+              </Card>
+            </Flex>
+          )}
+
+          <Flex vertical>
+            <Table
+              size="small"
+              dataSource={data}
+              bordered={true}
+              pagination={false}
+              columns={columns}
+            />
+          </Flex>
         </Flex>
-      </Flex>
-    </Card>
+      </Card>
+    </>
   );
 };
 

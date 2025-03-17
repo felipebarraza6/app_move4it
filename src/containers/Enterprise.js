@@ -12,36 +12,6 @@ import "react-circular-progressbar/dist/styles.css";
 const { Title } = Typography;
 
 const Enterpise = () => {
-  const config = {
-    data: [
-      { Date: "2020-01-01", scales: 2 },
-      { Date: "2020-01-02", scales: 5 },
-      { Date: "2020-01-03", scales: 8 },
-      { Date: "2020-01-04", scales: 12 },
-      { Date: "2020-01-05", scales: 3 },
-      { Date: "2020-01-06", scales: 7 },
-      { Date: "2020-01-07", scales: 2 },
-      { Date: "2020-01-08", scales: 5 },
-      { Date: "2020-01-09", scales: 8 },
-      { Date: "2020-01-10", scales: 12 },
-      { Date: "2020-01-11", scales: 3 },
-      { Date: "2020-01-12", scales: 7 },
-    ],
-    xField: "Date",
-    yField: "scales",
-    xAxis: {
-      tickCount: 5,
-    },
-    animation: false,
-    slider: {
-      start: 0.1,
-      end: 30,
-      trendCfg: {
-        isArea: true,
-      },
-    },
-  };
-
   const { state } = useContext(AppContext);
   const sourceValidate =
     state.user.enterprise_competition_overflow.last_competence.stats.my_team;
@@ -56,7 +26,7 @@ const Enterpise = () => {
             align="top"
             vertical={window.innerWidth > 900 ? false : true}
           >
-            <Flex align="top" style={{ width: "400px" }}>
+            <Flex align="top" style={{ width: "100%" }}>
               <Ranking />
             </Flex>
             <Flex

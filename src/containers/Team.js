@@ -10,10 +10,23 @@ import AverageMeditions from "../components/webapp/Teams/AverageMeditions";
 const Team = () => {
   const { state } = useContext(AppContext);
 
-  const teamData =
+  var teamData =
     state.user.enterprise_competition_overflow.last_competence.stats.my_team;
 
   const today = new Date();
+
+  const last_competence_end =
+    state.user.enterprise_competition_overflow.last_competence.end_date;
+
+  const active_competence = () => {
+    const today = new Date().toISOString().split("T")[0];
+
+    if (last_competence_end < today) {
+      return false;
+    } else {
+      return true;
+    }
+  };
 
   if (teamData && teamData.intervals) {
     teamData.intervals = teamData.intervals.filter(
@@ -73,7 +86,13 @@ const Team = () => {
             margin: "0 auto",
           }}
           bordered
-          dataSource={teamData ? teamData.intervals.slice(1) : []}
+          dataSource={
+            teamData
+              ? active_competence()
+                ? teamData.intervals.slice(1)
+                : teamData.intervals
+              : []
+          }
           columns={columns}
           pagination={false}
           summary={() => (

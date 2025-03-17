@@ -37,7 +37,6 @@ const Home = () => {
     <Layout>
       {window.innerWidth > 768 && (
         <Sider
-          width={200}
           style={{
             zIndex: 1000,
 

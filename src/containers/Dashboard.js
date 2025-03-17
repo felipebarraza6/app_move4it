@@ -16,34 +16,61 @@ const Dashboard = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    if (window.innerWidth < 768) {
-      setIsMobile(true);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Initial check
+    handleResize();
+
+    // Add resize event listener
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup on unmount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []); // Remove resizeTo dependency as it's not needed
+
+  const last_competence_end =
+    state.user.enterprise_competition_overflow.last_competence.end_date;
+
+  const active_competence = () => {
+    const today = new Date().toISOString().split("T")[0];
+    if (last_competence_end < today) {
+      return false;
     } else {
-      setIsMobile(false);
+      return true;
     }
-  }, []);
+  };
 
   return (
     <Flex gap="large" vertical>
-      <Flex gap="small" justify="space-between" vertical={isMobile}>
+      <Flex
+        gap="small"
+        justify="space-between"
+        vertical={window.innerWidth < 768 ? true : false}
+      >
         <Welcome />
         <Stats />
         <CompetitionSummary />
       </Flex>
       <Flex justify="center" vertical gap="large">
-        <UserChallenge
-          challengers={
-            state.user.enterprise_competition_overflow.last_competence.stats
-              .current_interval_data
-          }
-          pagination={false}
-        />
-        <MyTeamActivity
-          team_data={
-            state.user.enterprise_competition_overflow.last_competence.stats
-              .my_team
-          }
-        />
+        {active_competence() && (
+          <>
+            <UserChallenge
+              challengers={
+                state.user.enterprise_competition_overflow.last_competence.stats
+                  .current_interval_data
+              }
+              pagination={false}
+            />
+            <MyTeamActivity
+              team_data={
+                state.user.enterprise_competition_overflow.last_competence.stats
+                  .my_team
+              }
+            />
+          </>
+        )}
       </Flex>
 
       <Blog type="novedades" />

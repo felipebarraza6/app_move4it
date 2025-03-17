@@ -13,30 +13,38 @@ import { useLocation } from "react-router-dom";
 
 const MyTeamActivity = ({ team_data }) => {
   const { state } = useContext(AppContext);
+  const location = useLocation();
+  const [data, setData] = useState([]);
+
   const last_competence_end =
     state.user.enterprise_competition_overflow.last_competence.end_date;
 
   const active_competence = () => {
     const today = new Date().toISOString().split("T")[0];
+
     if (last_competence_end < today) {
       return false;
     } else {
       return true;
     }
   };
-  console.log(last_competence_end);
-  const location = useLocation();
-  const [data, setData] = useState([]);
 
-  const current_interval =
+  var current_interval =
     state.user.enterprise_competition_overflow.last_competence.stats
       ?.current_interval_data?.id;
 
   let currentIntervalF = [];
+
   if (current_interval) {
     currentIntervalF = team_data.intervals.findIndex(
       (challenger) => challenger.interval_id === current_interval
     );
+  } else {
+    if (!active_competence()) {
+      console.log(team_data.length);
+      currentIntervalF = 0;
+      current_interval = 0;
+    }
   }
 
   const [currentInterval, setCurrentInterval] = useState(currentIntervalF);
@@ -129,8 +137,16 @@ const MyTeamActivity = ({ team_data }) => {
 
     setData([...dataWithPercentage, totalsRow]);
   };
+  const [isMobile, setIsMobile] = useState(false);
+  const [expandedRows, setExpandedRows] = useState([]);
   useEffect(() => {
     dataSource();
+
+    if (window.innerWidth < 768) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
   }, [team_data, currentInterval]);
 
   if (!team_data || !team_data.intervals || team_data.intervals.length === 0) {
@@ -153,6 +169,7 @@ const MyTeamActivity = ({ team_data }) => {
       align: "center",
     },
     ...activityNames.map((activity) => ({
+      hidden: window.innerWidth < 726 && true,
       title: activity,
       dataIndex: activity,
       key: activity,
@@ -179,13 +196,13 @@ const MyTeamActivity = ({ team_data }) => {
       },
     })),
     {
-      title: "Puntos",
+      title: !isMobile ? "Puntos" : "Pts",
       dataIndex: "points",
       key: "points",
       align: "center",
     },
     {
-      title: "Efectividad",
+      title: !isMobile && "Efectividad",
       dataIndex: "percentage",
       key: "percentage",
       align: "center",
@@ -226,7 +243,6 @@ const MyTeamActivity = ({ team_data }) => {
             <div style={{ fontSize: "10px", marginLeft: "5px" }}>
               {currentInterval < team_data.intervals.length - 1 ? (
                 <>
-                  <CalendarOutlined />{" "}
                   {new Date(
                     new Date(
                       team_data.intervals[currentInterval + 1]?.start_date
@@ -240,7 +256,6 @@ const MyTeamActivity = ({ team_data }) => {
                     month: "short",
                   })}
                   <br />
-                  <CalendarFilled />{" "}
                   {new Date(
                     new Date(
                       team_data.intervals[currentInterval + 1]?.end_date
@@ -317,7 +332,6 @@ const MyTeamActivity = ({ team_data }) => {
             <div style={{ fontSize: "10px", marginLeft: "5px" }}>
               {currentInterval > 0 ? (
                 <>
-                  <CalendarOutlined />{" "}
                   {new Date(
                     new Date(
                       team_data.intervals[currentInterval - 1]?.start_date
@@ -331,7 +345,6 @@ const MyTeamActivity = ({ team_data }) => {
                     month: "short",
                   })}
                   <br />
-                  <CalendarFilled />{" "}
                   {new Date(
                     new Date(
                       team_data.intervals[currentInterval - 1]?.end_date
@@ -360,22 +373,57 @@ const MyTeamActivity = ({ team_data }) => {
   };
 
   return (
-    <>
-      {active_competence() && (
-        <Card
-          title="Actividad de mi equipo"
-          style={styles.card}
-          extra={extra()}
-        >
-          <Table
-            bordered
-            columns={columns}
-            pagination={false}
-            dataSource={data}
-          />
-        </Card>
-      )}
-    </>
+    <Card
+      title={location.pathname === "/" ? "Actividad de mi equipo" : <></>}
+      style={styles.card}
+      extra={extra()}
+    >
+      <Table
+        size="small"
+        bordered
+        columns={columns}
+        expandable={{
+          expandedRowKeys: expandedRows,
+          onExpandedRowsChange: (newExpandedRows) => {
+            setExpandedRows(newExpandedRows);
+          },
+          expandedRowRender: (record) => (
+            <p style={{ margin: 0 }}>
+              {activityNames.map((activity) => (
+                <div key={activity} style={{ marginBottom: "10px" }}>
+                  <strong>{activity}: </strong>
+                  {(() => {
+                    const activityData = team_data.intervals[
+                      currentInterval
+                    ]?.activities?.find(
+                      (act) =>
+                        act.user.email === record.email &&
+                        act.activity.name === activity
+                    );
+
+                    if (activityData) {
+                      if (!activityData.is_completed && activityData.is_load) {
+                        return <Spin />;
+                      }
+                      return activityData.is_completed ? (
+                        <CheckCircleFilled style={{ color: "green" }} />
+                      ) : (
+                        <CloseCircleFilled style={{ color: "red" }} />
+                      );
+                    }
+                    return null;
+                  })()}
+                </div>
+              ))}
+              {console.log(record)}
+            </p>
+          ),
+          rowExpandable: (record) => record.email !== "Total",
+        }}
+        pagination={false}
+        dataSource={data}
+      />
+    </Card>
   );
 };
 
