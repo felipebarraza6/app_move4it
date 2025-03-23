@@ -74,6 +74,9 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
               type: "UPDATE_ACTIVITIES",
               update_activity: x,
             });
+            dispatch({
+              type: "UPDATE_USER",
+            });
           });
 
         setVisible(false);
@@ -472,11 +475,15 @@ const UserChallenge = ({ challengers }) => {
         >
           {data.length > 0 && (
             <>
+              {console.log(challengers.length)}
+              {console.log(currentInterval + 1)}
               <Button
                 shape="round"
                 type="default"
                 onClick={nextInterval}
-                disabled={currentInterval - 1 > 0 ? true : false}
+                disabled={
+                  currentInterval + 1 == challengers.length ? true : false
+                }
               >
                 <ArrowLeftOutlined />
                 <div style={{ fontSize: "10px", marginLeft: "5px" }}>

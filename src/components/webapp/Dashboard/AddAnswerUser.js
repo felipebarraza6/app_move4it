@@ -89,7 +89,7 @@ const AddAnswerUser = ({ state, disabledAction, updateActivityState }) => {
       )}
       <Modal
         title={`Cargar evidencía para actividad "${state.activity.name}"`}
-        visible={visible}
+        open={visible}
         onOk={handleOk}
         width={700}
         onCancel={handleCancel}
@@ -105,9 +105,7 @@ const AddAnswerUser = ({ state, disabledAction, updateActivityState }) => {
             icon={<SendOutlined />}
             loading={loading}
             disabled={loading}
-          >
-            Enviar
-          </Button>,
+          ></Button>,
         ]}
       >
         <Flex

@@ -23,6 +23,12 @@ export const authReducer = (state, action) => {
         user: action.payload.user,
       };
 
+    case "UPDATE_USER":
+      return {
+        ...state,
+        update: state.update + 1,
+      };
+
     case "UPDATE_ACTIVITIES":
       var update_activity = action.update_activity;
       console.log(update_activity);
