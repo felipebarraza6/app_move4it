@@ -37,6 +37,9 @@ const CompetitionSummary = () => {
   const endDate = new Date(
     state.user.enterprise_competition_overflow.last_competence.start_date
   );
+  const startDate = new Date(
+    state.user.enterprise_competition_overflow.last_competence.start_date
+  );
   endDate.setDate(endDate.getDate() + quantity.getDate());
   const today = new Date();
 
@@ -50,8 +53,9 @@ const CompetitionSummary = () => {
       ranking = get_points?.position;
     }
   }
+  console.log(points);
 
-  return (
+  return today < endDate && today > startDate ? (
     <Card
       title={
         <Flex gap="small">
@@ -69,26 +73,24 @@ const CompetitionSummary = () => {
           value={name_team}
           prefix={<TeamOutlined />}
         />
-        {points && (
-          <>
-            <Statistic
-              title="Puntos"
-              valueStyle={styles.valueStyle}
-              value={points}
-              prefix={<FlagOutlined />}
-            />
+        <>
+          <Statistic
+            title="Puntos"
+            valueStyle={styles.valueStyle}
+            value={points}
+            prefix={<FlagOutlined />}
+          />
 
-            <Statistic
-              title="Ranking"
-              valueStyle={styles.valueStyle}
-              value={ranking}
-              prefix={<FieldNumberOutlined />}
-            />
-          </>
-        )}
+          <Statistic
+            title="Ranking"
+            valueStyle={styles.valueStyle}
+            value={ranking}
+            prefix={<FieldNumberOutlined />}
+          />
+        </>
       </Flex>
     </Card>
-  );
+  ) : null;
 };
 
 const styles = {

@@ -57,7 +57,11 @@ const FormData = () => {
         <Item name="date_of_birth">
           <DatePicker
             style={{ width: "100%" }}
-            placeholder={state.user.date_of_birth}
+            placeholder={
+              state.user.date_of_birth
+                ? state.user.date_of_birth
+                : "Fecha de nacimiento"
+            }
             format="YYYY-MM-DD"
           />
         </Item>

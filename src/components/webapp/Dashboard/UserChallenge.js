@@ -46,7 +46,7 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
   const [expanded, setExpanded] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isMobile, setIsMoile] = useState(false);
-
+  const today = new Date().toISOString().split("T")[0];
   const showModal = () => {
     setVisible(true);
   };
@@ -120,7 +120,9 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
           ) : (
             <span>
               {state.is_load && !state.is_completed
-                ? "Enviado"
+                ? today == state.interval.end_date
+                  ? "Enviado"
+                  : "incompleto"
                 : state.is_completed
                 ? "Completado"
                 : "Sin realizar"}
@@ -306,7 +308,6 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
 };
 
 const UserChallenge = ({ challengers }) => {
-  console.log(challengers);
   const { state, dispatch } = useContext(AppContext);
   const location = useLocation();
   const [data, setData] = useState([]);
@@ -341,7 +342,6 @@ const UserChallenge = ({ challengers }) => {
       );
   } else {
     if (!active_competence()) {
-      console.log(challengers.length);
       currentIntervalF = 0;
       current_interval = 0;
     }
@@ -420,15 +420,20 @@ const UserChallenge = ({ challengers }) => {
       hidden: isMobile,
       align: "center",
       render: (state) => {
+        console.log(today);
+        console.log(state.interval.end_date);
         if (state.is_completed) {
           return "completado";
-        } else if (state.is_load) {
+        } else if (state.is_load && today === state.interval.end_date) {
           return (
             <>
               en evaluación <Spin size="small" />
             </>
           );
+        } else if (state.is_load && today > state.interval.end_date) {
+          return "incompleto";
         } else {
+          console.log(state);
           return "sin realizar";
         }
       },
@@ -475,8 +480,6 @@ const UserChallenge = ({ challengers }) => {
         >
           {data.length > 0 && (
             <>
-              {console.log(challengers.length)}
-              {console.log(currentInterval + 1)}
               <Button
                 shape="round"
                 type="default"
@@ -655,7 +658,6 @@ const UserChallenge = ({ challengers }) => {
     ) {
       if (active_competence()) {
         setData(challengers[currentInterval]?.data?.user.activities ?? []);
-        console.log(challengers[0].data.user.activities);
         return challengers[0].data.user.activities;
       } else {
         setData(challengers[0].data.user.activities);

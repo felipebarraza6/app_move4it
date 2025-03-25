@@ -183,6 +183,9 @@ const MyTeamActivity = ({ team_data }) => {
         );
         if (activityData) {
           if (!activityData.is_completed && activityData.is_load) {
+            if (activityData.interval.end_date < today) {
+              return <CloseCircleFilled style={{ color: "red" }} />;
+            }
             return <Spin />;
           }
         }
@@ -372,6 +375,8 @@ const MyTeamActivity = ({ team_data }) => {
     );
   };
 
+  const today = new Date().toISOString().split("T")[0];
+
   return (
     <Card
       title={window.innerWidth > 726 ? "Actividad de mi equipo" : <></>}
@@ -408,6 +413,12 @@ const MyTeamActivity = ({ team_data }) => {
                               !activityData.is_completed &&
                               activityData.is_load
                             ) {
+                              console.log(activityData);
+                              if (activityData.interval.end_date < today) {
+                                return (
+                                  <CloseCircleFilled style={{ color: "red" }} />
+                                );
+                              }
                               return <Spin />;
                             }
                             return activityData.is_completed ? (

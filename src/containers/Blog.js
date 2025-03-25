@@ -50,7 +50,11 @@ const Blog = ({ type }) => {
         </Button>
       }
     >
-      <Flex justify={"start"} gap="large">
+      <Flex
+        justify={window.innerWidth < 768 ? "center" : "start"}
+        gap="large"
+        wrap={window.innerWidth < 768 ? "wrap" : "nowrap"}
+      >
         {blogs.map((blog, index) => (
           <Col key={index}>
             <Card
