@@ -13,9 +13,14 @@ const { Text } = Typography;
 
 const IntervalsTable = () => {
   const { state } = useContext(AppContext);
+
   const intervals =
     state.user.enterprise_competition_overflow.last_competence
       .intervals_to_back;
+
+  const currentIntervalValue =
+    state.user.enterprise_competition_overflow.last_competence.stats
+      .current_interval_data;
 
   const sourcesActive =
     state.user.enterprise_competition_overflow.last_competence.stats.my_team;
@@ -33,9 +38,10 @@ const IntervalsTable = () => {
   useEffect(() => {
     setCurrentInterval(0);
   }, [intervals]);
+
   return (
     <Flex vertical style={{ width: "100%" }}>
-      {intervals.length > 0 && (
+      {currentIntervalValue && (
         <Card
           key={intervals[currentInterval].interval_id}
           title={intervals[currentInterval].name}
@@ -114,7 +120,7 @@ const IntervalsTable = () => {
         </Card>
       )}
       <Flex gap="small" justify="center" style={{ marginTop: "10px" }}>
-        {sourcesActive && (
+        {currentIntervalValue && (
           <>
             <Button
               shape="round"

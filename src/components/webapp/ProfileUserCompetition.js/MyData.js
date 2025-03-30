@@ -21,7 +21,10 @@ const MyData = () => {
 
   const date_of_birth = state.user.date_of_birth || "1990-01-01";
   const date = new Date();
-  const age = date.getFullYear() - parseInt(date_of_birth.split("-")[0]);
+
+  const age = Math.floor(
+    (date - new Date(date_of_birth)) / (365.25 * 24 * 60 * 60 * 1000)
+  );
 
   return (
     <Card
