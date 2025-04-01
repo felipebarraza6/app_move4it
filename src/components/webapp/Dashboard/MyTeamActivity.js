@@ -10,6 +10,7 @@ import {
 } from "@ant-design/icons";
 import { AppContext } from "../../../App";
 import { useLocation } from "react-router-dom";
+import { render } from "@testing-library/react";
 
 const MyTeamActivity = ({ team_data }) => {
   const { state } = useContext(AppContext);
@@ -163,10 +164,20 @@ const MyTeamActivity = ({ team_data }) => {
 
   const columns = [
     {
-      title: "Email",
-      dataIndex: "email",
+      title: "Jugador",
       key: "email",
       align: "center",
+      render: (record) => (
+        <div>
+          {record.email === "Total" ? (
+            <strong>{record.email}</strong>
+          ) : record.email.length > 12 ? (
+            record.email.slice(0, 12) + "..."
+          ) : (
+            record.email.slice(0, 12)
+          )}
+        </div>
+      ),
     },
     ...activityNames.map((activity) => ({
       hidden: window.innerWidth < 726 && true,
@@ -203,13 +214,15 @@ const MyTeamActivity = ({ team_data }) => {
       dataIndex: "points",
       key: "points",
       align: "center",
+      render: (points) => points.toFixed(2),
     },
     {
       title: !isMobile && "Efectividad",
       dataIndex: "percentage",
       key: "percentage",
       align: "center",
-      render: (percentage) => `${Number(percentage).toFixed(0)}%`,
+
+      render: (percentage) => `${Number(percentage).toFixed(2)}%`,
     },
   ];
 
@@ -439,6 +452,7 @@ const MyTeamActivity = ({ team_data }) => {
             : false
         }
         pagination={false}
+        rowKey={(record) => record.email}
         dataSource={data}
       />
     </Card>
