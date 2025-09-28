@@ -59,7 +59,7 @@ const AvgAllGroups = () => {
             >
               <Statistic
                 title="Grasa Inicial" // eslint-disable-line
-                value={firstAvg.fat.toFixed(1)}
+                value={firstAvg.fat.toFixed(2)}
                 suffix={<Text>%</Text>}
               />
             </Card>
@@ -70,7 +70,7 @@ const AvgAllGroups = () => {
             >
               <Statistic
                 title="Peso Inicial" // eslint-disable-line
-                value={firstAvg.weight.toFixed(1)}
+                value={firstAvg.weight.toFixed(2)}
                 suffix={<Text>Kg</Text>}
               />
             </Card>
@@ -99,7 +99,7 @@ const AvgAllGroups = () => {
             >
               <Statistic
                 title="Grasa Actual" // eslint-disable-line
-                value={lastAvg.fat.toFixed(1)}
+                value={lastAvg.fat.toFixed(2)}
                 suffix={<Text>%</Text>}
               />
             </Card>
@@ -110,7 +110,7 @@ const AvgAllGroups = () => {
             >
               <Statistic
                 title="Peso Actual"
-                value={lastAvg.weight.toFixed(1)}
+                value={lastAvg.weight.toFixed(2)}
                 suffix={<Text>Kg</Text>}
               />
             </Card>

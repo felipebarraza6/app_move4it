@@ -126,12 +126,12 @@ const MyTeamActivity = ({ team_data }) => {
       email: "Total",
       points: totalPoints,
       percentage: Number(
-        (totalPercentage / dataWithPercentage.length).toFixed(0)
+        (totalPercentage / dataWithPercentage.length).toFixed(2)
       ),
       ...Object.fromEntries(
         Object.entries(activityCompletionPercentages).map(([key, value]) => [
           key,
-          Number(value.toFixed(0)),
+          Number(value.toFixed(2)),
         ])
       ),
     };
@@ -201,7 +201,7 @@ const MyTeamActivity = ({ team_data }) => {
           }
         }
         return typeof completed === "number" ? (
-          `${completed.toFixed(0)}%`
+          `${completed.toFixed(2)}%`
         ) : completed ? (
           <CheckCircleFilled style={{ color: "green" }} />
         ) : (
@@ -253,7 +253,10 @@ const MyTeamActivity = ({ team_data }) => {
             shape="round"
             type="default"
             onClick={previousInterval}
-            disabled={currentInterval >= team_data.intervals.length - 1}
+            disabled={
+              currentInterval >= team_data.intervals.length - 1 ||
+              team_data.intervals[currentInterval + 1]?.start_date > today
+            }
           >
             <ArrowLeftOutlined />
             <div style={{ fontSize: "10px", marginLeft: "5px" }}>

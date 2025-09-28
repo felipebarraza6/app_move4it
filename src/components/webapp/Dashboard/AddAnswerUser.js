@@ -154,7 +154,7 @@ const AddAnswerUser = ({ state, disabledAction, updateActivityState }) => {
               }}
             >
               <PlusCircleOutlined style={{ marginRight: "5px" }} />{" "}
-              {(state.activity.points / quantity_participants).toFixed(1)}{" "}
+              {(state.activity.points / quantity_participants).toFixed(2)}{" "}
               puntos
             </Card>
             <Card

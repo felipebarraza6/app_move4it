@@ -88,7 +88,7 @@ const UserActivity = () => {
             {allActivities.filter((activity) => !activity.is_load).length}
           </Descriptions.Item>
           <Descriptions.Item label="Puntos obtenidos" span={3}>
-            {totalAveragePoints}{" "}
+            {totalAveragePoints.toFixed(2)}{" "}
           </Descriptions.Item>
         </Descriptions>
       </Flex>

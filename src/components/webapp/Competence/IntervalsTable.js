@@ -27,6 +27,8 @@ const IntervalsTable = () => {
 
   const [currentInterval, setCurrentInterval] = useState(0);
 
+  const today = new Date().toISOString().split("T")[0];
+
   const nextInterval = () => {
     setCurrentInterval((prevInterval) => prevInterval + 1);
   };
@@ -126,7 +128,10 @@ const IntervalsTable = () => {
               shape="round"
               type="primary"
               onClick={nextInterval}
-              disabled={currentInterval >= intervals.length - 1}
+              disabled={
+                currentInterval >= intervals.length - 1 ||
+                intervals[currentInterval + 1]?.start_date > today
+              }
             >
               <ArrowLeftOutlined />
               Anterior
@@ -135,7 +140,10 @@ const IntervalsTable = () => {
               shape="round"
               type="primary"
               onClick={previousInterval}
-              disabled={currentInterval === 0}
+              disabled={
+                currentInterval === 0 ||
+                intervals[currentInterval - 1]?.start_date > today
+              }
             >
               Siguiente <ArrowRightOutlined />
             </Button>

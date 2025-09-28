@@ -89,16 +89,19 @@ const Stats = () => {
           name: "fat",
           title: isMobile ? "grasa" : "% Grasa",
           dataIndex: "fat",
+          render: (value) => (value ? parseFloat(value).toFixed(2) : value),
         },
         {
           name: "weight",
           title: isMobile ? "peso" : "Peso(kg)",
           dataIndex: "weight",
+          render: (value) => (value ? parseFloat(value).toFixed(2) : value),
         },
         {
           name: "height",
           title: isMobile ? "altura" : "Altura(mt)",
           dataIndex: "height",
+          render: (value) => (value ? parseFloat(value).toFixed(2) : value),
         },
       ]}
       dataSource={data}

@@ -204,7 +204,7 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
               }}
             >
               <PlusCircleOutlined style={{ marginRight: "5px" }} />{" "}
-              {(state.activity.points / quantity_participants).toFixed(1)}{" "}
+              {(state.activity.points / quantity_participants).toFixed(2)}{" "}
               puntos
             </Card>
             <Card
@@ -485,7 +485,8 @@ const UserChallenge = ({ challengers }) => {
                 type="default"
                 onClick={nextInterval}
                 disabled={
-                  currentInterval + 1 == challengers.length ? true : false
+                  currentInterval + 1 == challengers.length ||
+                  challengers[currentInterval + 1]?.start_date > today
                 }
               >
                 <ArrowLeftOutlined />
