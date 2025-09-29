@@ -93,20 +93,7 @@ const Documentation = () => {
       ],
       color: "#722ed1",
     },
-    {
-      key: "achievements",
-      title: "Logros",
-      icon: <TrophyOutlined />,
-      description: "Revisa tus logros y reconocimientos",
-      features: [
-        "Logros desbloqueados",
-        "Progreso hacia metas",
-        "Reconocimientos especiales",
-        "Historial de logros",
-        "Estadísticas de rendimiento",
-      ],
-      color: "#f5222d",
-    },
+
     {
       key: "global_viewer",
       title: "Visualizador Global",
