@@ -15,39 +15,69 @@ export const POST_LOGIN = async (endpoint, data) => {
 };
 
 export const POST = async (endpoint, data) => {
-  const token = JSON.parse(localStorage.getItem("token"));
+  try {
+    const tokenStr = localStorage.getItem("token");
+    if (!tokenStr) {
+      throw new Error("No token found");
+    }
 
-  const options = {
-    headers: {
-      Authorization: `Token ${token}`,
-    },
-  };
-  const request = await Axios.post(endpoint, data, options);
-  return request;
+    const token = JSON.parse(tokenStr);
+    const options = {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+      timeout: 30000, // 30 segundos timeout
+    };
+    const request = await Axios.post(endpoint, data, options);
+    return request;
+  } catch (error) {
+    console.error("POST request error:", error);
+    throw error;
+  }
 };
 
 export const PATCH = async (endpoint, data) => {
-  const token = JSON.parse(localStorage.getItem("token"));
+  try {
+    const tokenStr = localStorage.getItem("token");
+    if (!tokenStr) {
+      throw new Error("No token found");
+    }
 
-  const options = {
-    headers: {
-      Authorization: `Token ${token}`,
-    },
-  };
-  const request = await Axios.patch(endpoint, data, options);
-  return request;
+    const token = JSON.parse(tokenStr);
+    const options = {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+      timeout: 30000, // 30 segundos timeout
+    };
+    const request = await Axios.patch(endpoint, data, options);
+    return request;
+  } catch (error) {
+    console.error("PATCH request error:", error);
+    throw error;
+  }
 };
 
 export const GET = async (endpoint) => {
-  const token = JSON.parse(localStorage.getItem("token"));
+  try {
+    const tokenStr = localStorage.getItem("token");
+    if (!tokenStr) {
+      throw new Error("No token found");
+    }
 
-  const options = {
-    headers: {
-      Authorization: `Token ${token}`,
-    },
-  };
-  const request = await Axios.get(endpoint, options);
-  return request;
+    const token = JSON.parse(tokenStr);
+    const options = {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+      timeout: 30000, // 30 segundos timeout
+    };
+    const request = await Axios.get(endpoint, options);
+    return request;
+  } catch (error) {
+    console.error("GET request error:", error);
+    throw error;
+  }
 };
 
 export const DOWNLOAD = async (endpoint, name_file) => {

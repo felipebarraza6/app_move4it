@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Card, Statistic, Flex } from "antd";
+import { Card, Statistic, Flex, Alert } from "antd";
 import { AppContext } from "../../../App";
 import {
   FieldNumberOutlined,
@@ -7,6 +7,7 @@ import {
   TeamOutlined,
   TrophyFilled,
 } from "@ant-design/icons";
+import { parseDateYMDLocal, normalizeDateOnly } from "../../../utils/date";
 
 const CompetitionSummary = () => {
   const { state } = useContext(AppContext);
@@ -34,14 +35,14 @@ const CompetitionSummary = () => {
   const quantity = new Date(
     state.user.enterprise_competition_overflow.last_competence.days_for_interval
   );
-  const endDate = new Date(
+  const endDate = parseDateYMDLocal(
+    state.user.enterprise_competition_overflow.last_competence.end_date
+  );
+  const startDate = parseDateYMDLocal(
     state.user.enterprise_competition_overflow.last_competence.start_date
   );
-  const startDate = new Date(
-    state.user.enterprise_competition_overflow.last_competence.start_date
-  );
-  endDate.setDate(endDate.getDate() + quantity.getDate());
-  const today = new Date();
+
+  const today = normalizeDateOnly(new Date());
 
   if (endDate > today) {
     if (state.user.enterprise_competition_overflow.last_competence.ranking) {
@@ -55,7 +56,7 @@ const CompetitionSummary = () => {
   }
   console.log(points);
 
-  return today < endDate && today > startDate ? (
+  return (
     <Card
       title={
         <Flex gap="small">
@@ -66,31 +67,87 @@ const CompetitionSummary = () => {
       style={styles.card}
       size="small"
     >
-      <Flex gap="large" justify="space-between">
-        <Statistic
-          title={"Equipo"}
-          valueStyle={styles.valueStyle}
-          value={name_team}
-          prefix={<TeamOutlined />}
-        />
-        <>
-          <Statistic
-            title="Puntos"
-            valueStyle={styles.valueStyle}
-            value={points}
-            prefix={<FlagOutlined />}
-          />
+      <Flex gap="medium" justify="space-between" align="center">
+        <Flex vertical gap="small" style={{ minWidth: "120px" }}>
+          <Flex align="center" gap="small">
+            <TeamOutlined style={{ color: "#1890ff" }} />
+            <span style={{ fontSize: "14px", color: "#666" }}>Equipo</span>
+          </Flex>
+          <span style={{ fontSize: "16px", fontWeight: "500" }}>
+            {name_team}
+          </span>
+        </Flex>
 
-          <Statistic
-            title="Ranking"
-            valueStyle={styles.valueStyle}
-            value={ranking}
-            prefix={<FieldNumberOutlined />}
-          />
-        </>
+        {today < startDate ? (
+          <div
+            style={{
+              padding: "6px 10px",
+              backgroundColor: "#fff7e6",
+              border: "1px solid #ffd591",
+              borderRadius: "4px",
+              fontSize: "11px",
+              maxWidth: "180px",
+              lineHeight: "1.3",
+            }}
+          >
+            <div style={{ color: "#d46b08", fontWeight: "500" }}>
+              ⚠️ Comienza el{" "}
+              {startDate.toLocaleDateString("es-ES", {
+                day: "2-digit",
+                month: "short",
+              })}
+            </div>
+            <div
+              style={{ color: "#8c8c8c", fontSize: "10px", marginTop: "1px" }}
+            >
+              Prepárate
+            </div>
+          </div>
+        ) : today > endDate ? (
+          <div
+            style={{
+              padding: "6px 10px",
+              backgroundColor: "#e6f7ff",
+              border: "1px solid #91d5ff",
+              borderRadius: "4px",
+              fontSize: "11px",
+              maxWidth: "180px",
+              lineHeight: "1.3",
+            }}
+          >
+            <div style={{ color: "#0958d9", fontWeight: "500" }}>
+              ℹ️ Terminó el{" "}
+              {endDate.toLocaleDateString("es-ES", {
+                day: "2-digit",
+                month: "short",
+              })}
+            </div>
+            <div
+              style={{ color: "#8c8c8c", fontSize: "10px", marginTop: "1px" }}
+            >
+              Ver resultados
+            </div>
+          </div>
+        ) : (
+          <Flex gap="large">
+            <Statistic
+              title="Puntos"
+              valueStyle={styles.valueStyle}
+              value={points}
+              prefix={<FlagOutlined />}
+            />
+
+            <Statistic
+              title="Ranking"
+              valueStyle={styles.valueStyle}
+              value={ranking}
+              prefix={<FieldNumberOutlined />}
+            />
+          </Flex>
+        )}
       </Flex>
     </Card>
-  ) : null;
+  );
 };
 
 const styles = {

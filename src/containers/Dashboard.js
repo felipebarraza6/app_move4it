@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Typography, Row, Col, Flex } from "antd";
+import { Typography, Row, Col, Flex, Alert } from "antd";
 import Welcome from "../components/webapp/Dashboard/Welcome";
 import Blog from "./Blog";
 import { AppContext } from "../App";
@@ -8,6 +8,7 @@ import UserChallenge from "../components/webapp/Dashboard/UserChallenge";
 import UserActivity from "../components/webapp/Dashboard/UserActivity";
 import Stats from "../components/webapp/ProfileUser/Stats";
 import MyTeamActivity from "../components/webapp/Dashboard/MyTeamActivity";
+import { parseDateYMDLocal, normalizeDateOnly } from "../utils/date";
 
 const { Title } = Typography;
 
@@ -54,7 +55,7 @@ const Dashboard = () => {
         <CompetitionSummary />
       </Flex>
       <Flex justify="center" vertical gap="large">
-        {active_competence() && (
+        {active_competence() ? (
           <>
             <UserChallenge
               challengers={
@@ -70,6 +71,49 @@ const Dashboard = () => {
               }
             />
           </>
+        ) : (
+          (() => {
+            const startDate = parseDateYMDLocal(
+              state.user.enterprise_competition_overflow.last_competence
+                .start_date
+            );
+            const endDate = parseDateYMDLocal(last_competence_end);
+            const today = normalizeDateOnly(new Date());
+
+            if (today < startDate) {
+              return (
+                <Alert
+                  message={`La competencia comenzará el ${startDate.toLocaleDateString(
+                    "es-ES",
+                    {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    }
+                  )}`}
+                  description="Prepárate para la competencia."
+                  type="warning"
+                  showIcon
+                />
+              );
+            } else {
+              return (
+                <Alert
+                  message={`La competencia terminó el ${endDate.toLocaleDateString(
+                    "es-ES",
+                    {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    }
+                  )}`}
+                  description="Revisa el resumen y resultados finales disponibles."
+                  type="info"
+                  showIcon
+                />
+              );
+            }
+          })()
         )}
       </Flex>
 

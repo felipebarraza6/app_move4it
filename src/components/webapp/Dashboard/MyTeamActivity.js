@@ -9,6 +9,7 @@ import {
   CloseCircleFilled,
 } from "@ant-design/icons";
 import { AppContext } from "../../../App";
+import { parseDateYMDLocal, normalizeDateOnly } from "../../../utils/date";
 import { useLocation } from "react-router-dom";
 import { render } from "@testing-library/react";
 
@@ -42,7 +43,11 @@ const MyTeamActivity = ({ team_data }) => {
     );
   } else {
     if (!active_competence()) {
-      console.log(team_data.length);
+      console.log("=== DEBUG MYTEAMACTIVITY ===");
+      console.log("team_data:", team_data);
+      console.log("team_data type:", typeof team_data);
+      console.log("team_data.intervals:", team_data?.intervals);
+      console.log("=== FIN DEBUG MYTEAMACTIVITY ===");
       currentIntervalF = 0;
       current_interval = 0;
     }
@@ -57,6 +62,17 @@ const MyTeamActivity = ({ team_data }) => {
       !team_data.intervals[currentInterval].activities ||
       !team_data.intervals[currentInterval].activities.length
     ) {
+      setData([]);
+      return;
+    }
+
+    // Filtrar intervalos futuros
+    const todayString = new Date().toISOString().split("T")[0];
+    const validIntervals = team_data.intervals.filter(
+      (interval) => interval.start_date <= todayString
+    );
+
+    if (currentInterval >= validIntervals.length) {
       setData([]);
       return;
     }
@@ -194,7 +210,7 @@ const MyTeamActivity = ({ team_data }) => {
         );
         if (activityData) {
           if (!activityData.is_completed && activityData.is_load) {
-            if (activityData.interval.end_date < today) {
+            if (activityData.interval.end_date < todayString) {
               return <CloseCircleFilled style={{ color: "red" }} />;
             }
             return <Spin />;
@@ -235,7 +251,7 @@ const MyTeamActivity = ({ team_data }) => {
       setCurrentInterval((prevInterval) => prevInterval + 1);
     };
 
-    const today = new Date().toISOString().split("T")[0];
+    const todayString = new Date().toISOString().split("T")[0];
 
     return (
       <Flex
@@ -254,8 +270,11 @@ const MyTeamActivity = ({ team_data }) => {
             type="default"
             onClick={previousInterval}
             disabled={
-              currentInterval >= team_data.intervals.length - 1 ||
-              team_data.intervals[currentInterval + 1]?.start_date > today
+              currentInterval >=
+              team_data.intervals.filter(
+                (interval) => interval.start_date <= todayString
+              ).length -
+                1
             }
           >
             <ArrowLeftOutlined />
@@ -341,11 +360,7 @@ const MyTeamActivity = ({ team_data }) => {
             shape="round"
             type="default"
             onClick={nextInterval}
-            disabled={
-              currentInterval === 0
-                ? true
-                : team_data.intervals[currentInterval - 1]?.start_date > today
-            }
+            disabled={currentInterval === 0}
           >
             <ArrowRightOutlined />
             <div style={{ fontSize: "10px", marginLeft: "5px" }}>
@@ -391,14 +406,59 @@ const MyTeamActivity = ({ team_data }) => {
     );
   };
 
-  const today = new Date().toISOString().split("T")[0];
+  const todayString = new Date().toISOString().split("T")[0];
 
   return (
     <Card
       title={window.innerWidth > 726 ? "Actividad de mi equipo" : <></>}
-      style={styles.card}
+      style={{
+        ...styles.card,
+        marginBottom: "16px",
+      }}
       extra={extra()}
     >
+      {(() => {
+        const startDate = parseDateYMDLocal(
+          state.user.enterprise_competition_overflow.last_competence.start_date
+        );
+        const endDate = parseDateYMDLocal(
+          state.user.enterprise_competition_overflow.last_competence.end_date
+        );
+        const today = normalizeDateOnly(new Date());
+
+        if (today < startDate) {
+          return (
+            <Flex style={{ marginBottom: "8px" }}>
+              <Tag color="orange">
+                {`La competencia comenzará el ${startDate.toLocaleDateString(
+                  "es-ES",
+                  {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  }
+                )}`}
+              </Tag>
+            </Flex>
+          );
+        } else if (today > endDate) {
+          return (
+            <Flex style={{ marginBottom: "8px" }}>
+              <Tag color="blue">
+                {`La competencia terminó el ${endDate.toLocaleDateString(
+                  "es-ES",
+                  {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  }
+                )}`}
+              </Tag>
+            </Flex>
+          );
+        }
+        return null;
+      })()}
       <Table
         size="small"
         bordered
@@ -430,7 +490,9 @@ const MyTeamActivity = ({ team_data }) => {
                               activityData.is_load
                             ) {
                               console.log(activityData);
-                              if (activityData.interval.end_date < today) {
+                              if (
+                                activityData.interval.end_date < todayString
+                              ) {
                                 return (
                                   <CloseCircleFilled style={{ color: "red" }} />
                                 );

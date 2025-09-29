@@ -13,24 +13,40 @@ const AverageMeditions = () => {
     state.user.enterprise_competition_overflow.last_competence
       .avg_corporal_meditions_teams.last_avg;
 
-  const my_team_u = state.user.enterprise_competition_overflow.last_competence
-    .stats.current_interval_data
-    ? state.user.enterprise_competition_overflow.last_competence.stats
-        .current_interval_data.my_group
-    : [];
   const my_team =
     state.user.enterprise_competition_overflow.last_competence.stats
       .historical_data;
 
-  const totalCompleted = my_team.reduce((acc, interval) => {
-    return acc + interval.data.my_team.is_completed;
-  }, 0);
+  // Calcular estadísticas basadas en la tabla de abajo (intervalo actual hacia atrás)
+  const today = new Date().toISOString().split("T")[0];
 
-  const totalActivity = my_team.reduce((acc, interval) => {
-    return acc + interval.data.my_team.is_active;
-  }, 0);
+  // Contar participantes únicos, actividades agendadas y completadas
+  const allParticipants = new Set();
+  let totalScheduled = 0;
+  let totalCompleted = 0;
 
-  const userCount = Object.keys(my_team_u).length;
+  my_team.forEach((interval) => {
+    if (interval.start_date <= today) {
+      if (interval.data?.my_team?.activities) {
+        interval.data.my_team.activities.forEach((activity) => {
+          // Contar participantes únicos
+          if (activity.user?.email) {
+            allParticipants.add(activity.user.email);
+          }
+
+          // Contar actividades agendadas
+          totalScheduled++;
+
+          // Contar actividades completadas
+          if (activity.is_completed) {
+            totalCompleted++;
+          }
+        });
+      }
+    }
+  });
+
+  const userCount = allParticipants.size;
 
   return (
     <Flex
@@ -163,7 +179,7 @@ const AverageMeditions = () => {
           style={{ ...styles.static, textAlign: "center", width: "100%" }}
           size="small"
         >
-          <Statistic title="Se han agendado" value={totalActivity} />
+          <Statistic title="Se han agendado" value={totalScheduled} />
           <Text type="secondary">Pruebas al equipo</Text>
         </Card>
         <Card

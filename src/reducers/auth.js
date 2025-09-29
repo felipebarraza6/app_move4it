@@ -23,6 +23,16 @@ export const authReducer = (state, action) => {
         user: action.payload.user,
       };
 
+    case "LOGOUT":
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      return {
+        ...state,
+        isAuth: false,
+        token: null,
+        user: null,
+      };
+
     case "UPDATE_USER":
       return {
         ...state,

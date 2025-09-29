@@ -1,10 +1,15 @@
 // Login.js
 import React, { useState, useContext } from "react";
 import logo from "../assets/img/logo_dark.png";
-import { Form, Input, Button, Row, Col, Card, notification } from "antd";
+import { Form, Input, Button, Row, Col, Card, notification, Spin } from "antd";
 import { endpoints } from "../config/endpoints";
 import { AppContext } from "../App";
-import { MailOutlined, LoginOutlined, ClearOutlined } from "@ant-design/icons";
+import {
+  MailOutlined,
+  LoginOutlined,
+  ClearOutlined,
+  LoadingOutlined,
+} from "@ant-design/icons";
 import { MdOutlinePassword } from "react-icons/md";
 
 const Login = () => {
@@ -14,25 +19,25 @@ const Login = () => {
 
   const handleLogin = async (values) => {
     setLoading(true);
-    const rq = await endpoints.auth
-      .login(values)
-      .then((x) => {
-        dispatch({
-          type: "LOGIN",
-          payload: {
-            access_token: x.access_token,
-            user: x.user,
-          },
-        });
-        setLoading(false);
-      })
-      .catch((e) => {
-        setLoading(false);
-        notification.error({
-          message: "Error",
-          description: "Usuario o contraseña incorrectos",
-        });
+    try {
+      const response = await endpoints.auth.login(values);
+      dispatch({
+        type: "LOGIN",
+        payload: {
+          access_token: response.access_token,
+          user: response.user,
+        },
       });
+    } catch (error) {
+      console.error("Login error:", error);
+      notification.error({
+        message: "Error de autenticación",
+        description:
+          error.response?.data?.message || "Usuario o contraseña incorrectos",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -75,9 +80,10 @@ const Login = () => {
                   type="primary"
                   htmlType="submit"
                   loading={loading}
-                  icon={<LoginOutlined />}
+                  icon={loading ? <LoadingOutlined /> : <LoginOutlined />}
+                  disabled={loading}
                 >
-                  Iniciar sesión
+                  {loading ? "Iniciando sesión..." : "Iniciar sesión"}
                 </Button>
                 <Button
                   type="default"

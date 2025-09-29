@@ -16,6 +16,7 @@ import NavBar from "../components/webapp/NavBar";
 
 // Components Container
 import Blog from "./Blog";
+import Documentation from "./Documentation";
 import ProfileUserCompetition from "./ProfileUserCompetition";
 import Team from "./Team";
 import ProfileUser from "./ProfileUser";
@@ -180,6 +181,7 @@ const Home = () => {
               <Routes>
                 <Route path="*" element={<Dashboard />} />
                 <Route path="/profile_user" element={<ProfileUser />} />
+                <Route path="/documentation" element={<Documentation />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route
                   path="/profile_competition"

@@ -29,6 +29,7 @@ import {
   CheckSquareFilled,
 } from "@ant-design/icons";
 import { AppContext } from "../../../App";
+import { parseDateYMDLocal, normalizeDateOnly } from "../../../utils/date";
 import { endpoints } from "../../../config/endpoints";
 
 const { Paragraph } = Typography;
@@ -456,14 +457,31 @@ const UserChallenge = ({ challengers }) => {
   ];
 
   const extra = () => {
+    // Verificar que challengers existe y es un array
+    if (
+      !challengers ||
+      !Array.isArray(challengers) ||
+      challengers.length === 0
+    ) {
+      return null;
+    }
+
     const nextInterval = () => {
-      setCurrentInterval(currentInterval + 1);
-      setData(challengers[currentInterval + 1].data.user.activities);
+      if (currentInterval + 1 < challengers.length) {
+        setCurrentInterval(currentInterval + 1);
+        if (challengers[currentInterval + 1]?.data?.user?.activities) {
+          setData(challengers[currentInterval + 1].data.user.activities);
+        }
+      }
     };
 
     const previousInterval = () => {
-      setCurrentInterval(currentInterval - 1);
-      setData(challengers[currentInterval - 1].data.user.activities);
+      if (currentInterval - 1 >= 0) {
+        setCurrentInterval(currentInterval - 1);
+        if (challengers[currentInterval - 1]?.data?.user?.activities) {
+          setData(challengers[currentInterval - 1].data.user.activities);
+        }
+      }
     };
 
     if (location.pathname === "/profile_competition") {
@@ -478,20 +496,25 @@ const UserChallenge = ({ challengers }) => {
             borderRadius: "15px",
           }}
         >
-          {data.length > 0 && (
+          {data && data.length > 0 && (
             <>
               <Button
                 shape="round"
                 type="default"
                 onClick={nextInterval}
                 disabled={
-                  currentInterval + 1 == challengers.length ||
-                  challengers[currentInterval + 1]?.start_date > today
+                  currentInterval + 1 >=
+                  (
+                    challengers?.filter(
+                      (interval) => interval.start_date <= today
+                    ) || []
+                  ).length
                 }
               >
                 <ArrowLeftOutlined />
                 <div style={{ fontSize: "10px", marginLeft: "5px" }}>
-                  {currentInterval < challengers.length - 1 ? (
+                  {currentInterval < challengers.length - 1 &&
+                  challengers[currentInterval + 1] ? (
                     <>
                       {new Date(
                         new Date(
@@ -544,39 +567,46 @@ const UserChallenge = ({ challengers }) => {
                     style={{ textAlign: "center", color: "white" }}
                   />
                 </center>
-                {new Date(
-                  new Date(challengers[currentInterval].start_date).setDate(
-                    new Date(
-                      challengers[currentInterval].start_date
-                    ).getDate() + 1
-                  )
-                ).toLocaleDateString("es-ES", {
-                  day: "2-digit",
-                  month: "short",
-                })}
-                <br />
-                {new Date(
-                  new Date(challengers[currentInterval].end_date).setDate(
-                    new Date(challengers[currentInterval].end_date).getDate() +
-                      1
-                  )
-                ).toLocaleDateString("es-ES", {
-                  day: "2-digit",
-                  month: "short",
-                })}
+                {challengers[currentInterval] ? (
+                  <>
+                    {new Date(
+                      new Date(challengers[currentInterval].start_date).setDate(
+                        new Date(
+                          challengers[currentInterval].start_date
+                        ).getDate() + 1
+                      )
+                    ).toLocaleDateString("es-ES", {
+                      day: "2-digit",
+                      month: "short",
+                    })}
+                    <br />
+                    {new Date(
+                      new Date(challengers[currentInterval].end_date).setDate(
+                        new Date(
+                          challengers[currentInterval].end_date
+                        ).getDate() + 1
+                      )
+                    ).toLocaleDateString("es-ES", {
+                      day: "2-digit",
+                      month: "short",
+                    })}
+                  </>
+                ) : (
+                  <>
+                    dd-m
+                    <br />
+                    dd-m
+                  </>
+                )}
               </div>
               <Button
                 shape="round"
                 type={"default"}
                 onClick={previousInterval}
-                disabled={
-                  currentInterval === 0
-                    ? true
-                    : challengers[currentInterval - 1]?.start_date > today
-                }
+                disabled={currentInterval === 0}
               >
                 <div style={{ fontSize: "10px", marginRight: "5px" }}>
-                  {currentInterval > 0 ? (
+                  {currentInterval > 0 && challengers[currentInterval - 1] ? (
                     <>
                       {new Date(
                         new Date(
@@ -621,9 +651,11 @@ const UserChallenge = ({ challengers }) => {
         </Flex>
       );
     } else {
-      return `${challengers?.start_date || "MM-DD"} / ${
-        challengers?.end_date || "MM-DD"
-      }`;
+      return challengers
+        ? `${challengers?.start_date || "MM-DD"} / ${
+            challengers?.end_date || "MM-DD"
+          }`
+        : "MM-DD / MM-DD";
     }
   };
 
@@ -631,7 +663,11 @@ const UserChallenge = ({ challengers }) => {
     const current_interval =
       state?.user?.enterprise_competition_overflow?.last_competence?.stats
         ?.current_interval_data?.id;
-    if (location.pathname === "/profile_competition") {
+    if (
+      location.pathname === "/profile_competition" &&
+      challengers &&
+      Array.isArray(challengers)
+    ) {
       const changeInterval = challengers.findIndex(
         (challenger) => challenger.interval_id === current_interval
       );
@@ -653,20 +689,35 @@ const UserChallenge = ({ challengers }) => {
     if (!challengers) {
       return [];
     }
-    if (
-      location.pathname === "/profile_competition" &&
-      challengers.length > 0
-    ) {
-      if (active_competence()) {
-        setData(challengers[currentInterval]?.data?.user.activities ?? []);
-        return challengers[0].data.user.activities;
-      } else {
-        setData(challengers[0].data.user.activities);
+
+    // Verificar si challengers es un array (profile_competition) o un objeto (dashboard)
+    if (Array.isArray(challengers)) {
+      // Filtrar intervalos futuros
+      const today = new Date().toISOString().split("T")[0];
+      const validChallengers = challengers.filter(
+        (interval) => interval.start_date <= today
+      );
+
+      if (
+        location.pathname === "/profile_competition" &&
+        validChallengers.length > 0
+      ) {
+        if (active_competence()) {
+          setData(
+            validChallengers[currentInterval]?.data?.user?.activities ?? []
+          );
+          return validChallengers[0]?.data?.user?.activities ?? [];
+        } else {
+          setData(validChallengers[0]?.data?.user?.activities ?? []);
+        }
       }
     } else {
-      setData(challengers.user);
-      return challengers.user;
+      // Para dashboard, challengers es un objeto
+      setData(challengers?.user ?? []);
+      return challengers?.user ?? [];
     }
+
+    return [];
   };
   return (
     <>
@@ -684,30 +735,159 @@ const UserChallenge = ({ challengers }) => {
         }
         style={{
           ...styles.table,
+          marginBottom: "16px",
         }}
       >
+        {(() => {
+          const startDate = parseDateYMDLocal(
+            state.user.enterprise_competition_overflow.last_competence
+              .start_date
+          );
+          const endDate = parseDateYMDLocal(
+            state.user.enterprise_competition_overflow.last_competence.end_date
+          );
+          const today = normalizeDateOnly(new Date());
+
+          if (today < startDate) {
+            return (
+              <Flex style={{ marginBottom: "8px" }}>
+                <Tag color="orange">
+                  {`La competencia comenzará el ${startDate.toLocaleDateString(
+                    "es-ES",
+                    {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    }
+                  )}`}
+                </Tag>
+              </Flex>
+            );
+          } else if (today > endDate) {
+            return (
+              <Flex style={{ marginBottom: "8px" }}>
+                <Tag color="blue">
+                  {`La competencia terminó el ${endDate.toLocaleDateString(
+                    "es-ES",
+                    {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    }
+                  )}`}
+                </Tag>
+              </Flex>
+            );
+          }
+          return null;
+        })()}
         <Flex gap="large" vertical justify="space-between">
           {location.pathname === "/profile_competition" && (
             <Flex gap="small" justify="space-between" vertical={isMobile}>
               <Card size="small" hoverable style={{ width: "100%" }}>
                 <Statistic
-                  value={data.length}
-                  title="Total"
+                  value={(() => {
+                    // Contar jugadores únicos en todos los intervalos hasta el actual
+                    const allPlayers = new Set();
+                    const today = new Date().toISOString().split("T")[0];
+
+                    console.log("=== DEBUG PARTICIPANTES ===");
+                    console.log("challengers:", challengers);
+                    console.log("today:", today);
+
+                    challengers.forEach((interval, index) => {
+                      console.log(`Intervalo ${index}:`, interval);
+                      console.log(
+                        `start_date: ${interval.start_date}, <= today: ${
+                          interval.start_date <= today
+                        }`
+                      );
+
+                      if (interval.start_date <= today) {
+                        console.log(
+                          "Intervalo válido, buscando participantes..."
+                        );
+                        console.log("interval.data:", interval.data);
+                        console.log(
+                          "interval.data?.my_team:",
+                          interval.data?.my_team
+                        );
+                        console.log(
+                          "interval.data?.my_team?.activities:",
+                          interval.data?.my_team?.activities
+                        );
+
+                        // Usar my_team.activities para obtener participantes únicos
+                        if (interval.data?.my_team?.activities) {
+                          interval.data.my_team.activities.forEach(
+                            (activity, actIndex) => {
+                              console.log(`Actividad ${actIndex}:`, activity);
+                              console.log("activity.user:", activity.user);
+                              console.log(
+                                "activity.user?.email:",
+                                activity.user?.email
+                              );
+
+                              if (activity.user?.email) {
+                                allPlayers.add(activity.user.email);
+                                console.log("Agregado:", activity.user.email);
+                              }
+                            }
+                          );
+                        }
+                      }
+                    });
+
+                    console.log("Total participantes únicos:", allPlayers.size);
+                    console.log("Participantes:", Array.from(allPlayers));
+                    console.log("=== FIN DEBUG ===");
+
+                    return allPlayers.size;
+                  })()}
+                  title="Jugadores"
                   valueStyle={{ textAlign: "center" }}
                 />
               </Card>
               <Card size="small" hoverable style={{ width: "100%" }}>
                 <Statistic
-                  value={data.filter((state) => state.is_completed).length}
-                  title="Completadas"
+                  value={(() => {
+                    // Contar todas las actividades agendadas hasta el intervalo actual
+                    let totalActivities = 0;
+                    const today = new Date().toISOString().split("T")[0];
+                    challengers.forEach((interval) => {
+                      if (interval.start_date <= today) {
+                        if (interval.data?.user?.activities) {
+                          totalActivities +=
+                            interval.data.user.activities.length;
+                        }
+                      }
+                    });
+                    return totalActivities;
+                  })()}
+                  title="Pruebas Agendadas"
                   valueStyle={{ textAlign: "center" }}
                 />
               </Card>
 
               <Card size="small" hoverable style={{ width: "100%" }}>
                 <Statistic
-                  value={data.filter((state) => !state.is_completed).length}
-                  title="No completadas"
+                  value={(() => {
+                    // Contar actividades completadas en todos los intervalos hasta el actual
+                    let completedActivities = 0;
+                    const today = new Date().toISOString().split("T")[0];
+                    challengers.forEach((interval) => {
+                      if (interval.start_date <= today) {
+                        if (interval.data?.user?.activities) {
+                          completedActivities +=
+                            interval.data.user.activities.filter(
+                              (activity) => activity.is_completed
+                            ).length;
+                        }
+                      }
+                    });
+                    return completedActivities;
+                  })()}
+                  title="Completadas"
                   valueStyle={{ textAlign: "center" }}
                 />
               </Card>

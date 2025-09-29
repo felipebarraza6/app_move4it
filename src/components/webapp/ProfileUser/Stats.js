@@ -10,11 +10,7 @@ const Stats = () => {
   const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
 
-  var meditions = state.user.profile.corporal_meditions
-    .slice()
-    .sort((a, b) => new Date(b.created) - new Date(a.created));
-
-  const [data, setData] = useState(meditions);
+  const [data, setData] = useState([]);
 
   const sourcePagination = () => {
     if (location.pathname === "/profile_user") {
@@ -37,23 +33,32 @@ const Stats = () => {
   };
 
   useEffect(() => {
-    if (location.pathname == "/") {
+    const meditions = state.user.profile.corporal_meditions
+      .slice()
+      .sort((a, b) => new Date(b.created) - new Date(a.created));
+
+    if (location.pathname === "/") {
       setData(meditions.slice(0, 1));
-    } else if (location.pathname == "/profile_competition") {
+    } else if (location.pathname === "/profile_competition") {
       setData(meditions.slice(0, 3));
+    } else {
+      setData(meditions);
     }
+
     if (window.innerWidth < 768) {
       setIsMobile(true);
     } else {
       setIsMobile(false);
     }
-  }, []);
+  }, [location.pathname, state.user.profile.corporal_meditions]);
 
   return (
     <Table
       size="small"
       bordered
-      style={{ width: location.pathname !== "/" && "100%" }}
+      style={{
+        width: isMobile ? "100%" : location.pathname !== "/" ? "100%" : "40%",
+      }}
       title={() => (
         <Flex gap="small" justify="space-between">
           <Flex gap="small">
@@ -75,6 +80,7 @@ const Stats = () => {
           name: "created",
           title: "Fecha",
           dataIndex: "created",
+          width: "25%",
           render: (d) => (
             <Flex gap="small" vertical>
               <div> {d.slice(0, 10)}</div>
@@ -89,18 +95,24 @@ const Stats = () => {
           name: "fat",
           title: isMobile ? "grasa" : "% Grasa",
           dataIndex: "fat",
+          width: "25%",
+          align: "center",
           render: (value) => (value ? parseFloat(value).toFixed(2) : value),
         },
         {
           name: "weight",
           title: isMobile ? "peso" : "Peso(kg)",
           dataIndex: "weight",
+          width: "25%",
+          align: "center",
           render: (value) => (value ? parseFloat(value).toFixed(2) : value),
         },
         {
           name: "height",
           title: isMobile ? "altura" : "Altura(mt)",
           dataIndex: "height",
+          width: "25%",
+          align: "center",
           render: (value) => (value ? parseFloat(value).toFixed(2) : value),
         },
       ]}

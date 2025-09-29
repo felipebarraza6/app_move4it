@@ -5,6 +5,7 @@ import {
   LogoutOutlined,
   UserOutlined,
   SettingOutlined,
+  BookOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../App";
@@ -29,6 +30,8 @@ const MenuNav = () => {
       navigate("/");
     } else if (item.key === "profile_user") {
       navigate("/profile_user");
+    } else if (item.key === "documentation") {
+      navigate("/documentation");
     } else if (item.key === "blog") {
       navigate("/blog");
     } else if (item.key === "logout") {
@@ -39,6 +42,7 @@ const MenuNav = () => {
 
   const items = [
     getItem(`${state.user.username}`, "profile_user", <SettingOutlined />),
+    getItem("Documentación", "documentation", <BookOutlined />),
     getItem("Blog", "blog", <SnippetsOutlined />),
     getItem("Salir", "logout", <LogoutOutlined />),
   ];
@@ -63,6 +67,13 @@ const MenuNav = () => {
           onClick={() => navigate("/profile_user")}
         >
           {window.innerWidth > 900 && state.user.username}
+        </Button>
+
+        <Button
+          icon={<BookOutlined />}
+          onClick={() => navigate("/documentation")}
+        >
+          {window.innerWidth > 900 && "Documentación"}
         </Button>
 
         <Button icon={<SnippetsOutlined />} onClick={() => navigate("/blog")}>

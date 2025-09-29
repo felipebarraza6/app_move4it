@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
-import { Row, Flex, Table } from "antd";
+import { Row, Flex, Table, Alert, Tag } from "antd";
 
 import MyTeamActivity from "../components/webapp/Dashboard/MyTeamActivity";
 import "react-circular-progressbar/dist/styles.css";
 import { AppContext } from "../App";
 import MyTeam from "../components/webapp/Teams/MyTeam";
 import AverageMeditions from "../components/webapp/Teams/AverageMeditions";
+import { parseDateYMDLocal, normalizeDateOnly } from "../utils/date";
 
 const Team = () => {
   const { state } = useContext(AppContext);
@@ -13,19 +14,21 @@ const Team = () => {
   var teamData =
     state.user.enterprise_competition_overflow.last_competence.stats.my_team;
 
-  const today = new Date();
+  // Verificar estado de la competencia
+  const startDate = parseDateYMDLocal(
+    state.user.enterprise_competition_overflow.last_competence.start_date
+  );
+  const endDate = parseDateYMDLocal(
+    state.user.enterprise_competition_overflow.last_competence.end_date
+  );
+  const today = normalizeDateOnly(new Date());
 
-  const last_competence_end =
-    state.user.enterprise_competition_overflow.last_competence.end_date;
+  const competitionNotStarted = today < startDate;
+  const competitionEnded = today > endDate;
+  const competitionActive = today >= startDate && today <= endDate;
 
   const active_competence = () => {
-    const today = new Date().toISOString().split("T")[0];
-
-    if (last_competence_end < today) {
-      return false;
-    } else {
-      return true;
-    }
+    return competitionActive;
   };
 
   if (teamData && teamData.intervals) {
@@ -67,6 +70,42 @@ const Team = () => {
         style={{ width: "100%" }}
         vertical
       >
+        {/* Mostrar mensaje si la competencia no ha comenzado */}
+        {competitionNotStarted && (
+          <Alert
+            message={`La competencia comenzará el ${startDate.toLocaleDateString(
+              "es-ES",
+              {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+              }
+            )}`}
+            description="Los datos del equipo estarán disponibles cuando comience la competencia."
+            type="warning"
+            showIcon
+            style={{ marginBottom: "16px" }}
+          />
+        )}
+
+        {/* Mostrar mensaje si la competencia ha terminado */}
+        {competitionEnded && (
+          <Alert
+            message={`La competencia terminó el ${endDate.toLocaleDateString(
+              "es-ES",
+              {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+              }
+            )}`}
+            description="Revisa el resumen y resultados finales disponibles."
+            type="info"
+            showIcon
+            style={{ marginBottom: "16px" }}
+          />
+        )}
+
         <Flex
           gap="large"
           justify="space-between"
