@@ -37,14 +37,21 @@ const Blog = ({ type }) => {
       title={type ? type.toUpperCase() : "Noticias"}
       style={{
         marginTop: "20px",
-        background:
-          "radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(0,21,32,0.5438550420168067) 100%)",
+        background: "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
+        border: "1px solid rgba(15,120,142,0.2)",
+        borderRadius: "8px",
+        boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
       }}
       extra={
         <Button
           icon={<PaperClipOutlined />}
           type="primary"
           onClick={() => navigate("/blog")}
+          style={{
+            background: "rgba(15,120,142,1)",
+            border: "1px solid rgba(230,184,0,0.4)",
+            borderRadius: "6px"
+          }}
         >
           Blog
         </Button>
@@ -99,7 +106,7 @@ const Blog = ({ type }) => {
         <img
           width={"100%"}
           src={blogSingle && blogSingle.principal_img}
-          style={{ borderRadius: "15px" }}
+          style={{ borderRadius: "8px" }}
           alt="img"
         />
         <h5>
@@ -120,6 +127,10 @@ const styles = {
   card: {
     width: "250px",
     marginBottom: "20px",
+    background: "linear-gradient(135deg, rgba(15,120,142,0.03) 0%, rgba(230,184,0,0.02) 100%)",
+    border: "1px solid rgba(15,120,142,0.15)",
+    borderRadius: "8px",
+    boxShadow: "0 2px 8px rgba(15,120,142,0.08)",
   },
   img: {
     width: "100%",

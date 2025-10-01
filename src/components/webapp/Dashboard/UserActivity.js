@@ -98,8 +98,10 @@ const UserActivity = () => {
 
 const styles = {
   card: {
-    background:
-      "radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(165,171,173,1) 100%)",
+    background: "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
+    border: "1px solid rgba(15,120,142,0.2)",
+    borderRadius: "8px",
+    boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
   },
 };
 

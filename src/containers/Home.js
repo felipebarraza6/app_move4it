@@ -65,8 +65,9 @@ const Home = () => {
                 align="center"
                 style={{
                   marginBottom: "10px",
-                  background: "white",
+                  background: "linear-gradient(169deg, rgba(15,120,142,0.95) 0%, rgba(122,160,168,0.95) 35%, rgba(60,87,93,0.95) 100%)",
                   padding: "10px",
+                  backdropFilter: "blur(10px)",
                 }}
               >
                 <Button
@@ -74,11 +75,7 @@ const Home = () => {
                   icon={
                     <DashboardFilled
                       style={{
-                        borderColor: "rgba(122,160,168)",
-                        color:
-                          location.pathname !== "/"
-                            ? "rgba(122,160,168)"
-                            : "white",
+                        color: location.pathname !== "/" ? "white" : "#1a1a1a",
                       }}
                     />
                   }
@@ -86,10 +83,12 @@ const Home = () => {
                   onClick={() => navigate("/")}
                   style={{
                     background:
-                      location.pathname == "/" ? "rgba(122,160,168)" : "white",
-                    borderColor: "rgba(122,160,168)",
-                    color:
-                      location.pathname == "/" ? "white" : "rgba(122,160,168)",
+                      location.pathname == "/"
+                        ? "rgba(230,184,0,0.9)"
+                        : "rgba(15,120,142,0.8)",
+                    borderColor: "rgba(255,255,255,0.2)",
+                    color: location.pathname == "/" ? "#1a1a1a" : "white",
+                    boxShadow: location.pathname == "/" ? "0 0 10px rgba(230,184,0,0.5)" : "none",
                   }}
                 />
                 <Button
@@ -97,11 +96,7 @@ const Home = () => {
                   icon={
                     <UserOutlined
                       style={{
-                        borderColor: "rgba(122,160,168)",
-                        color:
-                          location.pathname !== "/profile_competition"
-                            ? "rgba(122,160,168)"
-                            : "white",
+                        color: location.pathname !== "/profile_competition" ? "white" : "#1a1a1a",
                       }}
                     />
                   }
@@ -110,13 +105,11 @@ const Home = () => {
                   style={{
                     background:
                       location.pathname == "/profile_competition"
-                        ? "rgba(122,160,168)"
-                        : "white",
-                    borderColor: "rgba(122,160,168)",
-                    color:
-                      location.pathname == "/profile_competition"
-                        ? "white"
-                        : "rgba(122,160,168)",
+                        ? "rgba(230,184,0,0.9)"
+                        : "rgba(15,120,142,0.8)",
+                    borderColor: "rgba(255,255,255,0.2)",
+                    color: location.pathname == "/profile_competition" ? "#1a1a1a" : "white",
+                    boxShadow: location.pathname == "/profile_competition" ? "0 0 10px rgba(230,184,0,0.5)" : "none",
                   }}
                 />
                 <Button
@@ -124,11 +117,7 @@ const Home = () => {
                   icon={
                     <TeamOutlined
                       style={{
-                        borderColor: "rgba(122,160,168)",
-                        color:
-                          location.pathname !== "/team"
-                            ? "rgba(122,160,168)"
-                            : "white",
+                        color: location.pathname !== "/team" ? "white" : "#1a1a1a",
                       }}
                     />
                   }
@@ -137,13 +126,11 @@ const Home = () => {
                   style={{
                     background:
                       location.pathname == "/team"
-                        ? "rgba(122,160,168)"
-                        : "white",
-                    borderColor: "rgba(122,160,168)",
-                    color:
-                      location.pathname == "/team"
-                        ? "white"
-                        : "rgba(122,160,168)",
+                        ? "rgba(230,184,0,0.9)"
+                        : "rgba(15,120,142,0.8)",
+                    borderColor: "rgba(255,255,255,0.2)",
+                    color: location.pathname == "/team" ? "#1a1a1a" : "white",
+                    boxShadow: location.pathname == "/team" ? "0 0 10px rgba(230,184,0,0.5)" : "none",
                   }}
                 />
                 <Button
@@ -151,11 +138,7 @@ const Home = () => {
                   icon={
                     <TrophyOutlined
                       style={{
-                        borderColor: "rgba(122,160,168)",
-                        color:
-                          location.pathname !== "/enterprise"
-                            ? "rgba(122,160,168)"
-                            : "white",
+                        color: location.pathname !== "/enterprise" ? "white" : "#1a1a1a",
                       }}
                     />
                   }
@@ -164,20 +147,26 @@ const Home = () => {
                   style={{
                     background:
                       location.pathname == "/enterprise"
-                        ? "rgba(122,160,168)"
-                        : "white",
-                    borderColor: "rgba(122,160,168)",
-                    color:
-                      location.pathname == "/enterprise"
-                        ? "white"
-                        : "rgba(122,160,168)",
+                        ? "rgba(230,184,0,0.9)"
+                        : "rgba(15,120,142,0.8)",
+                    borderColor: "rgba(255,255,255,0.2)",
+                    color: location.pathname == "/enterprise" ? "#1a1a1a" : "white",
+                    boxShadow: location.pathname == "/enterprise" ? "0 0 10px rgba(230,184,0,0.5)" : "none",
                   }}
                 />
               </Flex>
             </Affix>
           )}
           <Flex gap={"small"}>
-            <Card style={{ minHeight: "85vh", width: "100%" }}>
+            <Card
+              style={{
+                minHeight: "85vh",
+                width: "100%",
+                background: "white",
+                border: "1px solid rgba(15,120,142,0.1)",
+                borderRadius: "0px"
+              }}
+            >
               <Routes>
                 <Route path="*" element={<Dashboard />} />
                 <Route path="/profile_user" element={<ProfileUser />} />

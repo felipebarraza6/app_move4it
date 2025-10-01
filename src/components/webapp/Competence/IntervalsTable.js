@@ -89,17 +89,25 @@ const IntervalsTable = () => {
       {currentIntervalValue && competitionActive && (
         <Card
           key={intervals[currentInterval].interval_id}
-          title={intervals[currentInterval].name}
           style={{
             background:
-              "linear-gradient(39deg, rgba(62,65,73,1) 0%, rgba(134,184,200,1) 100%)",
+              "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
+            border: "1px solid rgba(15,120,142,0.2)",
+            borderRadius: "16px",
+            boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
           }}
         >
           <Descriptions
             bordered
             column={2}
             title={
-              <Text style={{ fontSize: "20px", color: "white" }}>
+              <Text
+                style={{
+                  fontSize: "18px",
+                  color: "rgba(15,120,142,0.8)",
+                  fontWeight: "600",
+                }}
+              >
                 Pruebas por intervalo
               </Text>
             }
@@ -110,17 +118,21 @@ const IntervalsTable = () => {
                   <CalendarOutlined style={{ marginRight: 8 }} /> Fecha inicio
                 </>
               }
-              style={{ color: "white" }}
               span={window.innerWidth > 900 ? 1 : 3}
             >
               {sourcesActive && (
-                <Tag color="blue-inverse">
+                <Tag
+                  style={{
+                    backgroundColor: "rgba(15,120,142,0.1)",
+                    color: "rgba(15,120,142,0.8)",
+                    border: "1px solid rgba(15,120,142,0.3)",
+                  }}
+                >
                   {intervals[currentInterval].start_date}
                 </Tag>
               )}
             </Descriptions.Item>
             <Descriptions.Item
-              style={{ color: "white" }}
               span={window.innerWidth > 900 ? 1 : 3}
               label={
                 <>
@@ -129,13 +141,18 @@ const IntervalsTable = () => {
               }
             >
               {sourcesActive && (
-                <Tag color="red-inverse">
+                <Tag
+                  style={{
+                    backgroundColor: "rgba(15,120,142,0.1)",
+                    color: "rgba(15,120,142,0.8)",
+                    border: "1px solid rgba(15,120,142,0.3)",
+                  }}
+                >
                   {intervals[currentInterval].end_date}
                 </Tag>
               )}
             </Descriptions.Item>
             <Descriptions.Item
-              style={{ color: "white" }}
               label={
                 <>
                   <UnorderedListOutlined style={{ marginRight: 8 }} /> Pruebas
@@ -150,13 +167,17 @@ const IntervalsTable = () => {
                 }}
                 renderItem={(r) => (
                   <List.Item>
-                    <Card
-                      hoverable
-                      style={{ background: "white" }}
-                      size="small"
+                    <p
+                      style={{
+                        color: "rgba(15,120,142,0.8)",
+                        border: "1px solid rgba(15,120,142,0.3)",
+                        borderRadius: "5px",
+                        textAlign: "center",
+                        padding: "2px",
+                      }}
                     >
                       {r}
-                    </Card>
+                    </p>
                   </List.Item>
                 )}
               />

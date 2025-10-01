@@ -2,11 +2,7 @@ import React, { useContext } from "react";
 
 import { Flex, Card, Descriptions } from "antd";
 import { AppContext } from "../../../App";
-import {
-  TrophyFilled,
-  OrderedListOutlined,
-  BuildTwoTone,
-} from "@ant-design/icons";
+import { TrophyFilled, OrderedListOutlined } from "@ant-design/icons";
 
 const MyTeam = () => {
   const { state } = useContext(AppContext);
@@ -33,11 +29,24 @@ const MyTeam = () => {
   return (
     <Flex>
       <Card
-        title={name}
+        title={
+          <div
+            style={{
+              color: "rgba(15,120,142,0.8)",
+              fontWeight: "600",
+              fontSize: "16px",
+            }}
+          >
+            {name}
+          </div>
+        }
         style={{
           width: window.innerWidth > 726 ? "300px" : "100%",
           background:
-            "radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(185,189,201,1) 81%)",
+            "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
+          border: "1px solid rgba(15,120,142,0.2)",
+          borderRadius: "16px",
+          boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
         }}
       >
         <Descriptions bordered column={1}>
@@ -63,13 +72,7 @@ const MyTeam = () => {
               </Descriptions.Item>
             </>
           )}
-          <Descriptions.Item
-            label={
-              <>
-                <BuildTwoTone style={{ color: "#d4b106" }} /> Empresa
-              </>
-            }
-          >
+          <Descriptions.Item label="Empresa">
             {enterprise.toUpperCase()}
           </Descriptions.Item>
         </Descriptions>

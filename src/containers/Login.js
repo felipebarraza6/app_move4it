@@ -42,65 +42,156 @@ const Login = () => {
 
   return (
     <Row
-      justify={"center"}
-      align={"middle"}
+      justify="center"
+      align="middle"
       style={{
         minHeight: "100vh",
-        padding: "10px",
-        background:
-          "radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(0,21,41,1) 100%)",
+        padding: "20px",
+        background: "linear-gradient(169deg, rgba(15,120,142,1) 0%, rgba(122,160,168,1) 35%, rgba(60,87,93,1) 100%)",
       }}
     >
-      <Col xl={7} xs={24}>
-        <Card style={{ width: "100%", marginBottom: "10px", zIndex: 99 }}>
-          <center>
+      <Col xl={6} lg={8} md={12} sm={16} xs={22}>
+        <Card
+          style={{
+            width: "100%",
+            marginBottom: "20px",
+            borderRadius: "16px",
+            boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
+            border: "1px solid rgba(230,184,0,0.2)",
+            background: "rgba(255, 255, 255, 0.95)",
+            backdropFilter: "blur(10px)"
+          }}
+          bodyStyle={{ padding: "40px 32px" }}
+        >
+          <div style={{ textAlign: "center", marginBottom: "32px" }}>
             <img
               src={logo}
               alt="logo"
-              style={{ width: "50%", marginBottom: "0px" }}
+              style={{
+                width: "120px",
+                height: "auto",
+                marginBottom: "16px",
+                filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.1))"
+              }}
             />
-          </center>
+            <h2 style={{
+              color: "#1a1a1a",
+              fontWeight: "600",
+              fontSize: "24px",
+              margin: "0 0 8px 0"
+            }}>
+              <span style={{ color: "#1a1a1a" }}>Bienve</span><span style={{ color: "#e6b800" }}>nido</span>
+            </h2>
+            <p style={{
+              color: "#666",
+              margin: 0,
+              fontSize: "14px"
+            }}>
+              Ingresa tus credenciales para continuar
+            </p>
+          </div>
+
           <Form onFinish={handleLogin} layout="vertical" form={form}>
-            <Form.Item name="email">
+            <Form.Item
+              name="email"
+              rules={[
+                { required: true, message: 'Por favor ingresa tu email' },
+                { type: 'email', message: 'Ingresa un email válido' }
+              ]}
+            >
               <Input
                 type="email"
-                addonBefore={<MailOutlined />}
-                placeholder="Ingresa tu email"
+                prefix={<MailOutlined style={{ color: "rgba(15,120,142,1)" }} />}
+                placeholder="Correo electrónico"
+                size="large"
+                style={{
+                  borderRadius: "8px",
+                  border: "1px solid #e1e5e9",
+                  padding: "12px 16px"
+                }}
+                onFocus={(e) => e.target.style.borderColor = "#e6b800"}
+                onBlur={(e) => e.target.style.borderColor = "#e1e5e9"}
               />
             </Form.Item>
-            <Form.Item name="password">
+
+            <Form.Item
+              name="password"
+              rules={[
+                { required: true, message: 'Por favor ingresa tu contraseña' }
+              ]}
+            >
               <Input.Password
-                addonBefore={<MdOutlinePassword />}
-                placeholder="Ingresa tu contraseña"
+                prefix={<MdOutlinePassword style={{ color: "rgba(15,120,142,1)" }} />}
+                placeholder="Contraseña"
+                size="large"
+                style={{
+                  borderRadius: "8px",
+                  border: "1px solid #e1e5e9",
+                  padding: "12px 16px"
+                }}
+                onFocus={(e) => e.target.style.borderColor = "#e6b800"}
+                onBlur={(e) => e.target.style.borderColor = "#e1e5e9"}
               />
             </Form.Item>
-            <Form.Item>
-              <center>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  loading={loading}
-                  icon={loading ? <LoadingOutlined /> : <LoginOutlined />}
-                  disabled={loading}
-                >
-                  {loading ? "Iniciando sesión..." : "Iniciar sesión"}
-                </Button>
-                <Button
-                  type="default"
-                  style={{ marginLeft: "10px" }}
-                  icon={<ClearOutlined />}
-                  onClick={() => form.resetFields()}
-                >
-                  Limpiar
-                </Button>
-              </center>
+
+            <Form.Item style={{ marginBottom: "16px" }}>
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={loading}
+                block
+                size="large"
+                style={{
+                  background: "linear-gradient(169deg, rgba(15,120,142,1) 0%, rgba(122,160,168,1) 35%, rgba(60,87,93,1) 100%)",
+                  border: "1px solid rgba(230,184,0,0.4)",
+                  borderRadius: "8px",
+                  height: "48px",
+                  fontSize: "16px",
+                  fontWeight: "500",
+                  boxShadow: "0 4px 12px rgba(15,120,142,0.4), 0 0 0 1px rgba(230,184,0,0.1)"
+                }}
+              >
+                {loading ? "Iniciando sesión..." : "Iniciar sesión"}
+              </Button>
+            </Form.Item>
+
+            <Form.Item style={{ marginBottom: 0 }}>
+              <Button
+                type="text"
+                block
+                icon={<ClearOutlined />}
+                onClick={() => form.resetFields()}
+                style={{
+                  color: "#666",
+                  height: "40px",
+                  borderRadius: "8px",
+                  border: "1px solid rgba(230,184,0,0.2)"
+                }}
+              >
+                Limpiar campos
+              </Button>
             </Form.Item>
           </Form>
         </Card>
-        <Card style={{ width: "100%", textAlign: "center" }} size="small">
-          Producto desarrollado por:
-          <br />
-          <u> fbarraza - dev</u> 👨‍💻☕ / LATAM 🇨🇱
+
+        <Card
+          style={{
+            width: "100%",
+            textAlign: "center",
+            borderRadius: "12px",
+            border: "none",
+            background: "rgba(255, 255, 255, 0.9)",
+            backdropFilter: "blur(10px)",
+            boxShadow: "0 8px 20px rgba(0,0,0,0.08)"
+          }}
+          size="small"
+          bodyStyle={{ padding: "16px" }}
+        >
+          <div style={{ color: "#666", fontSize: "12px" }}>
+            Desarrollado por <strong style={{ color: "rgba(15,120,142,1)" }}>fbarraza - dev</strong> 👨‍💻
+            <br />
+            <span style={{ color: "#888" }}>LATAM 🇨🇱</span>
+          </div>
         </Card>
       </Col>
     </Row>

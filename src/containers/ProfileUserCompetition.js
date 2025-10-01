@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Flex } from "antd";
+import { Flex, Alert } from "antd";
 import "react-circular-progressbar/dist/styles.css";
 import { AppContext } from "../App";
 import MyData from "../components/webapp/ProfileUserCompetition.js/MyData";
@@ -26,13 +26,49 @@ const ProfileUserCompetition = () => {
         <Stats />
       </Flex>
       <Flex gap={"small"} justify="space-around" align="top">
-        <UserChallenge
-          challengers={
+        {(() => {
+          const today = new Date().toISOString().split("T")[0];
+          const historicalData =
             state.user.enterprise_competition_overflow.last_competence.stats
-              .historical_data
+              .historical_data;
+          const hasCompletedIntervals =
+            historicalData &&
+            Array.isArray(historicalData) &&
+            historicalData.some((interval) => interval.end_date < today);
+
+          if (!hasCompletedIntervals) {
+            return (
+              <div
+                style={{
+                  width: "100%",
+                  textAlign: "center",
+                  padding: "40px 20px",
+                  color: "rgba(15,120,142,0.6)",
+                  fontSize: "14px",
+                  fontStyle: "italic",
+                  background:
+                    "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
+                  border: "1px solid rgba(15,120,142,0.2)",
+                  borderRadius: "16px",
+                  boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
+                }}
+              >
+                Los datos estarán disponibles después de que termine el primer
+                intervalo.
+              </div>
+            );
           }
-          pagination={true}
-        />
+
+          return (
+            <UserChallenge
+              challengers={
+                state.user.enterprise_competition_overflow.last_competence.stats
+                  .historical_data
+              }
+              pagination={true}
+            />
+          );
+        })()}
       </Flex>
     </Flex>
   );

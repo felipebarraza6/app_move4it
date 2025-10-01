@@ -13,21 +13,21 @@ const AverageMeditions = () => {
     state.user.enterprise_competition_overflow.last_competence
       .avg_corporal_meditions_teams.last_avg;
 
+  // Usar datos históricos para estadísticas completas
   const my_team =
     state.user.enterprise_competition_overflow.last_competence.stats
       .historical_data;
 
-  // Calcular estadísticas basadas en la tabla de abajo (intervalo actual hacia atrás)
-  const today = new Date().toISOString().split("T")[0];
-
-  // Contar participantes únicos, actividades agendadas y completadas
+  // Calcular estadísticas basadas en intervalos completados
   const allParticipants = new Set();
   let totalScheduled = 0;
   let totalCompleted = 0;
 
-  my_team.forEach((interval) => {
-    if (interval.start_date <= today) {
-      if (interval.data?.my_team?.activities) {
+  if (my_team && Array.isArray(my_team)) {
+    const today = new Date().toISOString().split("T")[0];
+    my_team.forEach((interval) => {
+      // Solo intervalos terminados (end_date < today)
+      if (interval.end_date < today && interval.data?.my_team?.activities) {
         interval.data.my_team.activities.forEach((activity) => {
           // Contar participantes únicos
           if (activity.user?.email) {
@@ -43,8 +43,8 @@ const AverageMeditions = () => {
           }
         });
       }
-    }
-  });
+    });
+  }
 
   const userCount = allParticipants.size;
 
@@ -64,13 +64,22 @@ const AverageMeditions = () => {
       >
         <Card
           style={{
-            backgroundColor: "#c9d3d9",
-            borderRadius: "10px",
+            background:
+              "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
+            border: "1px solid rgba(15,120,142,0.2)",
+            borderRadius: "16px",
+            boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
             textAlign: "center",
             width: "100%",
           }}
           title={
-            <Text style={{ fontSize: "17px", color: "black" }}>
+            <Text
+              style={{
+                fontSize: "17px",
+                color: "rgba(15,120,142,0.8)",
+                fontWeight: "600",
+              }}
+            >
               Mediciones promedio
             </Text>
           }
@@ -198,8 +207,10 @@ const AverageMeditions = () => {
 const styles = {
   static: {
     background:
-      "radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(170,184,193,1) 81%)",
-    borderRadius: "10px",
+      "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
+    border: "1px solid rgba(15,120,142,0.2)",
+    borderRadius: "12px",
+    boxShadow: "0 2px 8px rgba(15,120,142,0.1)",
     width: "100%",
   },
 };

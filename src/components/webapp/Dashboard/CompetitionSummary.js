@@ -70,7 +70,7 @@ const CompetitionSummary = () => {
       <Flex gap="medium" justify="space-between" align="center">
         <Flex vertical gap="small" style={{ minWidth: "120px" }}>
           <Flex align="center" gap="small">
-            <TeamOutlined style={{ color: "#1890ff" }} />
+            <TeamOutlined style={{ color: "rgba(15,120,142,0.8)" }} />
             <span style={{ fontSize: "14px", color: "#666" }}>Equipo</span>
           </Flex>
           <span style={{ fontSize: "16px", fontWeight: "500" }}>
@@ -155,12 +155,14 @@ const styles = {
     fontSize: "16px",
   },
   card: {
-    background:
-      "linear-gradient(124deg, rgba(255,255,255,1) 0%, rgba(165,171,173,1) 100%",
+    background: "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
+    border: "1px solid rgba(15,120,142,0.2)",
+    borderRadius: "8px",
+    boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
   },
   iconThrophy: {
     fontSize: "20px",
-    color: "#d4b106",
+    color: "#e6b800",
   },
 };
 

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Button, Flex } from "antd";
+import { Button, Flex, Popconfirm } from "antd";
 import {
   SnippetsOutlined,
   LogoutOutlined,
@@ -65,6 +65,11 @@ const MenuNav = () => {
         <Button
           icon={<UserOutlined />}
           onClick={() => navigate("/profile_user")}
+          style={{
+            border: "1px solid rgba(255,255,255,0.2)",
+            backgroundColor: "rgba(255,255,255,0.1)",
+            color: "white",
+          }}
         >
           {window.innerWidth > 900 && state.user.username}
         </Button>
@@ -72,23 +77,64 @@ const MenuNav = () => {
         <Button
           icon={<BookOutlined />}
           onClick={() => navigate("/documentation")}
+          style={{
+            border: "1px solid rgba(255,255,255,0.2)",
+            backgroundColor: "rgba(255,255,255,0.1)",
+            color: "white",
+          }}
         >
           {window.innerWidth > 900 && "Documentación"}
         </Button>
 
-        <Button icon={<SnippetsOutlined />} onClick={() => navigate("/blog")}>
+        <Button
+          icon={<SnippetsOutlined />}
+          onClick={() => navigate("/blog")}
+          style={{
+            border: "1px solid rgba(255,255,255,0.2)",
+            backgroundColor: "rgba(255,255,255,0.1)",
+            color: "white",
+          }}
+        >
           {window.innerWidth > 900 && "Blog"}
         </Button>
 
-        <Button
-          icon={<LogoutOutlined />}
-          onClick={() => {
+        <Popconfirm
+          title="¿Estás seguro de que quieres salir?"
+          description="Se cerrará tu sesión y tendrás que iniciar sesión nuevamente."
+          onConfirm={() => {
             dispatch({ type: "LOGOUT" });
             navigate("/");
           }}
+          okText="Sí, salir"
+          cancelText="Cancelar"
+          okButtonProps={{
+            style: {
+              background:
+                "linear-gradient(135deg, rgba(15,120,142,0.8) 0%, rgba(15,120,142,1) 100%)",
+              border: "none",
+              borderRadius: "6px",
+              fontWeight: "600",
+            },
+          }}
+          cancelButtonProps={{
+            style: {
+              borderRadius: "6px",
+              border: "1px solid rgba(15,120,142,0.3)",
+              color: "rgba(15,120,142,0.8)",
+            },
+          }}
         >
-          Salir
-        </Button>
+          <Button
+            icon={<LogoutOutlined />}
+            style={{
+              border: "1px solid rgba(230,184,0,0.8)",
+              backgroundColor: "rgba(230,184,0,0.2)",
+              color: "white",
+            }}
+          >
+            Salir
+          </Button>
+        </Popconfirm>
       </Flex>
     </Flex>
   );

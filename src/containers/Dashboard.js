@@ -16,6 +16,61 @@ const Dashboard = () => {
   const { state, dispatch } = useContext(AppContext);
   const [isMobile, setIsMobile] = useState(false);
 
+  // Debug: Log the data structure
+  console.log("=== DEBUG DASHBOARD ===");
+  console.log(
+    "state.user.enterprise_competition_overflow:",
+    state.user.enterprise_competition_overflow
+  );
+  console.log(
+    "last_competence:",
+    state.user.enterprise_competition_overflow?.last_competence
+  );
+  console.log(
+    "stats:",
+    state.user.enterprise_competition_overflow?.last_competence?.stats
+  );
+  console.log(
+    "my_team:",
+    state.user.enterprise_competition_overflow?.last_competence?.stats?.my_team
+  );
+  console.log(
+    "intervals:",
+    state.user.enterprise_competition_overflow?.last_competence?.stats?.my_team
+      ?.intervals
+  );
+
+  // Log each interval in detail
+  const intervals =
+    state.user.enterprise_competition_overflow?.last_competence?.stats?.my_team
+      ?.intervals;
+  if (intervals && Array.isArray(intervals)) {
+    console.log(`Total de intervalos encontrados: ${intervals.length}`);
+    intervals.forEach((interval, index) => {
+      console.log(`=== INTERVALO ${index} ===`);
+      console.log(`Intervalo completo:`, interval);
+      console.log(`  - start_date: ${interval.start_date}`);
+      console.log(`  - end_date: ${interval.end_date}`);
+      console.log(`  - points: ${interval.points}`);
+      console.log(`  - medition_avg:`, interval.medition_avg);
+
+      // Verificar si el intervalo está terminado
+      if (interval.end_date) {
+        const today = new Date().toISOString().split("T")[0];
+        const intervalEndDate = interval.end_date.split("T")[0];
+        const isCompleted = intervalEndDate < today;
+        console.log(
+          `  - ¿Terminado? ${intervalEndDate} < ${today} = ${isCompleted}`
+        );
+      }
+      console.log(`=== FIN INTERVALO ${index} ===`);
+    });
+  } else {
+    console.log("No se encontraron intervalos o no es un array");
+  }
+
+  console.log("=== FIN DEBUG DASHBOARD ===");
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
@@ -67,7 +122,7 @@ const Dashboard = () => {
             <MyTeamActivity
               team_data={
                 state.user.enterprise_competition_overflow.last_competence.stats
-                  .my_team
+                  .current_interval_data?.my_group
               }
             />
           </>

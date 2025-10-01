@@ -63,7 +63,7 @@ const NavBar = () => {
             color: "white",
             paddingLeft: "10px",
             paddingRight: "10px",
-            borderRadius: "10px",
+            borderRadius: "8px",
             backdropFilter: "blur(10px)", // Add backdrop filter for blurring effect
           }}
         >
@@ -75,22 +75,30 @@ const NavBar = () => {
               style={{
                 padding: "10px",
                 cursor: "pointer",
-                borderRadius: "10px",
+                borderRadius: "8px",
                 marginTop: "10px",
                 backgroundColor: option === item.key ? "black" : "transparent",
                 background:
                   option === item.key
-                    ? "linear-gradient(169deg, rgba(15,120,142,0.5) 0%, rgba(77,180,202,0.2217480742296919) 100%, rgba(60,87,93,1) 100%)"
+                    ? "linear-gradient(169deg, rgba(15,120,142,0.8) 0%, rgba(122,160,168,1) 35%, rgba(60,87,93,1) 100%)"
                     : "transparent",
+                border:
+                  option === item.key
+                    ? "1px solid rgba(230,184,0,0.6)"
+                    : "1px solid transparent",
                 transition: "background-color 0.4s ease",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background =
-                  "linear-gradient(169deg, rgba(15,120,142,0.5) 0%, rgba(77,180,202,0.2217480742296919) 100%, rgba(60,87,93,1) 100%)";
+                if (option !== item.key) {
+                  e.currentTarget.style.background = "rgba(15,120,142,0.15)";
+                  e.currentTarget.style.border =
+                    "1px solid rgba(15,120,142,0.3)";
+                }
               }}
               onMouseLeave={(e) => {
                 if (option !== item.key) {
                   e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.border = "1px solid transparent";
                 }
               }}
             >

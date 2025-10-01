@@ -101,6 +101,12 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
               type="primary"
               size={window.innerWidth < 768 ? "small" : "large"}
               onClick={showModal}
+              style={{
+                background: "rgba(15,120,142,1)",
+                border: "1px solid rgba(230,184,0,0.4)",
+                borderRadius: "6px",
+                boxShadow: "0 2px 8px rgba(15,120,142,0.3)",
+              }}
               icon={
                 state.is_completed ? (
                   <CheckCircleFilled />
@@ -137,14 +143,38 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
         </Flex>
       )}
       <Modal
-        title={`Cargar evidencia para actividad "${state.activity.name}"`}
+        title={
+          <div
+            style={{
+              color: "rgba(15,120,142,0.8)",
+              fontWeight: "600",
+              fontSize: "18px",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+            }}
+          >
+            <CloudUploadOutlined />
+            Cargar evidencia para "{state.activity.name}"
+          </div>
+        }
         open={visible}
         onOk={handleOk}
         width={700}
         onCancel={handleCancel}
-        extra={state.activity.points}
         footer={[
-          <Button key="back" onClick={handleCancel} disabled={loading}>
+          <Button
+            key="back"
+            onClick={handleCancel}
+            disabled={loading}
+            style={{
+              borderRadius: "8px",
+              height: "40px",
+              border: "1px solid rgba(15,120,142,0.3)",
+              color: "rgba(15,120,142,0.8)",
+              fontWeight: "500",
+            }}
+          >
             Cancelar
           </Button>,
           <Button
@@ -154,10 +184,27 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
             icon={<SendOutlined />}
             loading={loading}
             disabled={loading}
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(15,120,142,0.8) 0%, rgba(15,120,142,1) 100%)",
+              border: "none",
+              borderRadius: "8px",
+              height: "40px",
+              fontWeight: "600",
+              boxShadow: "0 4px 12px rgba(15,120,142,0.3)",
+            }}
           >
             Enviar
           </Button>,
         ]}
+        style={{
+          borderRadius: "16px",
+        }}
+        styles={{
+          body: {
+            padding: "24px",
+          },
+        }}
       >
         <Flex
           gap={"large"}
@@ -289,7 +336,7 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
                   >
                     <Button
                       size="large"
-                      style={{ color: "#1890ff" }}
+                      style={{ color: "rgba(15,120,142,0.8)" }}
                       type="link"
                     >
                       <Flex gap="small" align="center">
@@ -333,19 +380,23 @@ const UserChallenge = ({ challengers }) => {
     state.user.enterprise_competition_overflow.last_competence.stats
       ?.current_interval_data?.id || null;
 
-  let currentIntervalF = [];
+  let currentIntervalF = 0; // Por defecto mostrar el primer intervalo
 
-  if (current_interval) {
-    currentIntervalF =
-      challengers.length &&
-      challengers.findIndex(
-        (challenger) => challenger.interval_id === current_interval
-      );
-  } else {
-    if (!active_competence()) {
-      currentIntervalF = 0;
-      current_interval = 0;
+  if (current_interval && challengers && Array.isArray(challengers)) {
+    // Buscar el índice del intervalo actual en el array de challengers
+    const foundIndex = challengers.findIndex(
+      (challenger) => challenger.interval_id === current_interval
+    );
+    if (foundIndex !== -1) {
+      currentIntervalF = foundIndex;
     }
+  } else if (
+    !active_competence() &&
+    challengers &&
+    Array.isArray(challengers)
+  ) {
+    // Si la competencia no está activa, mostrar el último intervalo
+    currentIntervalF = Math.max(0, challengers.length - 1);
   }
 
   const [currentInterval, setCurrentInterval] = useState(currentIntervalF);
@@ -378,7 +429,17 @@ const UserChallenge = ({ challengers }) => {
       width: 100,
       hidden: isMobile,
       title: "Categoría",
-      render: (state) => <Tag color="blue">{state.activity.category.name}</Tag>,
+      render: (state) => (
+        <Tag
+          style={{
+            backgroundColor: "rgba(15,120,142,0.1)",
+            color: "rgba(15,120,142,0.8)",
+            border: "1px solid rgba(15,120,142,0.3)",
+          }}
+        >
+          {state.activity.category.name}
+        </Tag>
+      ),
     },
     {
       title: "Inicia",
@@ -397,7 +458,15 @@ const UserChallenge = ({ challengers }) => {
       render: (x) => (
         <Flex gap="small" align="center" vertical>
           <Tag color="green-inverse"> {x.interval?.start_date || "N/A"}</Tag>
-          <Tag color="geekblue-inverse">{x.interval?.end_date || "N/A"}</Tag>
+          <Tag
+            style={{
+              backgroundColor: "rgba(15,120,142,0.1)",
+              color: "rgba(15,120,142,0.8)",
+              border: "1px solid rgba(15,120,142,0.3)",
+            }}
+          >
+            {x.interval?.end_date || "N/A"}
+          </Tag>
           <AddAnswerUser
             state={x}
             disabledAction={disabledActionButton(x.finish_date_time, x)}
@@ -412,7 +481,15 @@ const UserChallenge = ({ challengers }) => {
       hidden: isMobile,
       align: "center",
       render: (state) => (
-        <Tag color="geekblue-inverse">{state.interval?.end_date || "N/A"}</Tag>
+        <Tag
+          style={{
+            backgroundColor: "rgba(15,120,142,0.1)",
+            color: "rgba(15,120,142,0.8)",
+            border: "1px solid rgba(15,120,142,0.3)",
+          }}
+        >
+          {state.interval?.end_date || "N/A"}
+        </Tag>
       ),
     },
     {
@@ -493,7 +570,7 @@ const UserChallenge = ({ challengers }) => {
             marginTop: "5px",
             marginBottom: "10px",
             padding: "5px",
-            borderRadius: "15px",
+            borderRadius: "0px",
           }}
         >
           {data && data.length > 0 && (
@@ -557,7 +634,7 @@ const UserChallenge = ({ challengers }) => {
                   fontSize: "12px",
                   backgroundColor: "#1677ff",
                   padding: "5px",
-                  borderRadius: "15px",
+                  borderRadius: "0px",
                   color: "white",
                   fontWeight: "500",
                 }}
@@ -692,11 +769,13 @@ const UserChallenge = ({ challengers }) => {
 
     // Verificar si challengers es un array (profile_competition) o un objeto (dashboard)
     if (Array.isArray(challengers)) {
-      // Filtrar intervalos futuros
+      // Filtrar intervalos: mostrar el actual y todos los terminados
       const today = new Date().toISOString().split("T")[0];
-      const validChallengers = challengers.filter(
-        (interval) => interval.start_date <= today
-      );
+      const validChallengers = challengers.filter((interval) => {
+        // Incluir intervalos que han comenzado (start_date <= today)
+        // y que han terminado (end_date < today) o están en curso
+        return interval.start_date <= today;
+      });
 
       if (
         location.pathname === "/profile_competition" &&
@@ -766,7 +845,13 @@ const UserChallenge = ({ challengers }) => {
           } else if (today > endDate) {
             return (
               <Flex style={{ marginBottom: "8px" }}>
-                <Tag color="blue">
+                <Tag
+                  style={{
+                    backgroundColor: "rgba(15,120,142,0.1)",
+                    color: "rgba(15,120,142,0.8)",
+                    border: "1px solid rgba(15,120,142,0.3)",
+                  }}
+                >
                   {`La competencia terminó el ${endDate.toLocaleDateString(
                     "es-ES",
                     {
@@ -787,60 +872,24 @@ const UserChallenge = ({ challengers }) => {
               <Card size="small" hoverable style={{ width: "100%" }}>
                 <Statistic
                   value={(() => {
-                    // Contar jugadores únicos en todos los intervalos hasta el actual
+                    // Contar jugadores únicos solo en intervalos terminados
                     const allPlayers = new Set();
                     const today = new Date().toISOString().split("T")[0];
 
-                    console.log("=== DEBUG PARTICIPANTES ===");
-                    console.log("challengers:", challengers);
-                    console.log("today:", today);
-
-                    challengers.forEach((interval, index) => {
-                      console.log(`Intervalo ${index}:`, interval);
-                      console.log(
-                        `start_date: ${interval.start_date}, <= today: ${
-                          interval.start_date <= today
-                        }`
-                      );
-
-                      if (interval.start_date <= today) {
-                        console.log(
-                          "Intervalo válido, buscando participantes..."
-                        );
-                        console.log("interval.data:", interval.data);
-                        console.log(
-                          "interval.data?.my_team:",
-                          interval.data?.my_team
-                        );
-                        console.log(
-                          "interval.data?.my_team?.activities:",
-                          interval.data?.my_team?.activities
-                        );
-
-                        // Usar my_team.activities para obtener participantes únicos
+                    challengers.forEach((interval) => {
+                      // Solo intervalos terminados (end_date < today)
+                      if (interval.end_date < today) {
                         if (interval.data?.my_team?.activities) {
                           interval.data.my_team.activities.forEach(
-                            (activity, actIndex) => {
-                              console.log(`Actividad ${actIndex}:`, activity);
-                              console.log("activity.user:", activity.user);
-                              console.log(
-                                "activity.user?.email:",
-                                activity.user?.email
-                              );
-
+                            (activity) => {
                               if (activity.user?.email) {
                                 allPlayers.add(activity.user.email);
-                                console.log("Agregado:", activity.user.email);
                               }
                             }
                           );
                         }
                       }
                     });
-
-                    console.log("Total participantes únicos:", allPlayers.size);
-                    console.log("Participantes:", Array.from(allPlayers));
-                    console.log("=== FIN DEBUG ===");
 
                     return allPlayers.size;
                   })()}
@@ -851,11 +900,11 @@ const UserChallenge = ({ challengers }) => {
               <Card size="small" hoverable style={{ width: "100%" }}>
                 <Statistic
                   value={(() => {
-                    // Contar todas las actividades agendadas hasta el intervalo actual
+                    // Contar todas las actividades agendadas solo en intervalos terminados
                     let totalActivities = 0;
                     const today = new Date().toISOString().split("T")[0];
                     challengers.forEach((interval) => {
-                      if (interval.start_date <= today) {
+                      if (interval.end_date < today) {
                         if (interval.data?.user?.activities) {
                           totalActivities +=
                             interval.data.user.activities.length;
@@ -872,11 +921,11 @@ const UserChallenge = ({ challengers }) => {
               <Card size="small" hoverable style={{ width: "100%" }}>
                 <Statistic
                   value={(() => {
-                    // Contar actividades completadas en todos los intervalos hasta el actual
+                    // Contar actividades completadas solo en intervalos terminados
                     let completedActivities = 0;
                     const today = new Date().toISOString().split("T")[0];
                     challengers.forEach((interval) => {
-                      if (interval.start_date <= today) {
+                      if (interval.end_date < today) {
                         if (interval.data?.user?.activities) {
                           completedActivities +=
                             interval.data.user.activities.filter(
@@ -913,7 +962,10 @@ const styles = {
   table: {
     width: "100%",
     background:
-      "linear-gradient(124deg, rgba(255,255,255,1) 0%, rgba(165,171,173,1) 100%",
+      "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
+    border: "1px solid rgba(15,120,142,0.2)",
+    borderRadius: "8px",
+    boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
   },
 };
 

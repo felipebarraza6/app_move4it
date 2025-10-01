@@ -11,12 +11,39 @@ import {
 import { AppContext } from "../../../App";
 import { parseDateYMDLocal, normalizeDateOnly } from "../../../utils/date";
 import { useLocation } from "react-router-dom";
-import { render } from "@testing-library/react";
 
 const MyTeamActivity = ({ team_data }) => {
   const { state } = useContext(AppContext);
   const location = useLocation();
   const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const processedData = processTeamData();
+    setData(processedData);
+  }, [team_data]);
+
+  // Early return if team_data is not available
+  if (!team_data) {
+    console.log("MyTeamActivity: team_data is undefined");
+    return (
+      <Card
+        title={window.innerWidth > 726 ? "Actividad de mi equipo" : <></>}
+        style={{
+          ...styles.card,
+          marginBottom: "16px",
+        }}
+      >
+        <div style={{ textAlign: "center", padding: "20px", color: "#666" }}>
+          No hay datos de equipo disponibles
+        </div>
+      </Card>
+    );
+  }
+
+  console.log("=== DEBUG MYTEAMACTIVITY NEW ===");
+  console.log("team_data:", team_data);
+  console.log("team_data keys:", Object.keys(team_data || {}));
+  console.log("=== FIN DEBUG MYTEAMACTIVITY NEW ===");
 
   const last_competence_end =
     state.user.enterprise_competition_overflow.last_competence.end_date;
@@ -31,379 +58,406 @@ const MyTeamActivity = ({ team_data }) => {
     }
   };
 
-  var current_interval =
-    state.user.enterprise_competition_overflow.last_competence.stats
-      ?.current_interval_data?.id;
+  // Process team_data which is now my_group structure
+  // team_data = { "empleado1@gmail.com": [...activities], "empleado2@gmail.com": [...activities] }
 
-  let currentIntervalF = [];
+  const processTeamData = () => {
+    if (!team_data || typeof team_data !== "object") return [];
 
-  if (current_interval) {
-    currentIntervalF = team_data.intervals.findIndex(
-      (challenger) => challenger.interval_id === current_interval
-    );
-  } else {
-    if (!active_competence()) {
-      console.log("=== DEBUG MYTEAMACTIVITY ===");
-      console.log("team_data:", team_data);
-      console.log("team_data type:", typeof team_data);
-      console.log("team_data.intervals:", team_data?.intervals);
-      console.log("=== FIN DEBUG MYTEAMACTIVITY ===");
-      currentIntervalF = 0;
-      current_interval = 0;
-    }
-  }
-
-  const [currentInterval, setCurrentInterval] = useState(currentIntervalF);
-  const dataSource = () => {
-    if (
-      !team_data ||
-      !team_data.intervals ||
-      !team_data.intervals[currentInterval] ||
-      !team_data.intervals[currentInterval].activities ||
-      !team_data.intervals[currentInterval].activities.length
-    ) {
-      setData([]);
-      return;
-    }
-
-    // Filtrar intervalos futuros
-    const todayString = new Date().toISOString().split("T")[0];
-    const validIntervals = team_data.intervals.filter(
-      (interval) => interval.start_date <= todayString
-    );
-
-    if (currentInterval >= validIntervals.length) {
-      setData([]);
-      return;
-    }
-
-    const participants = team_data.intervals[currentInterval].activities.reduce(
-      (acc, activity) => {
-        const user = activity.user.email;
-        if (!acc[user]) {
-          acc[user] = {
-            email: user,
-            points: 0,
-            completedActivities: 0,
-            totalActivities: 0,
-          };
-        }
-        acc[user][activity.activity.name] = activity.is_completed;
-        acc[user].points += activity.is_completed
-          ? activity.activity.points
-          : 0;
-        acc[user].completedActivities += activity.is_completed ? 1 : 0;
-        acc[user].totalActivities += 1;
-        return acc;
-      },
-      {}
-    );
-
-    const participantsCount =
-      team_data.intervals[currentInterval].participants_count;
-    const dataWithPercentage = Object.values(participants).map(
-      (participant) => ({
-        ...participant,
-        points: participant.points / participantsCount,
-        percentage:
-          (participant.completedActivities / participant.totalActivities) * 100,
-      })
-    );
-
-    // Calculate totals
-    const totalPoints = dataWithPercentage.reduce(
-      (sum, participant) => sum + participant.points,
-      0
-    );
-    const totalPercentage = dataWithPercentage.reduce(
-      (sum, participant) => sum + participant.percentage,
-      0
-    );
-
-    // Calculate activity completion percentages
-    const activityCompletionPercentages = activityNames.reduce(
-      (acc, activity) => {
-        const completedCount = team_data.intervals[
-          currentInterval
-        ]?.activities?.filter(
-          (act) => act.activity.name === activity && act.is_completed
-        ).length;
-        const totalCount = team_data.intervals[
-          currentInterval
-        ]?.activities?.filter((act) => act.activity.name === activity).length;
-        acc[activity] = (completedCount / totalCount) * 100;
-        return acc;
-      },
-      {}
-    );
-
-    // Add totals row
-    const totalsRow = {
-      email: "Total",
-      points: totalPoints,
-      percentage: Number(
-        (totalPercentage / dataWithPercentage.length).toFixed(2)
-      ),
-      ...Object.fromEntries(
-        Object.entries(activityCompletionPercentages).map(([key, value]) => [
-          key,
-          Number(value.toFixed(2)),
-        ])
-      ),
-    };
-
-    setData([...dataWithPercentage, totalsRow]);
-  };
-  const [isMobile, setIsMobile] = useState(false);
-  const [expandedRows, setExpandedRows] = useState([]);
-  useEffect(() => {
-    dataSource();
-
-    if (window.innerWidth < 768) {
-      setIsMobile(true);
+    // Detectar el tipo de estructura de datos
+    if (team_data.intervals) {
+      // Estructura de Team.js: stats.my_team con intervals
+      return processIntervalsStructure(team_data);
     } else {
-      setIsMobile(false);
+      // Estructura de Dashboard.js: my_group con emails como claves
+      return processMyGroupStructure(team_data);
     }
-  }, [team_data, currentInterval]);
+  };
 
-  if (!team_data || !team_data.intervals || team_data.intervals.length === 0) {
-    return <div>No hay datos disponibles</div>;
-  }
+  const processIntervalsStructure = (teamData) => {
+    // Determinar si estamos en Team.js (mostrar intervalos anteriores) o Dashboard.js (mostrar intervalo actual)
+    const isTeamPage = location.pathname === "/team";
 
-  const activityNames = Array.from(
-    new Set(
-      team_data.intervals[currentInterval]?.activities?.map(
-        (activity) => activity.activity.name
-      ) || []
-    )
-  );
+    if (isTeamPage) {
+      // En Team.js: mostrar solo intervalos anteriores (terminados)
+      const today = new Date().toISOString().split("T")[0];
+      const completedIntervals = teamData.intervals.filter(
+        (interval) => interval.end_date < today
+      );
 
+      if (completedIntervals.length === 0) {
+        return [];
+      }
+
+      // Agrupar actividades de todos los intervalos terminados
+      const userActivities = {};
+      completedIntervals.forEach((interval) => {
+        if (interval.my_team && interval.my_team.activities) {
+          interval.my_team.activities.forEach((activity) => {
+            const email = activity.user?.email;
+            if (email) {
+              if (!userActivities[email]) {
+                userActivities[email] = [];
+              }
+              userActivities[email].push(activity);
+            }
+          });
+        }
+      });
+
+      // Procesar cada usuario
+      return Object.keys(userActivities).map((email) => {
+        const activities = userActivities[email];
+        const completedActivities = activities.filter(
+          (act) => act.is_completed
+        ).length;
+        const totalActivities = activities.length;
+        const points = activities.reduce(
+          (sum, act) =>
+            sum + (act.is_completed ? act.activity?.points || 1 : 0),
+          0
+        );
+
+        return {
+          email,
+          completedActivities,
+          totalActivities,
+          points,
+          percentage:
+            totalActivities > 0
+              ? ((completedActivities / totalActivities) * 100).toFixed(1)
+              : 0,
+        };
+      });
+    } else {
+      // En Dashboard.js: mostrar intervalo actual
+      const currentIntervalData =
+        state.user.enterprise_competition_overflow.last_competence.stats
+          .current_interval_data;
+      let currentInterval = 0; // Fallback al primer intervalo
+
+      if (currentIntervalData && currentIntervalData.id) {
+        // Buscar el índice del intervalo actual
+        const intervalIndex = teamData.intervals.findIndex(
+          (interval) => interval.interval_id === currentIntervalData.id
+        );
+        if (intervalIndex !== -1) {
+          currentInterval = intervalIndex;
+        }
+      }
+
+      if (
+        !teamData.intervals ||
+        !teamData.intervals[currentInterval] ||
+        !teamData.intervals[currentInterval].my_team
+      ) {
+        return [];
+      }
+
+      const myTeamData = teamData.intervals[currentInterval].my_team;
+
+      if (!myTeamData.activities || !Array.isArray(myTeamData.activities)) {
+        return [];
+      }
+
+      // Agrupar actividades por usuario
+      const userActivities = {};
+      myTeamData.activities.forEach((activity) => {
+        const email = activity.user?.email;
+        if (email) {
+          if (!userActivities[email]) {
+            userActivities[email] = [];
+          }
+          userActivities[email].push(activity);
+        }
+      });
+
+      // Procesar cada usuario
+      return Object.keys(userActivities).map((email) => {
+        const activities = userActivities[email];
+        const completedActivities = activities.filter(
+          (act) => act.is_completed
+        ).length;
+        const totalActivities = activities.length;
+        const points = activities.reduce(
+          (sum, act) =>
+            sum + (act.is_completed ? act.activity?.points || 1 : 0),
+          0
+        );
+
+        return {
+          email,
+          completedActivities,
+          totalActivities,
+          points,
+          percentage:
+            totalActivities > 0
+              ? ((completedActivities / totalActivities) * 100).toFixed(1)
+              : 0,
+        };
+      });
+    }
+  };
+
+  const processMyGroupStructure = (teamData) => {
+    // Estructura my_group: emails como claves
+    const teamMembers = Object.keys(teamData);
+
+    // Filtrar solo las claves que parecen emails (contienen @)
+    const emailKeys = teamMembers.filter((key) => key.includes("@"));
+
+    return emailKeys.map((email) => {
+      const activities = teamData[email] || [];
+      const activitiesArray = Array.isArray(activities) ? activities : [];
+      const completedActivities = activitiesArray.filter(
+        (act) => act.is_completed
+      ).length;
+      const totalActivities = activitiesArray.length;
+      const points = activitiesArray.reduce(
+        (sum, act) => sum + (act.is_completed ? act.activity?.points || 1 : 0),
+        0
+      );
+
+      return {
+        email,
+        completedActivities,
+        totalActivities,
+        points,
+        percentage:
+          totalActivities > 0
+            ? ((completedActivities / totalActivities) * 100).toFixed(1)
+            : 0,
+      };
+    });
+  };
+
+  // Función para obtener actividades detalladas de un usuario
+  const getDetailedActivities = (email) => {
+    if (!team_data || !email) return [];
+
+    // Detectar el tipo de estructura de datos
+    if (team_data.intervals) {
+      // Estructura de Team.js: stats.my_team con intervals
+      const isTeamPage = location.pathname === "/team";
+
+      if (isTeamPage) {
+        // En Team.js: mostrar actividades de intervalos anteriores
+        const today = new Date().toISOString().split("T")[0];
+        const completedIntervals = team_data.intervals.filter(
+          (interval) => interval.end_date < today
+        );
+
+        const allActivities = [];
+        completedIntervals.forEach((interval) => {
+          if (interval.my_team && interval.my_team.activities) {
+            const userActivities = interval.my_team.activities.filter(
+              (activity) => activity.user?.email === email
+            );
+            allActivities.push(...userActivities);
+          }
+        });
+
+        return allActivities.map((activity) => ({
+          activity: activity.activity?.name || activity.activity,
+          is_completed: activity.is_completed,
+          name: activity.activity?.name || activity.activity,
+        }));
+      } else {
+        // En Dashboard.js: mostrar actividades del intervalo actual
+        const currentIntervalData =
+          state.user.enterprise_competition_overflow.last_competence.stats
+            .current_interval_data;
+        let currentInterval = 0;
+
+        if (currentIntervalData && currentIntervalData.id) {
+          const intervalIndex = team_data.intervals.findIndex(
+            (interval) => interval.interval_id === currentIntervalData.id
+          );
+          if (intervalIndex !== -1) {
+            currentInterval = intervalIndex;
+          }
+        }
+
+        if (team_data.intervals[currentInterval]?.my_team?.activities) {
+          return team_data.intervals[currentInterval].my_team.activities
+            .filter((activity) => activity.user?.email === email)
+            .map((activity) => ({
+              activity: activity.activity?.name || activity.activity,
+              is_completed: activity.is_completed,
+              name: activity.activity?.name || activity.activity,
+            }));
+        }
+      }
+    } else {
+      // Estructura de Dashboard.js: my_group con emails como claves
+      const activities = team_data[email];
+      if (Array.isArray(activities)) {
+        return activities.map((activity) => ({
+          activity: activity.activity || activity.name,
+          is_completed: activity.is_completed,
+          name: activity.activity || activity.name,
+        }));
+      }
+    }
+
+    return [];
+  };
+
+
+  // Enhanced table columns with expandable details
   const columns = [
     {
       title: "Jugador",
+      dataIndex: "email",
       key: "email",
-      align: "center",
-      render: (record) => (
-        <div>
-          {record.email === "Total" ? (
-            <strong>{record.email}</strong>
-          ) : record.email.length > 12 ? (
-            record.email.slice(0, 12) + "..."
-          ) : (
-            record.email.slice(0, 12)
-          )}
+      render: (email) => (
+        <div style={{ color: "rgba(15,120,142,0.8)", fontWeight: "600" }}>
+          {window.innerWidth > 726 ? email : email.slice(0, 15)}
         </div>
       ),
     },
-    ...activityNames.map((activity) => ({
-      hidden: window.innerWidth < 726 && true,
-      title: activity,
-      dataIndex: activity,
-      key: activity,
-      align: "center",
-      render: (completed, record) => {
-        const activityData = team_data.intervals[
-          currentInterval
-        ]?.activities?.find(
-          (act) =>
-            act.user.email === record.email && act.activity.name === activity
-        );
-        if (activityData) {
-          if (!activityData.is_completed && activityData.is_load) {
-            if (activityData.interval.end_date < todayString) {
-              return <CloseCircleFilled style={{ color: "red" }} />;
-            }
-            return <Spin />;
-          }
-        }
-        return typeof completed === "number" ? (
-          `${completed.toFixed(2)}%`
-        ) : completed ? (
-          <CheckCircleFilled style={{ color: "green" }} />
-        ) : (
-          <CloseCircleFilled style={{ color: "red" }} />
-        );
-      },
-    })),
     {
-      title: !isMobile ? "Puntos" : "Pts",
+      title: "Completadas",
+      dataIndex: "completedActivities",
+      key: "completedActivities",
+      align: "center",
+      render: (completed, record) => (
+        <span
+          style={{
+            color:
+              completed === record.totalActivities
+                ? "rgba(15,120,142,0.8)"
+                : "rgba(15,120,142,0.6)",
+            fontWeight: "500",
+          }}
+        >
+          {completed}/{record.totalActivities}
+        </span>
+      ),
+    },
+    {
+      title: "Puntos",
       dataIndex: "points",
       key: "points",
       align: "center",
-      render: (points) => points.toFixed(2),
+      render: (points) => (
+        <span
+          style={{
+            color: "rgba(15,120,142,0.8)",
+            fontWeight: "600",
+          }}
+        >
+          {points}
+        </span>
+      ),
     },
     {
-      title: !isMobile && "Efectividad",
+      title: "Efectividad",
       dataIndex: "percentage",
       key: "percentage",
       align: "center",
-
-      render: (percentage) => `${Number(percentage).toFixed(2)}%`,
+      render: (percentage) => (
+        <span
+          style={{
+            color:
+              parseFloat(percentage) >= 80
+                ? "rgba(15,120,142,0.8)"
+                : parseFloat(percentage) >= 50
+                ? "rgba(230,184,0,0.8)"
+                : "rgba(255,77,79,0.8)",
+            fontWeight: "600",
+          }}
+        >
+          {percentage}%
+        </span>
+      ),
     },
   ];
 
   const extra = () => {
-    const nextInterval = () => {
-      setCurrentInterval((prevInterval) => prevInterval - 1);
-    };
+    const isTeamPage = location.pathname === "/team";
 
-    const previousInterval = () => {
-      setCurrentInterval((prevInterval) => prevInterval + 1);
-    };
+    if (isTeamPage) {
+      // En Team.js: mostrar fechas de intervalos anteriores
+      if (team_data && team_data.intervals) {
+        const today = new Date().toISOString().split("T")[0];
+        const completedIntervals = team_data.intervals.filter(
+          (interval) => interval.end_date < today
+        );
 
-    const todayString = new Date().toISOString().split("T")[0];
+        if (completedIntervals.length > 0) {
+          // Mostrar rango desde el primer intervalo terminado hasta el último
+          const firstInterval =
+            completedIntervals[completedIntervals.length - 1]; // El más antiguo
+          const lastInterval = completedIntervals[0]; // El más reciente
 
-    return (
-      <Flex
-        gap="small"
-        align="end"
-        style={{
-          marginTop: "5px",
-          marginBottom: "10px",
-          padding: "5px",
-          borderRadius: "15px",
-        }}
-      >
-        {location.pathname === "/team" && (
-          <Button
-            shape="round"
-            type="default"
-            onClick={previousInterval}
-            disabled={
-              currentInterval >=
-              team_data.intervals.filter(
-                (interval) => interval.start_date <= todayString
-              ).length -
-                1
-            }
-          >
-            <ArrowLeftOutlined />
-            <div style={{ fontSize: "10px", marginLeft: "5px" }}>
-              {currentInterval < team_data.intervals.length - 1 ? (
-                <>
-                  {new Date(
-                    new Date(
-                      team_data.intervals[currentInterval + 1]?.start_date
-                    ).setDate(
-                      new Date(
-                        team_data.intervals[currentInterval + 1]?.start_date
-                      ).getDate() + 1
-                    )
-                  ).toLocaleDateString("es-ES", {
-                    day: "2-digit",
-                    month: "short",
-                  })}
-                  <br />
-                  {new Date(
-                    new Date(
-                      team_data.intervals[currentInterval + 1]?.end_date
-                    ).setDate(
-                      new Date(
-                        team_data.intervals[currentInterval + 1]?.end_date
-                      ).getDate() + 1
-                    )
-                  ).toLocaleDateString("es-ES", {
-                    day: "2-digit",
-                    month: "short",
-                  })}
-                </>
-              ) : (
-                <>
-                  dd-m
-                  <br />
-                  dd-m
-                </>
-              )}
-            </div>
-          </Button>
-        )}
+          const startDate = parseDateYMDLocal(firstInterval.start_date);
+          const endDate = parseDateYMDLocal(lastInterval.end_date);
 
-        <div
-          size="small"
-          style={{
-            fontSize: "12px",
-            backgroundColor: "#1677ff",
-            padding: "5px",
-            borderRadius: "15px",
-            color: "white",
-            fontWeight: "500",
-          }}
-        >
-          <center>
-            <CalendarOutlined style={{ textAlign: "center" }} />
-          </center>
-          {new Date(
-            new Date(team_data.intervals[currentInterval]?.start_date).setDate(
-              new Date(
-                team_data.intervals[currentInterval]?.start_date
-              ).getDate() + 1
-            )
-          ).toLocaleDateString("es-ES", {
-            day: "2-digit",
-            month: "short",
-          })}
-          <br />
-          {new Date(
-            new Date(team_data.intervals[currentInterval]?.end_date).setDate(
-              new Date(
-                team_data.intervals[currentInterval]?.end_date
-              ).getDate() + 1
-            )
-          ).toLocaleDateString("es-ES", {
-            day: "2-digit",
-            month: "short",
-          })}
-        </div>
+          return (
+            <Flex gap="small" align="center">
+              <CalendarFilled style={{ color: "rgba(15,120,142,0.8)" }} />
+              <span style={{ fontSize: "12px", color: "#666" }}>
+                {startDate.toLocaleDateString("es-ES", {
+                  day: "2-digit",
+                  month: "short",
+                })}{" "}
+                -{" "}
+                {endDate.toLocaleDateString("es-ES", {
+                  day: "2-digit",
+                  month: "short",
+                })}
+              </span>
+            </Flex>
+          );
+        }
+      }
 
-        {location.pathname === "/team" && (
-          <Button
-            shape="round"
-            type="default"
-            onClick={nextInterval}
-            disabled={currentInterval === 0}
-          >
-            <ArrowRightOutlined />
-            <div style={{ fontSize: "10px", marginLeft: "5px" }}>
-              {currentInterval > 0 ? (
-                <>
-                  {new Date(
-                    new Date(
-                      team_data.intervals[currentInterval - 1]?.start_date
-                    ).setDate(
-                      new Date(
-                        team_data.intervals[currentInterval - 1]?.start_date
-                      ).getDate() + 1
-                    )
-                  ).toLocaleDateString("es-ES", {
-                    day: "2-digit",
-                    month: "short",
-                  })}
-                  <br />
-                  {new Date(
-                    new Date(
-                      team_data.intervals[currentInterval - 1]?.end_date
-                    ).setDate(
-                      new Date(
-                        team_data.intervals[currentInterval - 1]?.end_date
-                      ).getDate() + 1
-                    )
-                  ).toLocaleDateString("es-ES", {
-                    day: "2-digit",
-                    month: "short",
-                  })}
-                </>
-              ) : (
-                <>
-                  dd-m
-                  <br />
-                  dd-m
-                </>
-              )}
-            </div>
-          </Button>
-        )}
-      </Flex>
-    );
+      // Si no hay intervalos terminados, no mostrar fechas
+      return null;
+    } else {
+      // En Dashboard.js: mostrar fechas del intervalo actual
+      const currentIntervalData =
+        state.user.enterprise_competition_overflow.last_competence.stats
+          .current_interval_data;
+
+      let startDate, endDate;
+
+      if (
+        currentIntervalData &&
+        currentIntervalData.start_date &&
+        currentIntervalData.end_date
+      ) {
+        // Usar fechas del intervalo actual
+        startDate = parseDateYMDLocal(currentIntervalData.start_date);
+        endDate = parseDateYMDLocal(currentIntervalData.end_date);
+      } else {
+        // Fallback a fechas de la competencia si no hay intervalo actual
+        startDate = parseDateYMDLocal(
+          state.user.enterprise_competition_overflow.last_competence.start_date
+        );
+        endDate = parseDateYMDLocal(
+          state.user.enterprise_competition_overflow.last_competence.end_date
+        );
+      }
+
+      return (
+        <Flex gap="small" align="center">
+          <CalendarFilled style={{ color: "rgba(15,120,142,0.8)" }} />
+          <span style={{ fontSize: "12px", color: "#666" }}>
+            {startDate.toLocaleDateString("es-ES", {
+              day: "2-digit",
+              month: "short",
+            })}{" "}
+            -{" "}
+            {endDate.toLocaleDateString("es-ES", {
+              day: "2-digit",
+              month: "short",
+            })}
+          </span>
+        </Flex>
+      );
+    }
   };
 
   const todayString = new Date().toISOString().split("T")[0];
@@ -429,13 +483,12 @@ const MyTeamActivity = ({ team_data }) => {
         if (today < startDate) {
           return (
             <Flex style={{ marginBottom: "8px" }}>
-              <Tag color="orange">
+              <Tag color="warning">
                 {`La competencia comenzará el ${startDate.toLocaleDateString(
                   "es-ES",
                   {
                     day: "2-digit",
                     month: "short",
-                    year: "numeric",
                   }
                 )}`}
               </Tag>
@@ -444,82 +497,128 @@ const MyTeamActivity = ({ team_data }) => {
         } else if (today > endDate) {
           return (
             <Flex style={{ marginBottom: "8px" }}>
-              <Tag color="blue">
+              <Tag
+                style={{
+                  backgroundColor: "rgba(15,120,142,0.1)",
+                  color: "rgba(15,120,142,0.8)",
+                  border: "1px solid rgba(15,120,142,0.3)",
+                }}
+              >
                 {`La competencia terminó el ${endDate.toLocaleDateString(
                   "es-ES",
                   {
                     day: "2-digit",
                     month: "short",
-                    year: "numeric",
                   }
                 )}`}
               </Tag>
             </Flex>
           );
-        }
-        return null;
-      })()}
-      <Table
-        size="small"
-        bordered
-        columns={columns}
-        expandable={
-          isMobile
-            ? {
-                expandedRowKeys: expandedRows,
-                onExpandedRowsChange: (newExpandedRows) => {
-                  setExpandedRows(newExpandedRows);
-                },
-                expandedRowRender: (record) => (
-                  <p style={{ margin: 0 }}>
-                    {activityNames.map((activity) => (
-                      <div key={activity} style={{ marginBottom: "10px" }}>
-                        <strong>{activity}: </strong>
-                        {(() => {
-                          const activityData = team_data.intervals[
-                            currentInterval
-                          ]?.activities?.find(
-                            (act) =>
-                              act.user.email === record.email &&
-                              act.activity.name === activity
-                          );
+        } else {
+          return (
+            <Table
+              dataSource={data}
+              columns={columns}
+              pagination={false}
+              rowKey="email"
+              size="small"
+              scroll={{ x: true }}
+              expandable={{
+                expandedRowRender: (record) => {
+                  // Obtener actividades detalladas del usuario
+                  const userActivities = getDetailedActivities(record.email);
 
-                          if (activityData) {
-                            if (
-                              !activityData.is_completed &&
-                              activityData.is_load
-                            ) {
-                              console.log(activityData);
-                              if (
-                                activityData.interval.end_date < todayString
-                              ) {
-                                return (
-                                  <CloseCircleFilled style={{ color: "red" }} />
-                                );
-                              }
-                              return <Spin />;
-                            }
-                            return activityData.is_completed ? (
-                              <CheckCircleFilled style={{ color: "green" }} />
-                            ) : (
-                              <CloseCircleFilled style={{ color: "red" }} />
-                            );
-                          }
-                          return null;
-                        })()}
-                      </div>
-                    ))}
-                    {console.log(record)}
-                  </p>
-                ),
+                  return (
+                    <div
+                      style={{
+                        padding: "16px",
+                        background: "rgba(15,120,142,0.02)",
+                      }}
+                    >
+                      <h4
+                        style={{
+                          color: "rgba(15,120,142,0.8)",
+                          marginBottom: "12px",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                        }}
+                      >
+                        Actividades Agendadas
+                      </h4>
+                      {userActivities.length > 0 ? (
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "8px",
+                          }}
+                        >
+                          {userActivities.map((activity, index) => (
+                            <div
+                              key={index}
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                padding: "8px 12px",
+                                background: activity.is_completed
+                                  ? "rgba(15,120,142,0.1)"
+                                  : "rgba(255,255,255,0.8)",
+                                border: `1px solid ${
+                                  activity.is_completed
+                                    ? "rgba(15,120,142,0.3)"
+                                    : "rgba(15,120,142,0.2)"
+                                }`,
+                                borderRadius: "6px",
+                              }}
+                            >
+                              <span
+                                style={{
+                                  color: "rgba(15,120,142,0.8)",
+                                  fontWeight: "500",
+                                }}
+                              >
+                                {activity.activity ||
+                                  activity.name ||
+                                  "Actividad"}
+                              </span>
+                              <span
+                                style={{
+                                  color: activity.is_completed
+                                    ? "rgba(15,120,142,0.8)"
+                                    : "rgba(255,77,79,0.8)",
+                                  fontWeight: "600",
+                                  fontSize: "12px",
+                                }}
+                              >
+                                {activity.is_completed
+                                  ? "✓ Completada"
+                                  : "✗ Pendiente"}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div
+                          style={{
+                            color: "rgba(15,120,142,0.6)",
+                            fontStyle: "italic",
+                            textAlign: "center",
+                            padding: "20px",
+                          }}
+                        >
+                          No hay actividades agendadas
+                        </div>
+                      )}
+                    </div>
+                  );
+                },
                 rowExpandable: (record) => record.email !== "Total",
-              }
-            : false
+              }}
+            />
+          );
         }
-        pagination={false}
-        rowKey={(record) => record.email}
-        dataSource={data}
-      />
+      })()}
     </Card>
   );
 };
@@ -527,7 +626,10 @@ const MyTeamActivity = ({ team_data }) => {
 const styles = {
   card: {
     background:
-      "linear-gradient(124deg, rgba(255,255,255,1) 0%, rgba(165,171,173,1) 100%",
+      "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
+    border: "1px solid rgba(15,120,142,0.2)",
+    borderRadius: "8px",
+    boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
     width: "100%",
   },
 };

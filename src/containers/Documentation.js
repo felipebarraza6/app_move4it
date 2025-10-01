@@ -79,36 +79,7 @@ const Documentation = () => {
       ],
       color: "#eb2f96",
     },
-    {
-      key: "challenges",
-      title: "Desafíos",
-      icon: <BarChartOutlined />,
-      description: "Participa en desafíos y actividades",
-      features: [
-        "Lista de desafíos disponibles",
-        "Registro de actividades",
-        "Seguimiento de progreso",
-        "Completar tareas",
-        "Historial de logros",
-      ],
-      color: "#722ed1",
-    },
 
-    {
-      key: "global_viewer",
-      title: "Visualizador Global",
-      icon: <GlobalOutlined />,
-      description: "Vista administrativa de toda la competencia",
-      features: [
-        "Estadísticas globales",
-        "Información general",
-        "Datos de todos los equipos",
-        "Métricas de competencia",
-        "Reportes administrativos",
-      ],
-      color: "#13c2c2",
-      adminOnly: true,
-    },
     {
       key: "blog",
       title: "Blog y Novedades",
@@ -126,208 +97,307 @@ const Documentation = () => {
   ];
 
   return (
-    <Flex vertical gap="large" style={{ padding: "24px" }}>
-      {/* Header */}
-      <Card>
-        <Flex vertical gap="medium" align="center">
-          <Title level={1} style={{ textAlign: "center", margin: 0 }}>
-            <BookOutlined style={{ marginRight: "12px", color: "#1890ff" }} />
-            Documentación Move4It
-          </Title>
-          <Paragraph
-            style={{ textAlign: "center", fontSize: "16px", margin: 0 }}
-          >
-            Guía completa de todos los módulos y funcionalidades de la
-            plataforma
-          </Paragraph>
-        </Flex>
-      </Card>
-
-      {/* Módulos Grid */}
-      <Row gutter={[24, 24]}>
-        {modules.map((module) => (
-          <Col xs={24} sm={12} lg={8} xl={6} key={module.key}>
-            <Card
-              hoverable
+    <div
+      style={{
+        background:
+          "linear-gradient(135deg, rgba(15,120,142,0.02) 0%, rgba(230,184,0,0.01) 100%)",
+        minHeight: "100vh",
+        padding: "24px",
+      }}
+    >
+      <Flex vertical gap="large">
+        {/* Header */}
+        <Card
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
+            border: "1px solid rgba(15,120,142,0.2)",
+            borderRadius: "16px",
+            boxShadow: "0 8px 24px rgba(15,120,142,0.08)",
+          }}
+        >
+          <Flex vertical gap="medium" align="center">
+            <Paragraph
               style={{
-                height: "100%",
-                border: `2px solid ${module.color}20`,
-                borderRadius: "12px",
+                textAlign: "center",
+                fontSize: "16px",
+                margin: 0,
+                color: "rgba(15,120,142,0.7)",
               }}
-              bodyStyle={{ padding: "20px" }}
             >
-              <Flex vertical gap="medium" style={{ height: "100%" }}>
-                {/* Icono y título */}
-                <Flex align="center" gap="small">
-                  <div
+              Guía completa de todos los módulos y funcionalidades de la
+              plataforma
+            </Paragraph>
+          </Flex>
+        </Card>
+
+        {/* Módulos Grid */}
+        <Row gutter={[24, 24]}>
+          {modules.map((module) => (
+            <Col xs={24} sm={12} lg={8} xl={6} key={module.key}>
+              <Card
+                hoverable
+                style={{
+                  height: "100%",
+                  background:
+                    "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
+                  border: "1px solid rgba(15,120,142,0.2)",
+                  borderRadius: "16px",
+                  boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
+                  transition: "all 0.3s ease",
+                }}
+                bodyStyle={{ padding: "24px" }}
+              >
+                <Flex vertical gap="medium" style={{ height: "100%" }}>
+                  {/* Icono y título */}
+                  <Flex align="center" gap="small">
+                    <div
+                      style={{
+                        fontSize: "28px",
+                        color: "rgba(15,120,142,0.8)",
+                        display: "flex",
+                        alignItems: "center",
+                        padding: "8px",
+                        background:
+                          "linear-gradient(135deg, rgba(15,120,142,0.1) 0%, rgba(230,184,0,0.05) 100%)",
+                        borderRadius: "12px",
+                        border: "1px solid rgba(15,120,142,0.2)",
+                      }}
+                    >
+                      {module.icon}
+                    </div>
+                    <Title
+                      level={4}
+                      style={{
+                        margin: 0,
+                        color: "rgba(15,120,142,0.8)",
+                        fontWeight: "600",
+                      }}
+                    >
+                      {module.title}
+                    </Title>
+                    {module.adminOnly && (
+                      <Tag color="red" size="small">
+                        Admin
+                      </Tag>
+                    )}
+                  </Flex>
+
+                  {/* Descripción */}
+                  <Paragraph
                     style={{
-                      fontSize: "24px",
-                      color: module.color,
-                      display: "flex",
-                      alignItems: "center",
+                      margin: 0,
+                      color: "rgba(15,120,142,0.7)",
+                      fontSize: "14px",
+                      lineHeight: "1.6",
                     }}
                   >
-                    {module.icon}
-                  </div>
-                  <Title level={4} style={{ margin: 0, color: module.color }}>
-                    {module.title}
-                  </Title>
-                  {module.adminOnly && (
-                    <Tag color="red" size="small">
-                      Admin
-                    </Tag>
-                  )}
-                </Flex>
-
-                {/* Descripción */}
-                <Paragraph style={{ margin: 0, color: "#666" }}>
-                  {module.description}
-                </Paragraph>
-
-                {/* Características */}
-                <Flex vertical gap="small" style={{ flex: 1 }}>
-                  <Text strong style={{ color: module.color }}>
-                    Características:
-                  </Text>
-                  <Space
-                    direction="vertical"
-                    size="small"
-                    style={{ width: "100%" }}
-                  >
-                    {module.features.map((feature, index) => (
-                      <Flex key={index} align="center" gap="small">
-                        <div
-                          style={{
-                            width: "6px",
-                            height: "6px",
-                            borderRadius: "50%",
-                            backgroundColor: module.color,
-                          }}
-                        />
-                        <Text style={{ fontSize: "13px" }}>{feature}</Text>
-                      </Flex>
-                    ))}
-                  </Space>
-                </Flex>
-              </Flex>
-            </Card>
-          </Col>
-        ))}
-      </Row>
-
-      {/* Información adicional */}
-      <Card>
-        <Flex vertical gap="large">
-          <Title level={2} style={{ textAlign: "center", margin: 0 }}>
-            <RocketOutlined style={{ marginRight: "12px", color: "#52c41a" }} />
-            Cómo usar la plataforma
-          </Title>
-
-          <Row gutter={[24, 24]}>
-            <Col xs={24} md={12}>
-              <Card size="small" style={{ height: "100%" }}>
-                <Flex vertical gap="small">
-                  <Title level={4} style={{ margin: 0, color: "#1890ff" }}>
-                    <CalendarOutlined /> Flujo de Competencia
-                  </Title>
-                  <Paragraph style={{ margin: 0 }}>
-                    Las competencias se dividen en intervalos de tiempo. Cada
-                    intervalo tiene actividades específicas que debes completar
-                    para ganar puntos.
+                    {module.description}
                   </Paragraph>
+
+                  {/* Características */}
+                  <Flex vertical gap="small" style={{ flex: 1 }}>
+                    <Text
+                      strong
+                      style={{
+                        color: "rgba(15,120,142,0.8)",
+                        fontSize: "14px",
+                        fontWeight: "600",
+                      }}
+                    >
+                      Características:
+                    </Text>
+                    <Space
+                      direction="vertical"
+                      size="small"
+                      style={{ width: "100%" }}
+                    >
+                      {module.features.map((feature, index) => (
+                        <Flex key={index} align="center" gap="small">
+                          <div
+                            style={{
+                              width: "8px",
+                              height: "8px",
+                              borderRadius: "50%",
+                              backgroundColor: "rgba(15,120,142,0.6)",
+                              boxShadow: "0 2px 4px rgba(15,120,142,0.2)",
+                            }}
+                          />
+                          <Text
+                            style={{
+                              fontSize: "13px",
+                              color: "rgba(15,120,142,0.7)",
+                            }}
+                          >
+                            {feature}
+                          </Text>
+                        </Flex>
+                      ))}
+                    </Space>
+                  </Flex>
                 </Flex>
               </Card>
             </Col>
+          ))}
+        </Row>
 
-            <Col xs={24} md={12}>
-              <Card size="small" style={{ height: "100%" }}>
-                <Flex vertical gap="small">
-                  <Title level={4} style={{ margin: 0, color: "#52c41a" }}>
-                    <SettingOutlined /> Configuración
-                  </Title>
-                  <Paragraph style={{ margin: 0 }}>
-                    Personaliza tu experiencia desde el perfil de usuario.
-                    Actualiza tus datos, cambia tu contraseña y revisa tus
-                    estadísticas.
-                  </Paragraph>
-                </Flex>
-              </Card>
-            </Col>
-          </Row>
-
-          <Divider />
-
-          <Flex vertical gap="medium" align="center">
-            <Title level={3} style={{ margin: 0, textAlign: "center" }}>
-              <BulbOutlined style={{ marginRight: "12px", color: "#fa8c16" }} />
-              Consejos para aprovechar al máximo la plataforma
+        {/* Información adicional */}
+        <Card
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
+            border: "1px solid rgba(15,120,142,0.2)",
+            borderRadius: "16px",
+            boxShadow: "0 8px 24px rgba(15,120,142,0.08)",
+          }}
+        >
+          <Flex vertical gap="large">
+            <Title
+              level={2}
+              style={{
+                textAlign: "center",
+                margin: 0,
+                color: "rgba(15,120,142,0.8)",
+                fontWeight: "600",
+              }}
+            >
+              <RocketOutlined
+                style={{ marginRight: "12px", color: "rgba(15,120,142,0.8)" }}
+              />
+              Cómo usar la plataforma
             </Title>
 
-            <Row gutter={[16, 16]} style={{ width: "100%" }}>
-              <Col xs={24} sm={12} md={8}>
-                <Card size="small" style={{ textAlign: "center" }}>
-                  <Flex vertical gap="small" align="center">
-                    <BarChartOutlined
-                      style={{ fontSize: "24px", color: "#1890ff" }}
-                    />
-                    <Text strong>Revisa el Dashboard</Text>
-                    <Text type="secondary">
-                      Mantente al día con el estado de tu competencia
-                    </Text>
+            <Row gutter={[24, 24]}>
+              <Col xs={24} md={12}>
+                <Card size="small" style={{ height: "100%" }}>
+                  <Flex vertical gap="small">
+                    <Title level={4} style={{ margin: 0, color: "#1890ff" }}>
+                      <CalendarOutlined /> Flujo de Competencia
+                    </Title>
+                    <Paragraph style={{ margin: 0 }}>
+                      Las competencias se dividen en intervalos de tiempo. Cada
+                      intervalo tiene actividades específicas que debes
+                      completar para ganar puntos.
+                    </Paragraph>
                   </Flex>
                 </Card>
               </Col>
 
-              <Col xs={24} sm={12} md={8}>
-                <Card size="small" style={{ textAlign: "center" }}>
-                  <Flex vertical gap="small" align="center">
-                    <CheckCircleOutlined
-                      style={{ fontSize: "24px", color: "#52c41a" }}
-                    />
-                    <Text strong>Completa Actividades</Text>
-                    <Text type="secondary">
-                      Participa activamente para ganar más puntos
-                    </Text>
-                  </Flex>
-                </Card>
-              </Col>
-
-              <Col xs={24} sm={12} md={8}>
-                <Card size="small" style={{ textAlign: "center" }}>
-                  <Flex vertical gap="small" align="center">
-                    <TeamOutlined
-                      style={{ fontSize: "24px", color: "#fa8c16" }}
-                    />
-                    <Text strong>Colabora con tu Equipo</Text>
-                    <Text type="secondary">
-                      Trabaja en equipo para mejores resultados
-                    </Text>
+              <Col xs={24} md={12}>
+                <Card size="small" style={{ height: "100%" }}>
+                  <Flex vertical gap="small">
+                    <Title level={4} style={{ margin: 0, color: "#52c41a" }}>
+                      <SettingOutlined /> Configuración
+                    </Title>
+                    <Paragraph style={{ margin: 0 }}>
+                      Personaliza tu experiencia desde el perfil de usuario.
+                      Actualiza tus datos, cambia tu contraseña y revisa tus
+                      estadísticas.
+                    </Paragraph>
                   </Flex>
                 </Card>
               </Col>
             </Row>
-          </Flex>
-        </Flex>
-      </Card>
 
-      {/* Footer */}
-      <Card style={{ textAlign: "center" }}>
-        <Flex vertical gap="small" align="center">
-          <Flex align="center" gap="small">
-            <InfoCircleOutlined style={{ color: "#1890ff" }} />
-            <Text style={{ margin: 0, color: "#666" }}>
-              ¿Tienes preguntas? Contacta al administrador de tu competencia
-            </Text>
+            <Divider />
+
+            <Flex vertical gap="medium" align="center">
+              <Title
+                level={3}
+                style={{ margin: "0 0 20px 0", textAlign: "center" }}
+              >
+                <BulbOutlined
+                  style={{ marginRight: "12px", color: "#fa8c16" }}
+                />
+                Consejos para aprovechar al máximo la plataforma
+              </Title>
+
+              <Row gutter={[16, 16]} style={{ width: "100%" }}>
+                <Col xs={24} sm={12} md={8}>
+                  <Card size="small" style={{ textAlign: "center" }}>
+                    <Flex vertical gap="small" align="center">
+                      <BarChartOutlined
+                        style={{ fontSize: "24px", color: "#1890ff" }}
+                      />
+                      <Text strong>Revisa el Dashboard</Text>
+                      <Text type="secondary">
+                        Mantente al día con el estado de tu competencia
+                      </Text>
+                    </Flex>
+                  </Card>
+                </Col>
+
+                <Col xs={24} sm={12} md={8}>
+                  <Card size="small" style={{ textAlign: "center" }}>
+                    <Flex vertical gap="small" align="center">
+                      <CheckCircleOutlined
+                        style={{ fontSize: "24px", color: "#52c41a" }}
+                      />
+                      <Text strong>Completa Actividades</Text>
+                      <Text type="secondary">
+                        Participa activamente para ganar más puntos
+                      </Text>
+                    </Flex>
+                  </Card>
+                </Col>
+
+                <Col xs={24} sm={12} md={8}>
+                  <Card size="small" style={{ textAlign: "center" }}>
+                    <Flex vertical gap="small" align="center">
+                      <TeamOutlined
+                        style={{ fontSize: "24px", color: "#fa8c16" }}
+                      />
+                      <Text strong>Colabora con tu Equipo</Text>
+                      <Text type="secondary">
+                        Trabaja en equipo para mejores resultados
+                      </Text>
+                    </Flex>
+                  </Card>
+                </Col>
+              </Row>
+            </Flex>
           </Flex>
-          <Flex align="center" gap="small">
-            <HeartOutlined style={{ color: "#eb2f96" }} />
-            <Text type="secondary" style={{ fontSize: "12px" }}>
-              Desarrollado por fbarraza - dev / LATAM
-            </Text>
+        </Card>
+
+        {/* Footer */}
+        <Card
+          style={{
+            textAlign: "center",
+            background:
+              "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
+            border: "1px solid rgba(15,120,142,0.2)",
+            borderRadius: "16px",
+            boxShadow: "0 8px 24px rgba(15,120,142,0.08)",
+          }}
+        >
+          <Flex vertical gap="small" align="center">
+            <Flex align="center" gap="small">
+              <InfoCircleOutlined style={{ color: "rgba(15,120,142,0.8)" }} />
+              <Text
+                style={{
+                  margin: 0,
+                  color: "rgba(15,120,142,0.7)",
+                  fontSize: "14px",
+                }}
+              >
+                ¿Tienes preguntas? Contacta al administrador de tu competencia
+              </Text>
+            </Flex>
+            <Flex align="center" gap="small">
+              <HeartOutlined style={{ color: "rgba(15,120,142,0.6)" }} />
+              <Text
+                style={{
+                  fontSize: "12px",
+                  color: "rgba(15,120,142,0.6)",
+                }}
+              >
+                Desarrollado por fbarraza - dev / LATAM
+              </Text>
+            </Flex>
           </Flex>
-        </Flex>
-      </Card>
-    </Flex>
+        </Card>
+      </Flex>
+    </div>
   );
 };
 

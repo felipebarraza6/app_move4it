@@ -23,13 +23,22 @@ const AvgAllGroups = () => {
       <Flex style={{ width: "100%" }} justify="center" align="center">
         <Card
           style={{
-            backgroundColor: "#c9d3d9",
-            borderRadius: "10px",
+            background:
+              "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
+            border: "1px solid rgba(15,120,142,0.2)",
+            borderRadius: "16px",
+            boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
             textAlign: "center",
             width: "100%",
           }}
           title={
-            <Text style={{ fontSize: "17px", color: "black" }}>
+            <Text
+              style={{
+                fontSize: "17px",
+                color: "rgba(15,120,142,0.8)",
+                fontWeight: "600",
+              }}
+            >
               Mediciones promedio
             </Text>
           }
@@ -124,8 +133,10 @@ const AvgAllGroups = () => {
 const styles = {
   static: {
     background:
-      "radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(170,184,193,1) 81%)",
-    borderRadius: "10px",
+      "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
+    border: "1px solid rgba(15,120,142,0.2)",
+    borderRadius: "12px",
+    boxShadow: "0 2px 8px rgba(15,120,142,0.1)",
     width: "100%",
   },
 };

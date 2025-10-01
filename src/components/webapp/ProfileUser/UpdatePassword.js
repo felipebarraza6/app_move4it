@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Form, Input, Button, notification, Card } from "antd";
 import { endpoints } from "../../../config/endpoints";
 import { AppContext } from "../../../App";
+import { LockOutlined } from "@ant-design/icons";
 const { Item } = Form;
 
 const UpdatePassword = () => {
@@ -24,23 +25,78 @@ const UpdatePassword = () => {
 
   return (
     <Card
+      title={
+        <div
+          style={{
+            color: "rgba(15,120,142,0.8)",
+            fontWeight: "600",
+            fontSize: "18px",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px"
+          }}
+        >
+          <LockOutlined />
+          Cambiar Contraseña
+        </div>
+      }
       style={{
         background:
-          "linear-gradient(169deg, rgba(15,120,142,1) 0%, rgba(77,180,202,0.2217480742296919) 99%, rgba(60,87,93,1) 100%)",
+          "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
+        border: "1px solid rgba(15,120,142,0.2)",
+        borderRadius: "12px",
+        boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
       }}
     >
-      <Form form={form} onFinish={onFinish}>
-        <Item name="first_password">
-          <Input type="password" placeholder="Nueva contraseña" />
+      <Form form={form} onFinish={onFinish} layout="vertical">
+        <Item name="first_password" label="Nueva Contraseña">
+          <Input
+            type="password"
+            placeholder="Ingresa tu nueva contraseña"
+            style={{
+              borderRadius: "8px",
+              border: "1px solid rgba(15,120,142,0.3)",
+            }}
+          />
         </Item>
-        <Item name="password">
-          <Input type="password" placeholder="Confirmar nueva contraseña" />
+        <Item name="password" label="Confirmar Contraseña">
+          <Input
+            type="password"
+            placeholder="Confirma tu nueva contraseña"
+            style={{
+              borderRadius: "8px",
+              border: "1px solid rgba(15,120,142,0.3)",
+            }}
+          />
         </Item>
         <Item>
-          <Button type="primary" style={styles.btn} htmlType="submit">
+          <Button
+            type="primary"
+            style={{
+              ...styles.btn,
+              background:
+                "linear-gradient(135deg, rgba(15,120,142,0.8) 0%, rgba(15,120,142,1) 100%)",
+              border: "none",
+              borderRadius: "8px",
+              height: "40px",
+              fontWeight: "600",
+              boxShadow: "0 4px 12px rgba(15,120,142,0.3)",
+            }}
+            htmlType="submit"
+          >
             Cambiar contraseña
           </Button>
-          <Button type="primary" danger onClick={() => form.resetFields()}>
+          <Button
+            type="default"
+            onClick={() => form.resetFields()}
+            style={{
+              margin: "0px 10px 10px 0px",
+              borderRadius: "8px",
+              height: "40px",
+              border: "1px solid rgba(15,120,142,0.3)",
+              color: "rgba(15,120,142,0.8)",
+            }}
+          >
             Cancelar
           </Button>
         </Item>
