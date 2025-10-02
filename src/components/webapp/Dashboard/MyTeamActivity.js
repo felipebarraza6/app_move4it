@@ -7,6 +7,7 @@ import {
   CalendarFilled,
   CheckCircleFilled,
   CloseCircleFilled,
+  TrophyFilled,
 } from "@ant-design/icons";
 import { AppContext } from "../../../App";
 import { parseDateYMDLocal, normalizeDateOnly } from "../../../utils/date";
@@ -40,11 +41,6 @@ const MyTeamActivity = ({ team_data }) => {
     );
   }
 
-  console.log("=== DEBUG MYTEAMACTIVITY NEW ===");
-  console.log("team_data:", team_data);
-  console.log("team_data keys:", Object.keys(team_data || {}));
-  console.log("=== FIN DEBUG MYTEAMACTIVITY NEW ===");
-
   const last_competence_end =
     state.user.enterprise_competition_overflow.last_competence.end_date;
 
@@ -65,8 +61,8 @@ const MyTeamActivity = ({ team_data }) => {
     if (!team_data || typeof team_data !== "object") return [];
 
     // Detectar el tipo de estructura de datos
-    if (team_data.intervals) {
-      // Estructura de Team.js: stats.my_team con intervals
+    if (team_data.data || team_data.intervals) {
+      // Estructura de Team.js: historical_data con data.my_team o stats.my_team con intervals
       return processIntervalsStructure(team_data);
     } else {
       // Estructura de Dashboard.js: my_group con emails como claves
@@ -79,29 +75,25 @@ const MyTeamActivity = ({ team_data }) => {
     const isTeamPage = location.pathname === "/team";
 
     if (isTeamPage) {
-      // En Team.js: mostrar solo intervalos anteriores (terminados)
-      const today = new Date().toISOString().split("T")[0];
-      const completedIntervals = teamData.intervals.filter(
-        (interval) => interval.end_date < today
-      );
-
-      if (completedIntervals.length === 0) {
+      // En Team.js: teamData ahora es un intervalo específico seleccionado de historical_data
+      if (
+        !teamData ||
+        !teamData.data ||
+        !teamData.data.my_team ||
+        !teamData.data.my_team.activities
+      ) {
         return [];
       }
 
-      // Agrupar actividades de todos los intervalos terminados
+      // Agrupar actividades del intervalo seleccionado
       const userActivities = {};
-      completedIntervals.forEach((interval) => {
-        if (interval.my_team && interval.my_team.activities) {
-          interval.my_team.activities.forEach((activity) => {
-            const email = activity.user?.email;
-            if (email) {
-              if (!userActivities[email]) {
-                userActivities[email] = [];
-              }
-              userActivities[email].push(activity);
-            }
-          });
+      teamData.data.my_team.activities.forEach((activity) => {
+        const email = activity.user?.email;
+        if (email) {
+          if (!userActivities[email]) {
+            userActivities[email] = [];
+          }
+          userActivities[email].push(activity);
         }
       });
 
@@ -236,32 +228,28 @@ const MyTeamActivity = ({ team_data }) => {
     if (!team_data || !email) return [];
 
     // Detectar el tipo de estructura de datos
-    if (team_data.intervals) {
-      // Estructura de Team.js: stats.my_team con intervals
+    if (team_data.data || team_data.intervals) {
+      // Estructura de Team.js: historical_data con data.my_team o stats.my_team con intervals
       const isTeamPage = location.pathname === "/team";
 
       if (isTeamPage) {
-        // En Team.js: mostrar actividades de intervalos anteriores
-        const today = new Date().toISOString().split("T")[0];
-        const completedIntervals = team_data.intervals.filter(
-          (interval) => interval.end_date < today
-        );
+        // En Team.js: team_data ahora es un intervalo específico seleccionado de historical_data
+        if (
+          team_data.data &&
+          team_data.data.my_team &&
+          team_data.data.my_team.activities
+        ) {
+          const userActivities = team_data.data.my_team.activities.filter(
+            (activity) => activity.user?.email === email
+          );
 
-        const allActivities = [];
-        completedIntervals.forEach((interval) => {
-          if (interval.my_team && interval.my_team.activities) {
-            const userActivities = interval.my_team.activities.filter(
-              (activity) => activity.user?.email === email
-            );
-            allActivities.push(...userActivities);
-          }
-        });
-
-        return allActivities.map((activity) => ({
-          activity: activity.activity?.name || activity.activity,
-          is_completed: activity.is_completed,
-          name: activity.activity?.name || activity.activity,
-        }));
+          return userActivities.map((activity) => ({
+            activity: activity.activity?.name || activity.activity,
+            is_completed: activity.is_completed,
+            name: activity.activity?.name || activity.activity,
+          }));
+        }
+        return [];
       } else {
         // En Dashboard.js: mostrar actividades del intervalo actual
         const currentIntervalData =
@@ -303,24 +291,52 @@ const MyTeamActivity = ({ team_data }) => {
     return [];
   };
 
-
   // Enhanced table columns with expandable details
   const columns = [
     {
       title: "Jugador",
       dataIndex: "email",
       key: "email",
-      render: (email) => (
-        <div style={{ color: "rgba(15,120,142,0.8)", fontWeight: "600" }}>
-          {window.innerWidth > 726 ? email : email.slice(0, 15)}
-        </div>
-      ),
+      width: "40%",
+      render: (email) => {
+        const isCurrentUser = email === state.user.email;
+        const isTeamPage = location.pathname === "/team";
+
+        return (
+          <div
+            style={{
+              color:
+                isCurrentUser && isTeamPage
+                  ? "rgba(15,120,142,1)"
+                  : "rgba(15,120,142,0.8)",
+              fontWeight: isCurrentUser && isTeamPage ? "700" : "600",
+              backgroundColor:
+                isCurrentUser && isTeamPage
+                  ? "rgba(15,120,142,0.1)"
+                  : "transparent",
+              padding: isCurrentUser && isTeamPage ? "4px 8px" : "0",
+              borderRadius: isCurrentUser && isTeamPage ? "4px" : "0",
+              border:
+                isCurrentUser && isTeamPage
+                  ? "1px solid rgba(15,120,142,0.3)"
+                  : "none",
+              wordBreak: "break-word",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {window.innerWidth > 726 ? email : email.slice(0, 15)}
+            {isCurrentUser && isTeamPage && " (Tú)"}
+          </div>
+        );
+      },
     },
     {
       title: "Completadas",
       dataIndex: "completedActivities",
       key: "completedActivities",
       align: "center",
+      width: "20%",
       render: (completed, record) => (
         <span
           style={{
@@ -340,6 +356,7 @@ const MyTeamActivity = ({ team_data }) => {
       dataIndex: "points",
       key: "points",
       align: "center",
+      width: "20%",
       render: (points) => (
         <span
           style={{
@@ -356,6 +373,7 @@ const MyTeamActivity = ({ team_data }) => {
       dataIndex: "percentage",
       key: "percentage",
       align: "center",
+      width: "20%",
       render: (percentage) => (
         <span
           style={{
@@ -378,42 +396,30 @@ const MyTeamActivity = ({ team_data }) => {
     const isTeamPage = location.pathname === "/team";
 
     if (isTeamPage) {
-      // En Team.js: mostrar fechas de intervalos anteriores
-      if (team_data && team_data.intervals) {
-        const today = new Date().toISOString().split("T")[0];
-        const completedIntervals = team_data.intervals.filter(
-          (interval) => interval.end_date < today
+      // En Team.js: mostrar fechas del intervalo seleccionado
+      if (team_data && team_data.start_date && team_data.end_date) {
+        const startDate = parseDateYMDLocal(team_data.start_date);
+        const endDate = parseDateYMDLocal(team_data.end_date);
+
+        return (
+          <Flex gap="small" align="center">
+            <CalendarFilled style={{ color: "rgba(15,120,142,0.8)" }} />
+            <span style={{ fontSize: "12px", color: "#666" }}>
+              {startDate.toLocaleDateString("es-ES", {
+                day: "2-digit",
+                month: "short",
+              })}{" "}
+              -{" "}
+              {endDate.toLocaleDateString("es-ES", {
+                day: "2-digit",
+                month: "short",
+              })}
+            </span>
+          </Flex>
         );
-
-        if (completedIntervals.length > 0) {
-          // Mostrar rango desde el primer intervalo terminado hasta el último
-          const firstInterval =
-            completedIntervals[completedIntervals.length - 1]; // El más antiguo
-          const lastInterval = completedIntervals[0]; // El más reciente
-
-          const startDate = parseDateYMDLocal(firstInterval.start_date);
-          const endDate = parseDateYMDLocal(lastInterval.end_date);
-
-          return (
-            <Flex gap="small" align="center">
-              <CalendarFilled style={{ color: "rgba(15,120,142,0.8)" }} />
-              <span style={{ fontSize: "12px", color: "#666" }}>
-                {startDate.toLocaleDateString("es-ES", {
-                  day: "2-digit",
-                  month: "short",
-                })}{" "}
-                -{" "}
-                {endDate.toLocaleDateString("es-ES", {
-                  day: "2-digit",
-                  month: "short",
-                })}
-              </span>
-            </Flex>
-          );
-        }
       }
 
-      // Si no hay intervalos terminados, no mostrar fechas
+      // Si no hay datos del intervalo, no mostrar fechas
       return null;
     } else {
       // En Dashboard.js: mostrar fechas del intervalo actual
@@ -522,7 +528,101 @@ const MyTeamActivity = ({ team_data }) => {
               pagination={false}
               rowKey="email"
               size="small"
-              scroll={{ x: true }}
+              scroll={{ x: 600 }}
+              tableLayout="fixed"
+              rowClassName={(record) => {
+                const isCurrentUser = record.email === state.user.email;
+                const isTeamPage = location.pathname === "/team";
+                return isCurrentUser && isTeamPage ? "current-user-row" : "";
+              }}
+              summary={() => {
+                if (data.length === 0) return null;
+
+                // Calcular totales del equipo
+                const totalCompleted = data.reduce(
+                  (sum, player) => sum + player.completedActivities,
+                  0
+                );
+                const totalActivities = data.reduce(
+                  (sum, player) => sum + player.totalActivities,
+                  0
+                );
+                const totalPoints = data.reduce(
+                  (sum, player) => sum + player.points,
+                  0
+                );
+                const averageEffectiveness =
+                  totalActivities > 0
+                    ? ((totalCompleted / totalActivities) * 100).toFixed(1)
+                    : 0;
+
+                return (
+                  <Table.Summary.Row
+                    style={{
+                      backgroundColor: "rgba(15,120,142,0.1)",
+                      fontWeight: "600",
+                      borderTop: "2px solid rgba(15,120,142,0.3)",
+                    }}
+                  >
+                    <Table.Summary.Cell colSpan={1}>
+                      <Flex align="center" gap="small">
+                        <span
+                          style={{
+                            color: "rgba(15,120,142,0.8)",
+                            fontWeight: "700",
+                            fontSize: "14px",
+                          }}
+                        >
+                          Rendimiento del Equipo
+                        </span>
+                      </Flex>
+                    </Table.Summary.Cell>
+                    <Table.Summary.Cell colSpan={1}></Table.Summary.Cell>
+                    <Table.Summary.Cell align="center">
+                      <div style={{ textAlign: "center" }}>
+                        <span
+                          style={{
+                            color: "rgba(15,120,142,0.8)",
+                            fontWeight: "600",
+                          }}
+                        >
+                          {totalCompleted}/{totalActivities}
+                        </span>
+                      </div>
+                    </Table.Summary.Cell>
+                    <Table.Summary.Cell align="center">
+                      <div style={{ textAlign: "center" }}>
+                        <span
+                          style={{
+                            color: "rgba(15,120,142,0.8)",
+                            fontWeight: "600",
+                          }}
+                        >
+                          {totalPoints}
+                        </span>
+                      </div>
+                    </Table.Summary.Cell>
+                    <Table.Summary.Cell align="center">
+                      <div style={{ textAlign: "center" }}>
+                        <span
+                          style={{
+                            color:
+                              parseFloat(averageEffectiveness) >= 80
+                                ? "rgba(15,120,142,0.8)"
+                                : parseFloat(averageEffectiveness) >= 50
+                                ? "rgba(230,184,0,0.8)"
+                                : "rgba(255,77,79,0.8)",
+                            fontWeight: "700",
+                            fontSize: "14px",
+                          }}
+                        >
+                          {averageEffectiveness}%
+                        </span>
+                      </div>
+                    </Table.Summary.Cell>
+                  </Table.Summary.Row>
+                );
+              }}
               expandable={{
                 expandedRowRender: (record) => {
                   // Obtener actividades detalladas del usuario
@@ -633,5 +733,21 @@ const styles = {
     width: "100%",
   },
 };
+
+// Agregar estilos CSS para destacar la fila del usuario actual
+const style = document.createElement("style");
+style.textContent = `
+  .current-user-row {
+    background-color: rgba(15,120,142,0.08) !important;
+    border-left: 3px solid rgba(15,120,142,0.6) !important;
+  }
+  .current-user-row:hover {
+    background-color: rgba(15,120,142,0.12) !important;
+  }
+`;
+if (!document.head.querySelector("style[data-team-user-highlight]")) {
+  style.setAttribute("data-team-user-highlight", "true");
+  document.head.appendChild(style);
+}
 
 export default MyTeamActivity;

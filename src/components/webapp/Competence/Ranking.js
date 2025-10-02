@@ -93,18 +93,18 @@ const Ranking = () => {
                 marginBottom: "16px",
               }}
             />
-             <Text
-               style={{
-                 fontSize: "18px",
-                 color: "rgba(15,120,142,0.8)",
-                 fontWeight: "600",
-                 display: "block",
-                 marginBottom: "8px",
-               }}
-             >
-               <TrophyFilled style={{ marginRight: "8px" }} />
-               Ranking en Proceso
-             </Text>
+            <Text
+              style={{
+                fontSize: "18px",
+                color: "rgba(15,120,142,0.8)",
+                fontWeight: "600",
+                display: "block",
+                marginBottom: "8px",
+              }}
+            >
+              <TrophyFilled style={{ marginRight: "8px" }} />
+              Ranking en Proceso
+            </Text>
             <Text
               style={{
                 fontSize: "14px",
@@ -133,17 +133,50 @@ const Ranking = () => {
               <List.Item style={{ textAlign: "left" }}>
                 <Flex justify="start" style={{ width: "100%" }}>
                   <Tag
-                    color={item.name === name_my_team ? "blue-inverse" : "blue"}
+                    style={{
+                      backgroundColor:
+                        item.name === name_my_team
+                          ? "rgba(15,120,142,0.8)"
+                          : "rgba(15,120,142,0.1)",
+                      color:
+                        item.name === name_my_team
+                          ? "white"
+                          : "rgba(15,120,142,0.8)",
+                      border: "1px solid rgba(15,120,142,0.3)",
+                      fontWeight: "600",
+                    }}
                   >
                     {item.position}
                   </Tag>
                   <Tag
-                    color={item.name === name_my_team ? "blue-inverse" : "blue"}
+                    style={{
+                      backgroundColor:
+                        item.name === name_my_team
+                          ? "rgba(15,120,142,0.8)"
+                          : "rgba(15,120,142,0.1)",
+                      color:
+                        item.name === name_my_team
+                          ? "white"
+                          : "rgba(15,120,142,0.8)",
+                      border: "1px solid rgba(15,120,142,0.3)",
+                      fontWeight: "600",
+                    }}
                   >
                     {item.name}
                   </Tag>
                   <Tag
-                    color={item.name === name_my_team ? "blue-inverse" : "blue"}
+                    style={{
+                      backgroundColor:
+                        item.name === name_my_team
+                          ? "rgba(15,120,142,0.8)"
+                          : "rgba(15,120,142,0.1)",
+                      color:
+                        item.name === name_my_team
+                          ? "white"
+                          : "rgba(15,120,142,0.8)",
+                      border: "1px solid rgba(15,120,142,0.3)",
+                      fontWeight: "600",
+                    }}
                   >
                     {item.points}
                   </Tag>
@@ -152,18 +185,32 @@ const Ranking = () => {
             )}
             header={
               <Flex justify="space-between" style={{ width: "100%" }}>
-                <Text style={{ fontSize: "20px", color: "rgba(15,120,142,0.8)", fontWeight: "600" }}>
+                <Text
+                  style={{
+                    fontSize: "20px",
+                    color: "rgba(15,120,142,0.8)",
+                    fontWeight: "600",
+                  }}
+                >
                   <TrophyFilled
-                    style={{ color: "rgba(15,120,142,0.8)", marginRight: "10px" }}
+                    style={{
+                      color: "rgba(15,120,142,0.8)",
+                      marginRight: "10px",
+                    }}
                   />
                   Ranking
                 </Text>
 
                 <Flex align="center">
                   <CalendarFilled
-                    style={{ color: "rgba(15,120,142,0.8)", marginRight: "10px" }}
+                    style={{
+                      color: "rgba(15,120,142,0.8)",
+                      marginRight: "10px",
+                    }}
                   />
-                  <Text style={{ fontSize: "14px", color: "rgba(15,120,142,0.7)" }}>
+                  <Text
+                    style={{ fontSize: "14px", color: "rgba(15,120,142,0.7)" }}
+                  >
                     {
                       intervals.find(
                         (interval) => interval.interval_id === selectedInterval
@@ -186,14 +233,32 @@ const Ranking = () => {
                     type={""}
                     onClick={() => handleIntervalChange(i.interval_id)}
                     size="small"
-                    style={{ marginRight: "5px", marginBottom: "5px" }}
+                    style={{
+                      marginRight: "5px",
+                      marginBottom: "5px",
+                      backgroundColor:
+                        i.interval_id === selectedInterval
+                          ? "rgba(15,120,142,0.1)"
+                          : "transparent",
+                      borderColor: "rgba(15,120,142,0.3)",
+                      color: "rgba(15,120,142,0.8)",
+                      fontWeight: "500",
+                    }}
                     icon={
                       i.interval_id === selectedInterval ? (
                         <CalendarFilled
-                          style={{ marginRight: "5px", color: "#d4b106" }}
+                          style={{
+                            marginRight: "5px",
+                            color: "rgba(15,120,142,0.8)",
+                          }}
                         />
                       ) : (
-                        <CalendarOutlined style={{ marginRight: "5px" }} />
+                        <CalendarOutlined
+                          style={{
+                            marginRight: "5px",
+                            color: "rgba(15,120,142,0.5)",
+                          }}
+                        />
                       )
                     }
                   >

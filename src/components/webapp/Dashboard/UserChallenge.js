@@ -632,18 +632,24 @@ const UserChallenge = ({ challengers }) => {
                 size="small"
                 style={{
                   fontSize: "12px",
-                  backgroundColor: "#1677ff",
-                  padding: "5px",
-                  borderRadius: "0px",
-                  color: "white",
-                  fontWeight: "500",
+                  backgroundColor: "rgba(15,120,142,0.1)",
+                  padding: "8px 12px",
+                  borderRadius: "8px",
+                  color: "rgba(15,120,142,0.8)",
+                  fontWeight: "600",
+                  border: "1px solid rgba(15,120,142,0.3)",
+                  textAlign: "center",
+                  minWidth: "80px",
                 }}
               >
-                <center>
+                <div style={{ textAlign: "center", marginBottom: "4px" }}>
                   <CalendarOutlined
-                    style={{ textAlign: "center", color: "white" }}
+                    style={{
+                      color: "rgba(15,120,142,0.8)",
+                      fontSize: "14px",
+                    }}
                   />
-                </center>
+                </div>
                 {challengers[currentInterval] ? (
                   <>
                     {new Date(

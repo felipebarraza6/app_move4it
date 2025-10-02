@@ -1,6 +1,10 @@
-import React, { useContext } from "react";
-import { Row, Flex, Table, Alert, Tag, Card, Spin } from "antd";
-import { TrophyFilled } from "@ant-design/icons";
+import React, { useContext, useState } from "react";
+import { Row, Flex, Table, Alert, Tag, Card, Spin, Button } from "antd";
+import {
+  TrophyFilled,
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
+} from "@ant-design/icons";
 
 import MyTeamActivity from "../components/webapp/Dashboard/MyTeamActivity";
 import "react-circular-progressbar/dist/styles.css";
@@ -11,10 +15,12 @@ import { parseDateYMDLocal, normalizeDateOnly } from "../utils/date";
 
 const Team = () => {
   const { state } = useContext(AppContext);
+  const [selectedIntervalIndex, setSelectedIntervalIndex] = useState(0);
 
-  // Usar my_team para obtener datos de todos los intervalos
+  // Usar historical_data para obtener datos de todos los intervalos
   var teamData =
-    state.user.enterprise_competition_overflow.last_competence.stats.my_team;
+    state.user.enterprise_competition_overflow.last_competence.stats
+      .historical_data;
 
   // Verificar estado de la competencia
   const startDate = parseDateYMDLocal(
@@ -33,36 +39,43 @@ const Team = () => {
     return competitionActive;
   };
 
-  // Filtrar intervalos futuros y crear dataSource
+  // Filtrar intervalos terminados y crear dataSource
   var dataSource = [];
-  if (teamData && teamData.intervals) {
+  var completedIntervals = [];
+  if (teamData && Array.isArray(teamData)) {
     const today = new Date().toISOString().split("T")[0];
-    const validIntervals = teamData.intervals.filter(
-      (interval) => interval.start_date <= today
+    // Solo mostrar intervalos que han terminado (end_date < today)
+    completedIntervals = teamData.filter(
+      (interval) => interval.end_date < today
     );
 
-    dataSource = validIntervals.map((interval, index) => ({
+    dataSource = completedIntervals.map((interval, index) => ({
       key: index,
       start_date: interval.start_date,
       end_date: interval.end_date,
-      puntos: interval.points || 0,
+      puntos: interval.data?.my_team?.points || 0,
     }));
   }
+
+  // Función para obtener datos del intervalo seleccionado
+  const getSelectedIntervalData = () => {
+    if (completedIntervals.length === 0) return null;
+    return completedIntervals[selectedIntervalIndex] || completedIntervals[0];
+  };
 
   const columns = [
     { title: "Fecha Inicio", dataIndex: "start_date" },
     { title: "Fecha Fin", dataIndex: "end_date" },
     {
       title: "Puntos",
-      dataIndex: "points",
+      dataIndex: "puntos",
       render: (text, record, index) => {
-        const isCurrentInterval = index === 0; // El primer intervalo es el actual
+        // Todos los intervalos mostrados son terminados, no hay intervalo actual
         return (
           <Flex align="center" gap="small">
-            {isCurrentInterval && (
-              <Spin size="small" style={{ color: "rgba(15,120,142,0.8)" }} />
-            )}
-            {text}
+            <span style={{ color: "rgba(15,120,142,0.8)", fontWeight: "600" }}>
+              {text}
+            </span>
           </Flex>
         );
       },
@@ -70,13 +83,14 @@ const Team = () => {
   ];
 
   let totalPoints = 0;
-  if (teamData && teamData.intervals) {
+  if (teamData && Array.isArray(teamData)) {
     const today = new Date().toISOString().split("T")[0];
-    const validIntervals = teamData.intervals.filter(
-      (interval) => interval.start_date <= today
+    // Solo sumar puntos de intervalos terminados
+    const completedIntervals = teamData.filter(
+      (interval) => interval.end_date < today
     );
-    totalPoints = validIntervals.reduce(
-      (sum, interval) => sum + (interval.points || 0),
+    totalPoints = completedIntervals.reduce(
+      (sum, interval) => sum + (interval.data?.my_team?.points || 0),
       0
     );
   }
@@ -141,15 +155,11 @@ const Team = () => {
           {(() => {
             const today = new Date().toISOString().split("T")[0];
             const hasCompletedIntervals = (() => {
-              if (
-                !teamData ||
-                !teamData.intervals ||
-                !Array.isArray(teamData.intervals)
-              ) {
+              if (!teamData || !Array.isArray(teamData)) {
                 return false;
               }
 
-              return teamData.intervals.some((interval) => {
+              return teamData.some((interval) => {
                 if (!interval || !interval.end_date) return false;
 
                 // Normalizar fechas para comparación
@@ -181,7 +191,7 @@ const Team = () => {
               );
             }
 
-            return <MyTeamActivity team_data={teamData} />;
+            return <MyTeamActivity team_data={getSelectedIntervalData()} />;
           })()}
         </Flex>
         <Card
@@ -190,13 +200,54 @@ const Team = () => {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "8px",
+                justifyContent: "space-between",
                 color: "rgba(15,120,142,0.8)",
                 fontWeight: "600",
               }}
             >
-              <TrophyFilled />
-              Historial de Puntos
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "8px" }}
+              >
+                <TrophyFilled />
+                Historial de Puntos
+              </div>
+              {completedIntervals.length > 1 && (
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
+                >
+                  <Button
+                    size="small"
+                    icon={<ArrowLeftOutlined />}
+                    disabled={selectedIntervalIndex === 0}
+                    onClick={() =>
+                      setSelectedIntervalIndex(selectedIntervalIndex - 1)
+                    }
+                    style={{
+                      backgroundColor: "rgba(15,120,142,0.1)",
+                      borderColor: "rgba(15,120,142,0.3)",
+                      color: "rgba(15,120,142,0.8)",
+                    }}
+                  />
+                  <span style={{ fontSize: "12px", color: "#666" }}>
+                    {selectedIntervalIndex + 1} de {completedIntervals.length}
+                  </span>
+                  <Button
+                    size="small"
+                    icon={<ArrowRightOutlined />}
+                    disabled={
+                      selectedIntervalIndex === completedIntervals.length - 1
+                    }
+                    onClick={() =>
+                      setSelectedIntervalIndex(selectedIntervalIndex + 1)
+                    }
+                    style={{
+                      backgroundColor: "rgba(15,120,142,0.1)",
+                      borderColor: "rgba(15,120,142,0.3)",
+                      color: "rgba(15,120,142,0.8)",
+                    }}
+                  />
+                </div>
+              )}
             </div>
           }
           style={{
@@ -211,15 +262,11 @@ const Team = () => {
           {(() => {
             const today = new Date().toISOString().split("T")[0];
             const hasCompletedIntervals = (() => {
-              if (
-                !teamData ||
-                !teamData.intervals ||
-                !Array.isArray(teamData.intervals)
-              ) {
+              if (!teamData || !Array.isArray(teamData)) {
                 return false;
               }
 
-              return teamData.intervals.some((interval) => {
+              return teamData.some((interval) => {
                 if (!interval || !interval.end_date) return false;
 
                 // Normalizar fechas para comparación
@@ -256,10 +303,20 @@ const Team = () => {
                 pagination={false}
                 size="middle"
                 rowClassName={(record, index) =>
-                  index === 0
-                    ? "current-interval-row"
+                  index === selectedIntervalIndex
+                    ? "selected-interval-row"
                     : "historical-interval-row"
                 }
+                onRow={(record, index) => ({
+                  onClick: () => setSelectedIntervalIndex(index),
+                  style: {
+                    cursor: "pointer",
+                    backgroundColor:
+                      index === selectedIntervalIndex
+                        ? "rgba(15,120,142,0.1)"
+                        : "transparent",
+                  },
+                })}
                 summary={() => (
                   <Table.Summary.Row
                     style={{
