@@ -148,22 +148,35 @@ const AddAnswerUser = ({ state, disabledAction, updateActivityState }) => {
               size="small"
               hoverable
               style={{
-                backgroundColor: "#b7eb8f",
+                backgroundColor: "rgba(230,184,0,0.15)",
+                border: "1px solid rgba(230,184,0,0.3)",
                 textAlign: "center",
                 width: "120px",
               }}
             >
-              <PlusCircleOutlined style={{ marginRight: "5px" }} />{" "}
-              {(state.activity.points / quantity_participants).toFixed(2)}{" "}
-              puntos
+              <PlusCircleOutlined
+                style={{ marginRight: "5px", color: "rgba(230,184,0,0.9)" }}
+              />{" "}
+              <span style={{ color: "rgba(60,87,93,0.9)", fontWeight: "500" }}>
+                {(state.activity.points / quantity_participants).toFixed(2)}{" "}
+                puntos
+              </span>
             </Card>
             <Card
               size="small"
               hoverable
-              style={{ backgroundColor: "#69c0ff", textAlign: "center" }}
+              style={{
+                backgroundColor: "rgba(15,120,142,0.1)",
+                border: "1px solid rgba(15,120,142,0.3)",
+                textAlign: "center",
+              }}
             >
-              <FilterFilled style={{ marginRight: "5px" }} />
-              {state.activity.category.name}
+              <FilterFilled
+                style={{ marginRight: "5px", color: "rgba(15,120,142,0.8)" }}
+              />
+              <span style={{ color: "rgba(60,87,93,0.9)", fontWeight: "500" }}>
+                {state.activity.category.name}
+              </span>
             </Card>
           </Flex>
         </Flex>
@@ -241,11 +254,15 @@ const AddAnswerUser = ({ state, disabledAction, updateActivityState }) => {
                   <Card
                     hoverable
                     size="small"
-                    style={{ width: "100%", backgroundColor: "#f0f0f0" }}
+                    style={{
+                      width: "100%",
+                      backgroundColor: "rgba(15,120,142,0.05)",
+                      border: "1px solid rgba(15,120,142,0.2)",
+                    }}
                   >
                     <Button
                       size="large"
-                      style={{ color: "#1890ff" }}
+                      style={{ color: "rgba(15,120,142,0.8)" }}
                       type="link"
                     >
                       <Flex gap="small" align="center">

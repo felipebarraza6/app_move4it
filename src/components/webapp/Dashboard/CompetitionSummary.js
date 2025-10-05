@@ -1,25 +1,17 @@
 import React, { useContext } from "react";
-import { Card, Statistic, Flex, Alert } from "antd";
+import { Card, Statistic, Flex } from "antd";
 import { AppContext } from "../../../App";
 import {
   FieldNumberOutlined,
   FlagOutlined,
   TeamOutlined,
   TrophyFilled,
+  CalendarFilled,
 } from "@ant-design/icons";
 import { parseDateYMDLocal, normalizeDateOnly } from "../../../utils/date";
 
 const CompetitionSummary = () => {
   const { state } = useContext(AppContext);
-  const select_interval =
-    state.user.enterprise_competition_overflow.last_competence.stats
-      .current_interval_data?.id;
-
-  const historical_data =
-    state.user.enterprise_competition_overflow.last_competence.stats
-      .historical_data;
-
-  const historical_data_last = historical_data[historical_data.length - 1];
 
   const name_competition =
     state.user.enterprise_competition_overflow.last_competence.name.toUpperCase();
@@ -32,9 +24,6 @@ const CompetitionSummary = () => {
 
   var points = "S/P";
   var ranking = "S/R";
-  const quantity = new Date(
-    state.user.enterprise_competition_overflow.last_competence.days_for_interval
-  );
   const endDate = parseDateYMDLocal(
     state.user.enterprise_competition_overflow.last_competence.end_date
   );
@@ -44,17 +33,66 @@ const CompetitionSummary = () => {
 
   const today = normalizeDateOnly(new Date());
 
-  if (endDate > today) {
-    if (state.user.enterprise_competition_overflow.last_competence.ranking) {
-      var _ob =
-        state.user.enterprise_competition_overflow.last_competence.ranking
-          .teams;
-      var get_points = _ob.find((team) => team.team_name === name_team);
-      points = get_points?.points;
-      ranking = get_points?.position;
+  // Obtener datos del ranking para mostrar siempre el último intervalo completado
+  const rankingData =
+    state.user.enterprise_competition_overflow.last_competence.ranking
+      .intervals;
+  const myTeamId = state.user.group_participation.id;
+
+  console.log("=== DEBUG COMPETITION SUMMARY ===");
+  console.log("today:", today);
+  console.log("startDate:", startDate);
+  console.log("endDate:", endDate);
+  console.log("rankingData:", rankingData);
+  console.log("myTeamId:", myTeamId);
+
+  // Lógica según el estado de la competencia
+  if (today < startDate) {
+    // Competencia no ha comenzado
+    points = "S/P";
+    ranking = "S/R";
+    console.log("Competencia no ha comenzado");
+  } else {
+    // Competencia activa o terminada - buscar último intervalo completado
+    if (rankingData && Array.isArray(rankingData)) {
+      const todayString = today.toISOString().split("T")[0];
+
+      // Filtrar intervalos completados y ordenar por fecha más reciente
+      const completedIntervals = rankingData
+        .filter((interval) => interval.end_date < todayString)
+        .sort((a, b) => new Date(b.end_date) - new Date(a.end_date));
+
+      console.log("Intervalos completados:", completedIntervals);
+
+      if (completedIntervals.length > 0) {
+        // Obtener el último intervalo completado
+        const lastInterval = completedIntervals[0];
+        const myTeamRanking = lastInterval.ranking?.find(
+          (team) => team.team_id === myTeamId
+        );
+
+        if (myTeamRanking) {
+          points = myTeamRanking.points || "S/P";
+          ranking = myTeamRanking.position || "S/R";
+          console.log("Último intervalo completado:", {
+            interval: lastInterval,
+            points,
+            ranking,
+          });
+        } else {
+          points = "S/P";
+          ranking = "S/R";
+          console.log("No se encontró mi equipo en el ranking");
+        }
+      } else {
+        // No hay intervalos completados aún
+        points = "S/P";
+        ranking = "S/R";
+        console.log("No hay intervalos completados aún");
+      }
     }
   }
-  console.log(points);
+  console.log("Puntos finales:", points, "Ranking final:", ranking);
 
   return (
     <Card
@@ -82,15 +120,15 @@ const CompetitionSummary = () => {
           <div
             style={{
               padding: "6px 10px",
-              backgroundColor: "#fff7e6",
-              border: "1px solid #ffd591",
-              borderRadius: "4px",
+              backgroundColor: "rgba(230,184,0,0.1)",
+              border: "1px solid rgba(230,184,0,0.3)",
+              borderRadius: "8px",
               fontSize: "11px",
               maxWidth: "180px",
               lineHeight: "1.3",
             }}
           >
-            <div style={{ color: "#d46b08", fontWeight: "500" }}>
+            <div style={{ color: "rgba(230,184,0,0.9)", fontWeight: "500" }}>
               ⚠️ Comienza el{" "}
               {startDate.toLocaleDateString("es-ES", {
                 day: "2-digit",
@@ -98,36 +136,85 @@ const CompetitionSummary = () => {
               })}
             </div>
             <div
-              style={{ color: "#8c8c8c", fontSize: "10px", marginTop: "1px" }}
+              style={{
+                color: "rgba(60,87,93,0.7)",
+                fontSize: "10px",
+                marginTop: "1px",
+              }}
             >
               Prepárate
             </div>
           </div>
         ) : today > endDate ? (
-          <div
-            style={{
-              padding: "6px 10px",
-              backgroundColor: "#e6f7ff",
-              border: "1px solid #91d5ff",
-              borderRadius: "4px",
-              fontSize: "11px",
-              maxWidth: "180px",
-              lineHeight: "1.3",
-            }}
-          >
-            <div style={{ color: "#0958d9", fontWeight: "500" }}>
-              ℹ️ Terminó el{" "}
-              {endDate.toLocaleDateString("es-ES", {
-                day: "2-digit",
-                month: "short",
-              })}
-            </div>
+          <Flex gap="medium" vertical align="center">
             <div
-              style={{ color: "#8c8c8c", fontSize: "10px", marginTop: "1px" }}
+              style={{
+                padding: "4px 8px",
+                backgroundColor: "rgba(15,120,142,0.1)",
+                border: "1px solid rgba(15,120,142,0.3)",
+                borderRadius: "8px",
+                fontSize: "10px",
+                maxWidth: "160px",
+                lineHeight: "1.2",
+                marginBottom: "6px",
+              }}
             >
-              Ver resultados
+              <div style={{ color: "rgba(15,120,142,0.9)", fontWeight: "500" }}>
+                <CalendarFilled
+                  style={{ marginRight: "4px", color: "rgba(15,120,142,0.9)" }}
+                />{" "}
+                Terminó el{" "}
+                {endDate.toLocaleDateString("es-ES", {
+                  day: "2-digit",
+                  month: "short",
+                })}
+              </div>
             </div>
-          </div>
+            <Flex gap="small" align="center">
+              <div style={{ textAlign: "center", minWidth: "60px" }}>
+                <div
+                  style={{
+                    fontSize: "10px",
+                    color: "#666",
+                    marginBottom: "2px",
+                  }}
+                >
+                  Puntos
+                </div>
+                <div
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "600",
+                    color: "rgba(15,120,142,0.8)",
+                  }}
+                >
+                  <FlagOutlined style={{ marginRight: "4px" }} />
+                  {points}
+                </div>
+              </div>
+              <div style={{ textAlign: "center", minWidth: "60px" }}>
+                <div
+                  style={{
+                    fontSize: "10px",
+                    color: "#666",
+                    marginBottom: "2px",
+                  }}
+                >
+                  Ranking
+                </div>
+                <div
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "600",
+                    color: "rgba(15,120,142,0.8)",
+                  }}
+                >
+                  <FieldNumberOutlined style={{ marginRight: "4px" }} />
+                  {ranking}
+                </div>
+              </div>
+            </Flex>
+          </Flex>
         ) : (
           <Flex gap="large">
             <Statistic
@@ -155,7 +242,8 @@ const styles = {
     fontSize: "16px",
   },
   card: {
-    background: "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
+    background:
+      "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
     border: "1px solid rgba(15,120,142,0.2)",
     borderRadius: "8px",
     boxShadow: "0 4px 12px rgba(15,120,142,0.1)",

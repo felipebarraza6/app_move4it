@@ -13,7 +13,7 @@ import { AppContext } from "../../../App";
 import { parseDateYMDLocal, normalizeDateOnly } from "../../../utils/date";
 import { useLocation } from "react-router-dom";
 
-const MyTeamActivity = ({ team_data }) => {
+const MyTeamActivity = ({ team_data, navigationProps }) => {
   const { state } = useContext(AppContext);
   const location = useLocation();
   const [data, setData] = useState([]);
@@ -98,17 +98,42 @@ const MyTeamActivity = ({ team_data }) => {
       });
 
       // Procesar cada usuario
-      return Object.keys(userActivities).map((email) => {
+      const processedData = Object.keys(userActivities).map((email) => {
         const activities = userActivities[email];
         const completedActivities = activities.filter(
           (act) => act.is_completed
         ).length;
         const totalActivities = activities.length;
-        const points = activities.reduce(
-          (sum, act) =>
-            sum + (act.is_completed ? act.activity?.points || 1 : 0),
-          0
-        );
+
+        // Calcular puntos basándose en participación del equipo
+        const points = activities.reduce((sum, act) => {
+          if (!act.is_completed) return sum;
+
+          // Contar cuántos miembros del equipo completaron esta actividad
+          const activityId = act.activity?.id;
+          const teamMembersCount = Object.keys(userActivities).length;
+          const completedByTeamMembers = Object.values(userActivities).reduce(
+            (count, userActs) => {
+              return (
+                count +
+                userActs.filter(
+                  (userAct) =>
+                    userAct.activity?.id === activityId && userAct.is_completed
+                ).length
+              );
+            },
+            0
+          );
+
+          // Calcular puntos proporcionales a la participación del equipo
+          const participationRatio = completedByTeamMembers / teamMembersCount;
+          const basePoints = act.activity?.points || 1;
+          const earnedPoints = parseFloat(
+            (basePoints * participationRatio).toFixed(1)
+          );
+
+          return sum + earnedPoints;
+        }, 0);
 
         return {
           email,
@@ -121,6 +146,8 @@ const MyTeamActivity = ({ team_data }) => {
               : 0,
         };
       });
+
+      return processedData;
     } else {
       // En Dashboard.js: mostrar intervalo actual
       const currentIntervalData =
@@ -239,15 +266,59 @@ const MyTeamActivity = ({ team_data }) => {
           team_data.data.my_team &&
           team_data.data.my_team.activities
         ) {
-          const userActivities = team_data.data.my_team.activities.filter(
+          const allActivities = team_data.data.my_team.activities;
+          const userActivities = allActivities.filter(
             (activity) => activity.user?.email === email
           );
 
-          return userActivities.map((activity) => ({
-            activity: activity.activity?.name || activity.activity,
-            is_completed: activity.is_completed,
-            name: activity.activity?.name || activity.activity,
-          }));
+          // Agrupar por usuario para calcular participación
+          const userActivitiesMap = {};
+          allActivities.forEach((activity) => {
+            const userEmail = activity.user?.email;
+            if (userEmail) {
+              if (!userActivitiesMap[userEmail]) {
+                userActivitiesMap[userEmail] = [];
+              }
+              userActivitiesMap[userEmail].push(activity);
+            }
+          });
+
+          const teamMembersCount = Object.keys(userActivitiesMap).length;
+
+          return userActivities.map((activity) => {
+            // Calcular puntos proporcionales para esta actividad
+            let earnedPoints = 0;
+            if (activity.is_completed) {
+              const activityId = activity.activity?.id;
+              const completedByTeamMembers = Object.values(
+                userActivitiesMap
+              ).reduce((count, userActs) => {
+                return (
+                  count +
+                  userActs.filter(
+                    (userAct) =>
+                      userAct.activity?.id === activityId &&
+                      userAct.is_completed
+                  ).length
+                );
+              }, 0);
+
+              const participationRatio =
+                completedByTeamMembers / teamMembersCount;
+              const basePoints = activity.activity?.points || 1;
+              earnedPoints = parseFloat(
+                (basePoints * participationRatio).toFixed(1)
+              );
+            }
+
+            return {
+              activity: activity.activity?.name || activity.activity,
+              is_completed: activity.is_completed,
+              name: activity.activity?.name || activity.activity,
+              points: earnedPoints,
+              basePoints: activity.activity?.points || 0,
+            };
+          });
         }
         return [];
       } else {
@@ -267,13 +338,59 @@ const MyTeamActivity = ({ team_data }) => {
         }
 
         if (team_data.intervals[currentInterval]?.my_team?.activities) {
-          return team_data.intervals[currentInterval].my_team.activities
+          const allActivities =
+            team_data.intervals[currentInterval].my_team.activities;
+
+          // Agrupar por usuario para calcular participación
+          const userActivitiesMap = {};
+          allActivities.forEach((activity) => {
+            const userEmail = activity.user?.email;
+            if (userEmail) {
+              if (!userActivitiesMap[userEmail]) {
+                userActivitiesMap[userEmail] = [];
+              }
+              userActivitiesMap[userEmail].push(activity);
+            }
+          });
+
+          const teamMembersCount = Object.keys(userActivitiesMap).length;
+
+          return allActivities
             .filter((activity) => activity.user?.email === email)
-            .map((activity) => ({
-              activity: activity.activity?.name || activity.activity,
-              is_completed: activity.is_completed,
-              name: activity.activity?.name || activity.activity,
-            }));
+            .map((activity) => {
+              // Calcular puntos proporcionales para esta actividad
+              let earnedPoints = 0;
+              if (activity.is_completed) {
+                const activityId = activity.activity?.id;
+                const completedByTeamMembers = Object.values(
+                  userActivitiesMap
+                ).reduce((count, userActs) => {
+                  return (
+                    count +
+                    userActs.filter(
+                      (userAct) =>
+                        userAct.activity?.id === activityId &&
+                        userAct.is_completed
+                    ).length
+                  );
+                }, 0);
+
+                const participationRatio =
+                  completedByTeamMembers / teamMembersCount;
+                const basePoints = activity.activity?.points || 1;
+                earnedPoints = parseFloat(
+                  (basePoints * participationRatio).toFixed(1)
+                );
+              }
+
+              return {
+                activity: activity.activity?.name || activity.activity,
+                is_completed: activity.is_completed,
+                name: activity.activity?.name || activity.activity,
+                points: earnedPoints,
+                basePoints: activity.activity?.points || 0,
+              };
+            });
         }
       }
     } else {
@@ -392,11 +509,176 @@ const MyTeamActivity = ({ team_data }) => {
     },
   ];
 
+  // Función helper para formatear fechas de manera segura
+  const formatDateSafe = (dateString) => {
+    if (!dateString) return "dd-m";
+
+    // Debug: mostrar qué fecha estamos procesando
+    console.log("=== DEBUG FECHA ===");
+    console.log("dateString original:", dateString);
+
+    // Intentar diferentes formatos de fecha
+    let date;
+    if (dateString.includes("-")) {
+      // Formato YYYY-MM-DD
+      date = new Date(dateString);
+      console.log("Formato YYYY-MM-DD, fecha parseada:", date);
+    } else if (dateString.includes("/")) {
+      // Formato DD/MM/YYYY o MM/DD/YYYY
+      const parts = dateString.split("/");
+      if (parts.length === 3) {
+        // Asumir formato DD/MM/YYYY
+        date = new Date(parts[2], parts[1] - 1, parts[0]);
+        console.log("Formato DD/MM/YYYY, fecha parseada:", date);
+      }
+    } else {
+      // Intentar parsear directamente
+      date = new Date(dateString);
+      console.log("Parseo directo, fecha parseada:", date);
+    }
+
+    const result = isNaN(date.getTime())
+      ? "dd-m"
+      : date.toLocaleDateString("es-ES", {
+          day: "2-digit",
+          month: "short",
+        });
+
+    console.log("Resultado final:", result);
+    return result;
+  };
+
   const extra = () => {
     const isTeamPage = location.pathname === "/team";
 
-    if (isTeamPage) {
-      // En Team.js: mostrar fechas del intervalo seleccionado
+    if (isTeamPage && navigationProps) {
+      // En Team.js: mostrar navegación de calendario
+      const {
+        completedIntervals,
+        selectedIntervalIndex,
+        setSelectedIntervalIndex,
+      } = navigationProps;
+
+      if (completedIntervals && completedIntervals.length > 1) {
+        return (
+          <Flex gap="small" align="center" justify="center">
+            <Button
+              shape="round"
+              type="default"
+              disabled={selectedIntervalIndex === completedIntervals.length - 1}
+              onClick={() =>
+                setSelectedIntervalIndex(selectedIntervalIndex + 1)
+              }
+              style={{
+                backgroundColor: "rgba(15,120,142,0.1)",
+                borderColor: "rgba(15,120,142,0.3)",
+                color: "rgba(15,120,142,0.8)",
+              }}
+            >
+              <ArrowLeftOutlined />
+              <div style={{ fontSize: "10px", marginLeft: "5px" }}>
+                {selectedIntervalIndex < completedIntervals.length - 1 &&
+                completedIntervals[selectedIntervalIndex + 1] ? (
+                  <>
+                    {formatDateSafe(
+                      completedIntervals[selectedIntervalIndex + 1].start_date
+                    )}
+                    <br />
+                    {formatDateSafe(
+                      completedIntervals[selectedIntervalIndex + 1].end_date
+                    )}
+                  </>
+                ) : (
+                  <>
+                    dd-m
+                    <br />
+                    dd-m
+                  </>
+                )}
+              </div>
+            </Button>
+
+            <div
+              style={{
+                fontSize: "12px",
+                backgroundColor: "rgba(15,120,142,0.1)",
+                padding: "12px 16px",
+                marginTop: "8px",
+                marginBottom: "8px",
+                borderRadius: "8px",
+                color: "rgba(15,120,142,0.8)",
+                fontWeight: "600",
+                border: "1px solid rgba(15,120,142,0.3)",
+                textAlign: "center",
+                minWidth: "80px",
+              }}
+            >
+              <div style={{ textAlign: "center", marginBottom: "4px" }}>
+                <CalendarFilled style={{ color: "rgba(15,120,142,0.8)" }} />
+              </div>
+              {completedIntervals[selectedIntervalIndex] ? (
+                <>
+                  {formatDateSafe(
+                    completedIntervals[selectedIntervalIndex].start_date
+                  )}{" "}
+                  <CalendarOutlined />
+                  <br />
+                  {formatDateSafe(
+                    completedIntervals[selectedIntervalIndex].end_date
+                  )}{" "}
+                  <CalendarFilled />
+                </>
+              ) : (
+                <>
+                  dd-m
+                  <br />
+                  dd-m
+                </>
+              )}
+            </div>
+
+            <Button
+              shape="round"
+              type="default"
+              disabled={selectedIntervalIndex === 0}
+              onClick={() =>
+                setSelectedIntervalIndex(selectedIntervalIndex - 1)
+              }
+              style={{
+                backgroundColor: "rgba(15,120,142,0.1)",
+                borderColor: "rgba(15,120,142,0.3)",
+                color: "rgba(15,120,142,0.8)",
+              }}
+            >
+              <div style={{ fontSize: "10px", marginRight: "5px" }}>
+                {selectedIntervalIndex > 0 &&
+                completedIntervals[selectedIntervalIndex - 1] ? (
+                  <>
+                    {formatDateSafe(
+                      completedIntervals[selectedIntervalIndex - 1].start_date
+                    )}{" "}
+                    <CalendarOutlined />
+                    <br />
+                    {formatDateSafe(
+                      completedIntervals[selectedIntervalIndex - 1].end_date
+                    )}{" "}
+                    <CalendarFilled />
+                  </>
+                ) : (
+                  <>
+                    dd-m
+                    <br />
+                    dd-m
+                  </>
+                )}
+              </div>
+              <ArrowRightOutlined />
+            </Button>
+          </Flex>
+        );
+      }
+
+      // Si no hay navegación, mostrar fechas simples
       if (team_data && team_data.start_date && team_data.end_date) {
         const startDate = parseDateYMDLocal(team_data.start_date);
         const endDate = parseDateYMDLocal(team_data.end_date);
@@ -419,7 +701,6 @@ const MyTeamActivity = ({ team_data }) => {
         );
       }
 
-      // Si no hay datos del intervalo, no mostrar fechas
       return null;
     } else {
       // En Dashboard.js: mostrar fechas del intervalo actual
@@ -489,7 +770,13 @@ const MyTeamActivity = ({ team_data }) => {
         if (today < startDate) {
           return (
             <Flex style={{ marginBottom: "8px" }}>
-              <Tag color="warning">
+              <Tag
+                style={{
+                  backgroundColor: "rgba(230,184,0,0.1)",
+                  color: "rgba(230,184,0,0.9)",
+                  border: "1px solid rgba(230,184,0,0.3)",
+                }}
+              >
                 {`La competencia comenzará el ${startDate.toLocaleDateString(
                   "es-ES",
                   {
@@ -502,23 +789,208 @@ const MyTeamActivity = ({ team_data }) => {
           );
         } else if (today > endDate) {
           return (
-            <Flex style={{ marginBottom: "8px" }}>
-              <Tag
-                style={{
-                  backgroundColor: "rgba(15,120,142,0.1)",
-                  color: "rgba(15,120,142,0.8)",
-                  border: "1px solid rgba(15,120,142,0.3)",
+            <div>
+              <Flex style={{ marginBottom: "8px" }}>
+                <Tag
+                  style={{
+                    backgroundColor: "rgba(15,120,142,0.1)",
+                    color: "rgba(15,120,142,0.8)",
+                    border: "1px solid rgba(15,120,142,0.3)",
+                  }}
+                >
+                  {`La competencia terminó el ${endDate.toLocaleDateString(
+                    "es-ES",
+                    {
+                      day: "2-digit",
+                      month: "short",
+                    }
+                  )}`}
+                </Tag>
+              </Flex>
+              <Table
+                dataSource={data}
+                columns={columns}
+                pagination={false}
+                rowKey="email"
+                size="small"
+                rowClassName={(record) => {
+                  const isCurrentUser = record.email === state.user.email;
+                  const isTeamPage = location.pathname === "/team";
+                  return isCurrentUser && isTeamPage ? "current-user-row" : "";
                 }}
-              >
-                {`La competencia terminó el ${endDate.toLocaleDateString(
-                  "es-ES",
-                  {
-                    day: "2-digit",
-                    month: "short",
-                  }
-                )}`}
-              </Tag>
-            </Flex>
+                expandable={{
+                  expandedRowRender: (record) => {
+                    const userActivities = getDetailedActivities(record.email);
+                    return userActivities.length > 0 ? (
+                      <div style={{ padding: "16px" }}>
+                        {userActivities.map((activity, index) => (
+                          <div
+                            key={index}
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              padding: "8px 12px",
+                              marginBottom: "8px",
+                              background: activity.is_completed
+                                ? "rgba(15,120,142,0.1)"
+                                : "rgba(255,255,255,0.8)",
+                              border: `1px solid ${
+                                activity.is_completed
+                                  ? "rgba(15,120,142,0.3)"
+                                  : "rgba(15,120,142,0.2)"
+                              }`,
+                              borderRadius: "6px",
+                            }}
+                          >
+                            <div style={{ flex: 1 }}>
+                              <div
+                                style={{
+                                  fontWeight: "500",
+                                  color: "rgba(15,120,142,0.8)",
+                                }}
+                              >
+                                {activity.activity ||
+                                  activity.name ||
+                                  "Actividad"}
+                              </div>
+                            </div>
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "12px",
+                              }}
+                            >
+                              {activity.is_completed && (
+                                <span
+                                  style={{
+                                    color: "rgba(230,184,0,0.9)",
+                                    fontWeight: "600",
+                                    fontSize: "12px",
+                                  }}
+                                >
+                                  {`${activity.points} pts`}
+                                </span>
+                              )}
+                              <span
+                                style={{
+                                  color: activity.is_completed
+                                    ? "rgba(15,120,142,0.8)"
+                                    : "rgba(255,77,79,0.8)",
+                                  fontWeight: "600",
+                                  fontSize: "12px",
+                                }}
+                              >
+                                {activity.is_completed
+                                  ? "✓ Completada"
+                                  : "✗ Pendiente"}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div
+                        style={{
+                          color: "rgba(15,120,142,0.6)",
+                          fontStyle: "italic",
+                          textAlign: "center",
+                          padding: "20px",
+                        }}
+                      >
+                        No hay actividades agendadas
+                      </div>
+                    );
+                  },
+                  rowExpandable: (record) => record.email !== "Total",
+                }}
+                summary={() => {
+                  if (data.length === 0) return null;
+
+                  const totalCompleted = data.reduce(
+                    (sum, player) => sum + player.completedActivities,
+                    0
+                  );
+                  const totalActivities = data.reduce(
+                    (sum, player) => sum + player.totalActivities,
+                    0
+                  );
+                  const totalPoints = data.reduce(
+                    (sum, player) => sum + player.points,
+                    0
+                  );
+                  const averageEffectiveness =
+                    totalActivities > 0
+                      ? ((totalCompleted / totalActivities) * 100).toFixed(1)
+                      : 0;
+
+                  return (
+                    <Table.Summary.Row
+                      style={{
+                        backgroundColor: "rgba(15,120,142,0.1)",
+                        fontWeight: "600",
+                        borderTop: "2px solid rgba(15,120,142,0.3)",
+                      }}
+                    >
+                      <Table.Summary.Cell colSpan={2}>
+                        <span
+                          style={{
+                            color: "rgba(15,120,142,0.8)",
+                            fontWeight: "700",
+                            fontSize: "14px",
+                          }}
+                        >
+                          Rendimiento del Equipo
+                        </span>
+                      </Table.Summary.Cell>
+                      <Table.Summary.Cell align="center">
+                        <div style={{ textAlign: "center" }}>
+                          <span
+                            style={{
+                              color: "rgba(15,120,142,0.8)",
+                              fontWeight: "600",
+                            }}
+                          >
+                            {totalCompleted}/{totalActivities}
+                          </span>
+                        </div>
+                      </Table.Summary.Cell>
+                      <Table.Summary.Cell align="center">
+                        <div style={{ textAlign: "center" }}>
+                          <span
+                            style={{
+                              color: "rgba(15,120,142,0.8)",
+                              fontWeight: "600",
+                            }}
+                          >
+                            {totalPoints}
+                          </span>
+                        </div>
+                      </Table.Summary.Cell>
+                      <Table.Summary.Cell align="center">
+                        <div style={{ textAlign: "center" }}>
+                          <span
+                            style={{
+                              color:
+                                parseFloat(averageEffectiveness) >= 80
+                                  ? "rgba(15,120,142,0.8)"
+                                  : parseFloat(averageEffectiveness) >= 50
+                                  ? "rgba(230,184,0,0.8)"
+                                  : "rgba(255,77,79,0.8)",
+                              fontWeight: "700",
+                              fontSize: "14px",
+                            }}
+                          >
+                            {averageEffectiveness}%
+                          </span>
+                        </div>
+                      </Table.Summary.Cell>
+                    </Table.Summary.Row>
+                  );
+                }}
+              />
+            </div>
           );
         } else {
           return (
@@ -672,29 +1144,50 @@ const MyTeamActivity = ({ team_data }) => {
                                 borderRadius: "6px",
                               }}
                             >
-                              <span
+                              <div style={{ flex: 1 }}>
+                                <span
+                                  style={{
+                                    color: "rgba(15,120,142,0.8)",
+                                    fontWeight: "500",
+                                  }}
+                                >
+                                  {activity.activity ||
+                                    activity.name ||
+                                    "Actividad"}
+                                </span>
+                              </div>
+                              <div
                                 style={{
-                                  color: "rgba(15,120,142,0.8)",
-                                  fontWeight: "500",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: "12px",
                                 }}
                               >
-                                {activity.activity ||
-                                  activity.name ||
-                                  "Actividad"}
-                              </span>
-                              <span
-                                style={{
-                                  color: activity.is_completed
-                                    ? "rgba(15,120,142,0.8)"
-                                    : "rgba(255,77,79,0.8)",
-                                  fontWeight: "600",
-                                  fontSize: "12px",
-                                }}
-                              >
-                                {activity.is_completed
-                                  ? "✓ Completada"
-                                  : "✗ Pendiente"}
-                              </span>
+                                {activity.is_completed && (
+                                  <span
+                                    style={{
+                                      color: "rgba(230,184,0,0.9)",
+                                      fontWeight: "600",
+                                      fontSize: "12px",
+                                    }}
+                                  >
+                                    {`${activity.points} pts`}
+                                  </span>
+                                )}
+                                <span
+                                  style={{
+                                    color: activity.is_completed
+                                      ? "rgba(15,120,142,0.8)"
+                                      : "rgba(255,77,79,0.8)",
+                                    fontWeight: "600",
+                                    fontSize: "12px",
+                                  }}
+                                >
+                                  {activity.is_completed
+                                    ? "✓ Completada"
+                                    : "✗ Pendiente"}
+                                </span>
+                              </div>
                             </div>
                           ))}
                         </div>

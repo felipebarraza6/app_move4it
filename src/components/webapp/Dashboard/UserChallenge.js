@@ -246,22 +246,35 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
               size="small"
               hoverable
               style={{
-                backgroundColor: "#b7eb8f",
+                backgroundColor: "rgba(230,184,0,0.15)",
+                border: "1px solid rgba(230,184,0,0.3)",
                 textAlign: "center",
                 width: "120px",
               }}
             >
-              <PlusCircleOutlined style={{ marginRight: "5px" }} />{" "}
-              {(state.activity.points / quantity_participants).toFixed(2)}{" "}
-              puntos
+              <PlusCircleOutlined
+                style={{ marginRight: "5px", color: "rgba(230,184,0,0.9)" }}
+              />{" "}
+              <span style={{ color: "rgba(60,87,93,0.9)", fontWeight: "500" }}>
+                {(state.activity.points / quantity_participants).toFixed(2)}{" "}
+                puntos
+              </span>
             </Card>
             <Card
               size="small"
               hoverable
-              style={{ backgroundColor: "#69c0ff", textAlign: "center" }}
+              style={{
+                backgroundColor: "rgba(15,120,142,0.1)",
+                border: "1px solid rgba(15,120,142,0.3)",
+                textAlign: "center",
+              }}
             >
-              <FilterFilled style={{ marginRight: "5px" }} />
-              {state.activity.category.name}
+              <FilterFilled
+                style={{ marginRight: "5px", color: "rgba(15,120,142,0.8)" }}
+              />
+              <span style={{ color: "rgba(60,87,93,0.9)", fontWeight: "500" }}>
+                {state.activity.category.name}
+              </span>
             </Card>
           </Flex>
         </Flex>
@@ -332,7 +345,11 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
                   <Card
                     hoverable
                     size="small"
-                    style={{ width: "100%", backgroundColor: "#f0f0f0" }}
+                    style={{
+                      width: "100%",
+                      backgroundColor: "rgba(15,120,142,0.05)",
+                      border: "1px solid rgba(15,120,142,0.2)",
+                    }}
                   >
                     <Button
                       size="large"
@@ -544,6 +561,15 @@ const UserChallenge = ({ challengers }) => {
     }
 
     const nextInterval = () => {
+      if (currentInterval - 1 >= 0) {
+        setCurrentInterval(currentInterval - 1);
+        if (challengers[currentInterval - 1]?.data?.user?.activities) {
+          setData(challengers[currentInterval - 1].data.user.activities);
+        }
+      }
+    };
+
+    const previousInterval = () => {
       if (currentInterval + 1 < challengers.length) {
         setCurrentInterval(currentInterval + 1);
         if (challengers[currentInterval + 1]?.data?.user?.activities) {
@@ -552,12 +578,19 @@ const UserChallenge = ({ challengers }) => {
       }
     };
 
-    const previousInterval = () => {
-      if (currentInterval - 1 >= 0) {
-        setCurrentInterval(currentInterval - 1);
-        if (challengers[currentInterval - 1]?.data?.user?.activities) {
-          setData(challengers[currentInterval - 1].data.user.activities);
-        }
+    // Formateador seguro de fechas (dd-mmmm) sin offsets manuales
+    const formatDM = (dateString) => {
+      if (!dateString) return "dd-m";
+      try {
+        const dt = new Date(dateString);
+        // Si no es válida
+        if (isNaN(dt.getTime())) return "dd-m";
+        return dt.toLocaleDateString("es-ES", {
+          day: "2-digit",
+          month: "short",
+        });
+      } catch (_) {
+        return "dd-m";
       }
     };
 
@@ -579,45 +612,15 @@ const UserChallenge = ({ challengers }) => {
                 shape="round"
                 type="default"
                 onClick={nextInterval}
-                disabled={
-                  currentInterval + 1 >=
-                  (
-                    challengers?.filter(
-                      (interval) => interval.start_date <= today
-                    ) || []
-                  ).length
-                }
+                disabled={currentInterval === 0}
               >
                 <ArrowLeftOutlined />
                 <div style={{ fontSize: "10px", marginLeft: "5px" }}>
-                  {currentInterval < challengers.length - 1 &&
-                  challengers[currentInterval + 1] ? (
+                  {currentInterval > 0 && challengers[currentInterval - 1] ? (
                     <>
-                      {new Date(
-                        new Date(
-                          challengers[currentInterval + 1].start_date
-                        ).setDate(
-                          new Date(
-                            challengers[currentInterval + 1].start_date
-                          ).getDate() + 1
-                        )
-                      ).toLocaleDateString("es-ES", {
-                        day: "2-digit",
-                        month: "short",
-                      })}
+                      {formatDM(challengers[currentInterval - 1].start_date)}
                       <br />
-                      {new Date(
-                        new Date(
-                          challengers[currentInterval + 1].end_date
-                        ).setDate(
-                          new Date(
-                            challengers[currentInterval + 1].end_date
-                          ).getDate() + 1
-                        )
-                      ).toLocaleDateString("es-ES", {
-                        day: "2-digit",
-                        month: "short",
-                      })}
+                      {formatDM(challengers[currentInterval - 1].end_date)}
                     </>
                   ) : (
                     <>
@@ -652,27 +655,9 @@ const UserChallenge = ({ challengers }) => {
                 </div>
                 {challengers[currentInterval] ? (
                   <>
-                    {new Date(
-                      new Date(challengers[currentInterval].start_date).setDate(
-                        new Date(
-                          challengers[currentInterval].start_date
-                        ).getDate() + 1
-                      )
-                    ).toLocaleDateString("es-ES", {
-                      day: "2-digit",
-                      month: "short",
-                    })}
+                    {formatDM(challengers[currentInterval].start_date)}
                     <br />
-                    {new Date(
-                      new Date(challengers[currentInterval].end_date).setDate(
-                        new Date(
-                          challengers[currentInterval].end_date
-                        ).getDate() + 1
-                      )
-                    ).toLocaleDateString("es-ES", {
-                      day: "2-digit",
-                      month: "short",
-                    })}
+                    {formatDM(challengers[currentInterval].end_date)}
                   </>
                 ) : (
                   <>
@@ -686,37 +671,23 @@ const UserChallenge = ({ challengers }) => {
                 shape="round"
                 type={"default"}
                 onClick={previousInterval}
-                disabled={currentInterval === 0}
+                disabled={
+                  currentInterval + 1 >=
+                  (
+                    challengers?.filter(
+                      (interval) => interval.start_date <= today
+                    ) || []
+                  ).length
+                }
               >
                 <div style={{ fontSize: "10px", marginRight: "5px" }}>
-                  {currentInterval > 0 && challengers[currentInterval - 1] ? (
+                  {currentInterval < challengers.length - 1 &&
+                  challengers[currentInterval + 1] ? (
                     <>
-                      {new Date(
-                        new Date(
-                          challengers[currentInterval - 1].start_date
-                        ).setDate(
-                          new Date(
-                            challengers[currentInterval - 1].start_date
-                          ).getDate() + 1
-                        )
-                      ).toLocaleDateString("es-ES", {
-                        day: "2-digit",
-                        month: "short",
-                      })}{" "}
+                      {formatDM(challengers[currentInterval + 1].start_date)}{" "}
                       <CalendarOutlined />
                       <br />
-                      {new Date(
-                        new Date(
-                          challengers[currentInterval - 1].end_date
-                        ).setDate(
-                          new Date(
-                            challengers[currentInterval - 1].end_date
-                          ).getDate() + 1
-                        )
-                      ).toLocaleDateString("es-ES", {
-                        day: "2-digit",
-                        month: "short",
-                      })}{" "}
+                      {formatDM(challengers[currentInterval + 1].end_date)}{" "}
                       <CalendarFilled />
                     </>
                   ) : (
@@ -836,7 +807,13 @@ const UserChallenge = ({ challengers }) => {
           if (today < startDate) {
             return (
               <Flex style={{ marginBottom: "8px" }}>
-                <Tag color="orange">
+                <Tag
+                  style={{
+                    backgroundColor: "rgba(230,184,0,0.1)",
+                    color: "rgba(230,184,0,0.9)",
+                    border: "1px solid rgba(230,184,0,0.3)",
+                  }}
+                >
                   {`La competencia comenzará el ${startDate.toLocaleDateString(
                     "es-ES",
                     {
@@ -878,48 +855,14 @@ const UserChallenge = ({ challengers }) => {
               <Card size="small" hoverable style={{ width: "100%" }}>
                 <Statistic
                   value={(() => {
-                    // Contar jugadores únicos solo en intervalos terminados
-                    const allPlayers = new Set();
-                    const today = new Date().toISOString().split("T")[0];
-
-                    challengers.forEach((interval) => {
-                      // Solo intervalos terminados (end_date < today)
-                      if (interval.end_date < today) {
-                        if (interval.data?.my_team?.activities) {
-                          interval.data.my_team.activities.forEach(
-                            (activity) => {
-                              if (activity.user?.email) {
-                                allPlayers.add(activity.user.email);
-                              }
-                            }
-                          );
-                        }
-                      }
-                    });
-
-                    return allPlayers.size;
+                    // Contar actividades agendadas solo del intervalo actual
+                    if (challengers[currentInterval]?.data?.user?.activities) {
+                      return challengers[currentInterval].data.user.activities
+                        .length;
+                    }
+                    return 0;
                   })()}
-                  title="Jugadores"
-                  valueStyle={{ textAlign: "center" }}
-                />
-              </Card>
-              <Card size="small" hoverable style={{ width: "100%" }}>
-                <Statistic
-                  value={(() => {
-                    // Contar todas las actividades agendadas solo en intervalos terminados
-                    let totalActivities = 0;
-                    const today = new Date().toISOString().split("T")[0];
-                    challengers.forEach((interval) => {
-                      if (interval.end_date < today) {
-                        if (interval.data?.user?.activities) {
-                          totalActivities +=
-                            interval.data.user.activities.length;
-                        }
-                      }
-                    });
-                    return totalActivities;
-                  })()}
-                  title="Pruebas Agendadas"
+                  title="Agendadas"
                   valueStyle={{ textAlign: "center" }}
                 />
               </Card>
@@ -927,22 +870,58 @@ const UserChallenge = ({ challengers }) => {
               <Card size="small" hoverable style={{ width: "100%" }}>
                 <Statistic
                   value={(() => {
-                    // Contar actividades completadas solo en intervalos terminados
-                    let completedActivities = 0;
-                    const today = new Date().toISOString().split("T")[0];
-                    challengers.forEach((interval) => {
-                      if (interval.end_date < today) {
-                        if (interval.data?.user?.activities) {
-                          completedActivities +=
-                            interval.data.user.activities.filter(
-                              (activity) => activity.is_completed
-                            ).length;
-                        }
-                      }
-                    });
-                    return completedActivities;
+                    // Contar actividades completadas solo del intervalo actual
+                    if (challengers[currentInterval]?.data?.user?.activities) {
+                      return challengers[
+                        currentInterval
+                      ].data.user.activities.filter(
+                        (activity) => activity.is_completed
+                      ).length;
+                    }
+                    return 0;
                   })()}
                   title="Completadas"
+                  valueStyle={{ textAlign: "center" }}
+                />
+              </Card>
+
+              <Card size="small" hoverable style={{ width: "100%" }}>
+                <Statistic
+                  value={(() => {
+                    // Contar actividades incompletas solo del intervalo actual
+                    if (challengers[currentInterval]?.data?.user?.activities) {
+                      const today = new Date().toISOString().split("T")[0];
+                      return challengers[
+                        currentInterval
+                      ].data.user.activities.filter(
+                        (activity) =>
+                          !activity.is_completed &&
+                          activity.is_load &&
+                          today > activity.interval.end_date
+                      ).length;
+                    }
+                    return 0;
+                  })()}
+                  title="Incompletas"
+                  valueStyle={{ textAlign: "center" }}
+                />
+              </Card>
+
+              <Card size="small" hoverable style={{ width: "100%" }}>
+                <Statistic
+                  value={(() => {
+                    // Contar actividades sin realizar solo del intervalo actual
+                    if (challengers[currentInterval]?.data?.user?.activities) {
+                      return challengers[
+                        currentInterval
+                      ].data.user.activities.filter(
+                        (activity) =>
+                          !activity.is_completed && !activity.is_load
+                      ).length;
+                    }
+                    return 0;
+                  })()}
+                  title="Sin Realizar"
                   valueStyle={{ textAlign: "center" }}
                 />
               </Card>
