@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Typography, Row, Col, Flex, Alert } from "antd";
+import { CheckCircleFilled, ClockCircleOutlined } from "@ant-design/icons";
 import Welcome from "../components/webapp/Dashboard/Welcome";
 import Blog from "./Blog";
 import { AppContext } from "../App";
@@ -149,6 +150,7 @@ const Dashboard = () => {
                   description="Prepárate para la competencia."
                   type="warning"
                   showIcon
+                  icon={<ClockCircleOutlined />}
                 />
               );
             } else {
@@ -163,8 +165,20 @@ const Dashboard = () => {
                     }
                   )}`}
                   description="Revisa el resumen y resultados finales disponibles."
-                  type="info"
+                  type="success"
                   showIcon
+                  icon={
+                    <CheckCircleFilled
+                      style={{
+                        background:
+                          "linear-gradient(100deg, rgb(15, 120, 142) 0%, rgba(77, 180, 202, 0.8) 50%, rgb(60, 87, 93) 100%)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                        fontSize: "18px",
+                      }}
+                    />
+                  }
                 />
               );
             }

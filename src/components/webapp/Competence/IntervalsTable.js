@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { AppContext } from "../../../App";
 import { Descriptions, Button, Card, Flex, List, Tag, Typography } from "antd";
 import { parseDateYMDLocal, normalizeDateOnly } from "../../../utils/date";
@@ -19,11 +19,14 @@ const IntervalsTable = () => {
     state.user.enterprise_competition_overflow.last_competence
       .intervals_to_back;
 
-  // Filtrar solo intervalos terminados
+  // Filtrar solo intervalos terminados y ordenar por fecha de finalización (más reciente primero)
   const todayString = new Date().toISOString().split("T")[0];
-  const intervals = allIntervals.filter(
-    (interval) => interval.end_date < todayString
-  );
+  const intervals = allIntervals
+    .filter((interval) => interval.end_date < todayString)
+    .sort((a, b) => {
+      // Ordenar descendente: el más reciente primero (índice 0)
+      return new Date(b.end_date) - new Date(a.end_date);
+    });
 
   const currentIntervalValue =
     state.user.enterprise_competition_overflow.last_competence.stats
@@ -32,31 +35,22 @@ const IntervalsTable = () => {
   const sourcesActive =
     state.user.enterprise_competition_overflow.last_competence.stats.my_team;
 
-  const [currentInterval, setCurrentInterval] = useState(0); // Inicializar en 0
-  const [isInitialized, setIsInitialized] = useState(false); // Controlar si ya se inicializó
-
-  const nextInterval = () => {
-    if (currentInterval > 0) {
-      setCurrentInterval((prevInterval) => prevInterval - 1);
-    }
-  };
+  // Inicializar en 0 para empezar con el intervalo más reciente
+  const [currentInterval, setCurrentInterval] = useState(0);
 
   const previousInterval = () => {
+    // Navegar hacia la izquierda = ir al pasado (intervalos más antiguos, índice mayor)
     if (currentInterval < intervals.length - 1) {
       setCurrentInterval((prevInterval) => prevInterval + 1);
     }
   };
 
-  useEffect(() => {
-    // Solo inicializar una vez cuando se cargan los intervalos
-    if (intervals.length > 0 && !isInitialized) {
-      setCurrentInterval(intervals.length - 1); // Empezar en el último intervalo
-      setIsInitialized(true);
-    } else if (intervals.length === 0) {
-      setCurrentInterval(0);
-      setIsInitialized(false);
+  const nextInterval = () => {
+    // Navegar hacia la derecha = ir al futuro (intervalos más recientes, índice menor)
+    if (currentInterval > 0) {
+      setCurrentInterval((prevInterval) => prevInterval - 1);
     }
-  }, [intervals, isInitialized]);
+  };
 
   // Verificar estado de la competencia
   const startDate = parseDateYMDLocal(
@@ -109,6 +103,151 @@ const IntervalsTable = () => {
           >
             <Descriptions
               bordered
+              extra={
+                <Flex
+                  gap="small"
+                  justify="center"
+                  align="center"
+                  style={{ marginTop: "16px", marginBottom: "8px" }}
+                >
+                  {((currentIntervalValue && competitionActive) ||
+                    competitionEnded) &&
+                    intervals.length > 1 &&
+                    intervals[currentInterval] && (
+                      <>
+                        {/* Botón izquierdo: ir al pasado (intervalos más antiguos) */}
+                        <Button
+                          shape="round"
+                          type="default"
+                          disabled={currentInterval >= intervals.length - 1}
+                          onClick={previousInterval}
+                          style={{
+                            backgroundColor: "rgba(15,120,142,0.1)",
+                            borderColor: "rgba(15,120,142,0.3)",
+                            color: "rgba(15,120,142,0.8)",
+                          }}
+                        >
+                          <ArrowLeftOutlined />
+                          <div style={{ fontSize: "10px", marginLeft: "5px" }}>
+                            {currentInterval < intervals.length - 1 &&
+                            intervals[currentInterval + 1] ? (
+                              <>
+                                {parseDateYMDLocal(
+                                  intervals[currentInterval + 1].start_date
+                                ).toLocaleDateString("es-ES", {
+                                  day: "2-digit",
+                                  month: "short",
+                                })}{" "}
+                                <br />
+                                {parseDateYMDLocal(
+                                  intervals[currentInterval + 1].end_date
+                                ).toLocaleDateString("es-ES", {
+                                  day: "2-digit",
+                                  month: "short",
+                                })}{" "}
+                              </>
+                            ) : (
+                              <>
+                                dd-m
+                                <br />
+                                dd-m
+                              </>
+                            )}
+                          </div>
+                        </Button>
+
+                        {/* Indicador del intervalo actual */}
+                        <div
+                          style={{
+                            fontSize: "12px",
+                            backgroundColor: "rgba(15,120,142,0.1)",
+                            padding: "12px 16px",
+                            marginTop: "8px",
+                            marginBottom: "8px",
+                            borderRadius: "8px",
+                            color: "rgba(15,120,142,0.8)",
+                            fontWeight: "600",
+                            border: "1px solid rgba(15,120,142,0.3)",
+                            textAlign: "center",
+                            minWidth: "80px",
+                          }}
+                        >
+                          <div
+                            style={{ textAlign: "center", marginBottom: "4px" }}
+                          ></div>
+                          {intervals[currentInterval] ? (
+                            <>
+                              {parseDateYMDLocal(
+                                intervals[currentInterval].start_date
+                              ).toLocaleDateString("es-ES", {
+                                day: "2-digit",
+                                month: "short",
+                              })}{" "}
+                              <CalendarOutlined />
+                              <br />
+                              {parseDateYMDLocal(
+                                intervals[currentInterval].end_date
+                              ).toLocaleDateString("es-ES", {
+                                day: "2-digit",
+                                month: "short",
+                              })}{" "}
+                              <CalendarFilled />
+                            </>
+                          ) : (
+                            <>
+                              dd-m
+                              <br />
+                              dd-m
+                            </>
+                          )}
+                        </div>
+
+                        {/* Botón derecho: ir al futuro (intervalos más recientes) */}
+                        <Button
+                          shape="round"
+                          type="default"
+                          disabled={currentInterval === 0}
+                          onClick={nextInterval}
+                          style={{
+                            backgroundColor: "rgba(15,120,142,0.1)",
+                            borderColor: "rgba(15,120,142,0.3)",
+                            color: "rgba(15,120,142,0.8)",
+                          }}
+                        >
+                          <div style={{ fontSize: "10px", marginRight: "5px" }}>
+                            {currentInterval > 0 &&
+                            intervals[currentInterval - 1] ? (
+                              <>
+                                {parseDateYMDLocal(
+                                  intervals[currentInterval - 1].start_date
+                                ).toLocaleDateString("es-ES", {
+                                  day: "2-digit",
+                                  month: "short",
+                                })}{" "}
+                                <CalendarOutlined />
+                                <br />
+                                {parseDateYMDLocal(
+                                  intervals[currentInterval - 1].end_date
+                                ).toLocaleDateString("es-ES", {
+                                  day: "2-digit",
+                                  month: "short",
+                                })}{" "}
+                                <CalendarFilled />
+                              </>
+                            ) : (
+                              <>
+                                dd-m
+                                <br />
+                                dd-m
+                              </>
+                            )}
+                          </div>
+                          <ArrowRightOutlined />
+                        </Button>
+                      </>
+                    )}
+                </Flex>
+              }
               column={2}
               title={
                 <Text
@@ -122,42 +261,6 @@ const IntervalsTable = () => {
                 </Text>
               }
             >
-              <Descriptions.Item
-                label={
-                  <>
-                    <CalendarOutlined style={{ marginRight: 8 }} /> Fecha inicio
-                  </>
-                }
-                span={window.innerWidth > 900 ? 1 : 3}
-              >
-                <Tag
-                  style={{
-                    backgroundColor: "rgba(15,120,142,0.1)",
-                    color: "rgba(15,120,142,0.8)",
-                    border: "1px solid rgba(15,120,142,0.3)",
-                  }}
-                >
-                  {intervals[currentInterval].start_date}
-                </Tag>
-              </Descriptions.Item>
-              <Descriptions.Item
-                span={window.innerWidth > 900 ? 1 : 3}
-                label={
-                  <>
-                    <CalendarFilled style={{ marginRight: 8 }} /> Fecha termino
-                  </>
-                }
-              >
-                <Tag
-                  style={{
-                    backgroundColor: "rgba(15,120,142,0.1)",
-                    color: "rgba(15,120,142,0.8)",
-                    border: "1px solid rgba(15,120,142,0.3)",
-                  }}
-                >
-                  {intervals[currentInterval].end_date}
-                </Tag>
-              </Descriptions.Item>
               <Descriptions.Item
                 label={
                   <>
@@ -293,63 +396,6 @@ const IntervalsTable = () => {
             </Descriptions>
           </Card>
         )}
-      <Flex
-        gap="small"
-        justify="center"
-        style={{ marginTop: "16px", marginBottom: "8px" }}
-      >
-        {((currentIntervalValue && competitionActive) || competitionEnded) &&
-          intervals.length > 1 &&
-          intervals[currentInterval] && (
-            <>
-              <Button
-                shape="round"
-                onClick={nextInterval}
-                disabled={currentInterval === 0}
-                style={{
-                  backgroundColor:
-                    currentInterval === 0
-                      ? "rgba(15,120,142,0.1)"
-                      : "rgba(15,120,142,0.8)",
-                  borderColor: "rgba(15,120,142,0.3)",
-                  color:
-                    currentInterval === 0 ? "rgba(15,120,142,0.4)" : "white",
-                  fontWeight: "600",
-                  boxShadow:
-                    currentInterval === 0
-                      ? "none"
-                      : "0 2px 8px rgba(15,120,142,0.3)",
-                }}
-              >
-                <ArrowLeftOutlined />
-                Anterior
-              </Button>
-              <Button
-                shape="round"
-                onClick={previousInterval}
-                disabled={currentInterval >= intervals.length - 1}
-                style={{
-                  backgroundColor:
-                    currentInterval >= intervals.length - 1
-                      ? "rgba(15,120,142,0.1)"
-                      : "rgba(15,120,142,0.8)",
-                  borderColor: "rgba(15,120,142,0.3)",
-                  color:
-                    currentInterval >= intervals.length - 1
-                      ? "rgba(15,120,142,0.4)"
-                      : "white",
-                  fontWeight: "600",
-                  boxShadow:
-                    currentInterval >= intervals.length - 1
-                      ? "none"
-                      : "0 2px 8px rgba(15,120,142,0.3)",
-                }}
-              >
-                Siguiente <ArrowRightOutlined />
-              </Button>
-            </>
-          )}
-      </Flex>
     </Flex>
   );
 };

@@ -562,6 +562,7 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
       if (completedIntervals && completedIntervals.length > 1) {
         return (
           <Flex gap="small" align="center" justify="center">
+            {/* Botón izquierdo: ir al pasado (intervalos más antiguos) */}
             <Button
               shape="round"
               type="default"
@@ -598,6 +599,7 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
               </div>
             </Button>
 
+            {/* Indicador del intervalo actual */}
             <div
               style={{
                 fontSize: "12px",
@@ -613,9 +615,6 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
                 minWidth: "80px",
               }}
             >
-              <div style={{ textAlign: "center", marginBottom: "4px" }}>
-                <CalendarFilled style={{ color: "rgba(15,120,142,0.8)" }} />
-              </div>
               {completedIntervals[selectedIntervalIndex] ? (
                 <>
                   {formatDateSafe(
@@ -637,6 +636,7 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
               )}
             </div>
 
+            {/* Botón derecho: ir al futuro (intervalos más recientes) */}
             <Button
               shape="round"
               type="default"

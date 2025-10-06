@@ -1,6 +1,11 @@
 import React, { useContext } from "react";
 import { Row, Col, Flex, Table, Alert } from "antd";
-import { CalendarOutlined, CalendarTwoTone } from "@ant-design/icons";
+import {
+  CalendarOutlined,
+  CalendarTwoTone,
+  CheckCircleFilled,
+  ClockCircleOutlined,
+} from "@ant-design/icons";
 import Ranking from "../components/webapp/Competence/Ranking";
 import AvgAllGroups from "../components/webapp/Competence/AvgAllGroups";
 import IntervalsTable from "../components/webapp/Competence/IntervalsTable";
@@ -105,6 +110,7 @@ const Enterpise = () => {
                   description="Prepárate para la competencia."
                   type="warning"
                   showIcon
+                  icon={<ClockCircleOutlined />}
                 />
               )}
 
@@ -163,6 +169,10 @@ const Enterpise = () => {
               {/* Mostrar mensaje si la competencia ha terminado */}
               {competitionEnded && (
                 <Alert
+                  style={{
+                    backgroundColor: "rgba(15,120,142,0.1)",
+                    border: "1px solid rgba(15,120,142,0.3)",
+                  }}
                   message={`La competencia terminó el ${endDate.toLocaleDateString(
                     "es-ES",
                     {
@@ -172,8 +182,20 @@ const Enterpise = () => {
                     }
                   )}`}
                   description="Revisa el resumen y resultados finales disponibles."
-                  type="info"
+                  type="success"
                   showIcon
+                  icon={
+                    <CheckCircleFilled
+                      style={{
+                        background:
+                          "linear-gradient(100deg, rgb(15, 120, 142) 0%, rgba(77, 180, 202, 0.8) 50%, rgb(60, 87, 93) 100%)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                        fontSize: "18px",
+                      }}
+                    />
+                  }
                 />
               )}
             </Flex>
