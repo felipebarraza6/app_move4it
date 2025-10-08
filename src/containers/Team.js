@@ -158,6 +158,11 @@ const Team = () => {
 
   const columns = [
     {
+      title: "Intervalo",
+      dataIndex: "key",
+      render: (text) => `#${text + 1}`,
+    },
+    {
       title: "Fecha Inicio",
       dataIndex: "start_date",
       width: "20%",
@@ -546,7 +551,7 @@ const Team = () => {
                         borderTop: "3px solid rgba(15,120,142,0.4)",
                       }}
                     >
-                      <Table.Summary.Cell colSpan={2}>
+                      <Table.Summary.Cell colSpan={3}>
                         <span
                           style={{
                             color: "rgba(15,120,142,0.9)",
