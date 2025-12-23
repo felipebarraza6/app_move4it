@@ -13,7 +13,7 @@
 }
 
 .App-header {
-  background: linear-gradient(169deg, rgba(15,120,142,1) 0%, rgba(122,160,168,1) 35%, rgba(60,87,93,1) 100%);
+  background: linear-gradient(135deg, rgba(10, 95, 224, 0.98) 0%, rgba(10, 140, 207, 0.98) 50%, rgba(18, 227, 194, 0.98) 100%);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -24,7 +24,7 @@
 }
 
 .App-link {
-  color: #e6b800;
+  color: #12E3C2;
 }
 
 @keyframes App-logo-spin {
@@ -37,17 +37,17 @@
 }
 
 .backtable {
-  background: linear-gradient(169deg, rgba(15,120,142,0.9) 0%, rgba(122,160,168,0.9) 35%, rgba(60,87,93,0.9) 100%);
+  background: linear-gradient(135deg, rgba(10, 95, 224, 0.95) 0%, rgba(10, 140, 207, 0.95) 50%, rgba(18, 227, 194, 0.95) 100%);
   color: white;
 }
 .rowClass{
-  background: linear-gradient(169deg, rgba(15,120,142,0.8) 0%, rgba(122,160,168,0.8) 35%, rgba(60,87,93,0.8) 100%);
-  border-bottom: 1px solid rgba(230,184,0,0.2);
+  background: linear-gradient(135deg, rgba(10, 95, 224, 0.85) 0%, rgba(10, 140, 207, 0.85) 50%, rgba(18, 227, 194, 0.85) 100%);
+  border-bottom: 1px solid rgba(18, 227, 194, 0.3);
 }
 
 .rowClass:hover{
-  background: linear-gradient(169deg, rgba(15,120,142,1) 0%, rgba(122,160,168,1) 35%, rgba(60,87,93,1) 100%);
-  border-bottom: 1px solid rgba(230,184,0,0.4);
-  box-shadow: 0 2px 8px rgba(230,184,0,0.2);
+  background: linear-gradient(135deg, rgba(10, 95, 224, 0.95) 0%, rgba(10, 140, 207, 0.95) 50%, rgba(18, 227, 194, 0.95) 100%);
+  border-bottom: 1px solid rgba(18, 227, 194, 0.5);
+  box-shadow: 0 2px 8px rgba(18, 227, 194, 0.3);
 }
 

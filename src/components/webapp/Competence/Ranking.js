@@ -68,10 +68,10 @@ const Ranking = () => {
       style={{
         width: "100%",
         background:
-          "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-        border: "1px solid rgba(15,120,142,0.2)",
+          "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+        border: "1px solid rgba(10, 95, 224, 0.2)",
         borderRadius: "16px",
-        boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
+        boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
       }}
     >
       <Flex vertical gap={"large"} style={{ width: "100%" }}>
@@ -79,8 +79,8 @@ const Ranking = () => {
           <Card
             style={{
               background:
-                "linear-gradient(135deg, rgba(15,120,142,0.1) 0%, rgba(230,184,0,0.05) 100%)",
-              border: "1px solid rgba(15,120,142,0.3)",
+                "linear-gradient(135deg, rgba(10, 95, 224, 0.1) 0%, rgba(18, 227, 194, 0.5) 100%)",
+              border: "1px solid rgba(10, 95, 224, 0.3)",
               borderRadius: "12px",
               textAlign: "center",
               padding: "24px",
@@ -89,14 +89,14 @@ const Ranking = () => {
             <TrophyFilled
               style={{
                 fontSize: "48px",
-                color: "rgba(15,120,142,0.6)",
+                color: "rgba(10, 95, 224, 0.6)",
                 marginBottom: "16px",
               }}
             />
             <Text
               style={{
                 fontSize: "18px",
-                color: "rgba(15,120,142,0.8)",
+                color: "rgba(10, 95, 224, 0.8)",
                 fontWeight: "600",
                 display: "block",
                 marginBottom: "8px",
@@ -108,7 +108,7 @@ const Ranking = () => {
             <Text
               style={{
                 fontSize: "14px",
-                color: "rgba(15,120,142,0.7)",
+                color: "rgba(10, 95, 224, 0.7)",
                 display: "block",
                 marginBottom: "12px",
               }}
@@ -118,7 +118,7 @@ const Ranking = () => {
             <Text
               style={{
                 fontSize: "12px",
-                color: "rgba(15,120,142,0.6)",
+                color: "rgba(10, 95, 224, 0.6)",
                 display: "block",
               }}
             >
@@ -136,13 +136,13 @@ const Ranking = () => {
                     style={{
                       backgroundColor:
                         item.name === name_my_team
-                          ? "rgba(15,120,142,0.8)"
-                          : "rgba(15,120,142,0.1)",
+                          ? "rgba(10, 95, 224, 0.8)"
+                          : "rgba(10, 95, 224, 0.1)",
                       color:
                         item.name === name_my_team
                           ? "white"
-                          : "rgba(15,120,142,0.8)",
-                      border: "1px solid rgba(15,120,142,0.3)",
+                          : "rgba(10, 95, 224, 0.8)",
+                      border: "1px solid rgba(10, 95, 224, 0.3)",
                       fontWeight: "600",
                     }}
                   >
@@ -152,13 +152,13 @@ const Ranking = () => {
                     style={{
                       backgroundColor:
                         item.name === name_my_team
-                          ? "rgba(15,120,142,0.8)"
-                          : "rgba(15,120,142,0.1)",
+                          ? "rgba(10, 95, 224, 0.8)"
+                          : "rgba(10, 95, 224, 0.1)",
                       color:
                         item.name === name_my_team
                           ? "white"
-                          : "rgba(15,120,142,0.8)",
-                      border: "1px solid rgba(15,120,142,0.3)",
+                          : "rgba(10, 95, 224, 0.8)",
+                      border: "1px solid rgba(10, 95, 224, 0.3)",
                       fontWeight: "600",
                     }}
                   >
@@ -168,13 +168,13 @@ const Ranking = () => {
                     style={{
                       backgroundColor:
                         item.name === name_my_team
-                          ? "rgba(15,120,142,0.8)"
-                          : "rgba(15,120,142,0.1)",
+                          ? "rgba(10, 95, 224, 0.8)"
+                          : "rgba(10, 95, 224, 0.1)",
                       color:
                         item.name === name_my_team
                           ? "white"
-                          : "rgba(15,120,142,0.8)",
-                      border: "1px solid rgba(15,120,142,0.3)",
+                          : "rgba(10, 95, 224, 0.8)",
+                      border: "1px solid rgba(10, 95, 224, 0.3)",
                       fontWeight: "600",
                     }}
                   >
@@ -188,13 +188,13 @@ const Ranking = () => {
                 <Text
                   style={{
                     fontSize: "20px",
-                    color: "rgba(15,120,142,0.8)",
+                    color: "rgba(10, 95, 224, 0.8)",
                     fontWeight: "600",
                   }}
                 >
                   <TrophyFilled
                     style={{
-                      color: "rgba(15,120,142,0.8)",
+                      color: "rgba(10, 95, 224, 0.8)",
                       marginRight: "10px",
                     }}
                   />
@@ -204,12 +204,12 @@ const Ranking = () => {
                 <Flex align="center">
                   <CalendarFilled
                     style={{
-                      color: "rgba(15,120,142,0.8)",
+                      color: "rgba(10, 95, 224, 0.8)",
                       marginRight: "10px",
                     }}
                   />
                   <Text
-                    style={{ fontSize: "14px", color: "rgba(15,120,142,0.7)" }}
+                    style={{ fontSize: "14px", color: "rgba(10, 95, 224, 0.7)" }}
                   >
                     {
                       intervals.find(
@@ -238,10 +238,10 @@ const Ranking = () => {
                       marginBottom: "5px",
                       backgroundColor:
                         i.interval_id === selectedInterval
-                          ? "rgba(15,120,142,0.1)"
+                          ? "rgba(10, 95, 224, 0.1)"
                           : "transparent",
-                      borderColor: "rgba(15,120,142,0.3)",
-                      color: "rgba(15,120,142,0.8)",
+                      borderColor: "rgba(10, 95, 224, 0.3)",
+                      color: "rgba(10, 95, 224, 0.8)",
                       fontWeight: "500",
                     }}
                     icon={
@@ -249,14 +249,14 @@ const Ranking = () => {
                         <CalendarFilled
                           style={{
                             marginRight: "5px",
-                            color: "rgba(15,120,142,0.8)",
+                            color: "rgba(10, 95, 224, 0.8)",
                           }}
                         />
                       ) : (
                         <CalendarOutlined
                           style={{
                             marginRight: "5px",
-                            color: "rgba(15,120,142,0.5)",
+                            color: "rgba(10, 95, 224, 0.05)",
                           }}
                         />
                       )

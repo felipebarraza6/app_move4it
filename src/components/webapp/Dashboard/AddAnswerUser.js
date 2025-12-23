@@ -148,16 +148,16 @@ const AddAnswerUser = ({ state, disabledAction, updateActivityState }) => {
               size="small"
               hoverable
               style={{
-                backgroundColor: "rgba(230,184,0,0.15)",
-                border: "1px solid rgba(230,184,0,0.3)",
+                backgroundColor: "rgba(18, 227, 194, 0.15)",
+                border: "1px solid rgba(18, 227, 194, 0.03)",
                 textAlign: "center",
                 width: "120px",
               }}
             >
               <PlusCircleOutlined
-                style={{ marginRight: "5px", color: "rgba(230,184,0,0.9)" }}
+                style={{ marginRight: "5px", color: "rgba(18, 227, 194, 0.9)" }}
               />{" "}
-              <span style={{ color: "rgba(60,87,93,0.9)", fontWeight: "500" }}>
+              <span style={{ color: "#052240", fontWeight: "500" }}>
                 {(state.activity.points / quantity_participants).toFixed(2)}{" "}
                 puntos
               </span>
@@ -166,15 +166,15 @@ const AddAnswerUser = ({ state, disabledAction, updateActivityState }) => {
               size="small"
               hoverable
               style={{
-                backgroundColor: "rgba(15,120,142,0.1)",
-                border: "1px solid rgba(15,120,142,0.3)",
+                backgroundColor: "rgba(10, 95, 224, 0.1)",
+                border: "1px solid rgba(10, 95, 224, 0.3)",
                 textAlign: "center",
               }}
             >
               <FilterFilled
-                style={{ marginRight: "5px", color: "rgba(15,120,142,0.8)" }}
+                style={{ marginRight: "5px", color: "#0A5FE0" }}
               />
-              <span style={{ color: "rgba(60,87,93,0.9)", fontWeight: "500" }}>
+              <span style={{ color: "#052240", fontWeight: "500" }}>
                 {state.activity.category.name}
               </span>
             </Card>
@@ -256,13 +256,13 @@ const AddAnswerUser = ({ state, disabledAction, updateActivityState }) => {
                     size="small"
                     style={{
                       width: "100%",
-                      backgroundColor: "rgba(15,120,142,0.05)",
-                      border: "1px solid rgba(15,120,142,0.2)",
+                      backgroundColor: "rgba(10, 95, 224, 0.05)",
+                      border: "1px solid rgba(10, 95, 224, 0.2)",
                     }}
                   >
                     <Button
                       size="large"
-                      style={{ color: "rgba(15,120,142,0.8)" }}
+                      style={{ color: "rgba(10, 95, 224, 0.8)" }}
                       type="link"
                     >
                       <Flex gap="small" align="center">

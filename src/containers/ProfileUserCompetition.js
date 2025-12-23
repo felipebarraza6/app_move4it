@@ -43,14 +43,14 @@ const ProfileUserCompetition = () => {
                   width: "100%",
                   textAlign: "center",
                   padding: "40px 20px",
-                  color: "rgba(15,120,142,0.6)",
+                  color: "rgba(10, 95, 224, 0.6)",
                   fontSize: "14px",
                   fontStyle: "italic",
                   background:
-                    "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-                  border: "1px solid rgba(15,120,142,0.2)",
+                    "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+                  border: "1px solid rgba(10, 95, 224, 0.2)",
                   borderRadius: "16px",
-                  boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
+                  boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
                 }}
               >
                 Los datos estarán disponibles después de que termine el primer

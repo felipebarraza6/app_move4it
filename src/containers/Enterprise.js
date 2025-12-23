@@ -68,14 +68,14 @@ const Enterpise = () => {
                         width: "100%",
                         textAlign: "center",
                         padding: "40px 20px",
-                        color: "rgba(15,120,142,0.6)",
+                        color: "rgba(10, 95, 224, 0.6)",
                         fontSize: "14px",
                         fontStyle: "italic",
                         background:
-                          "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-                        border: "1px solid rgba(15,120,142,0.2)",
+                          "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+                        border: "1px solid rgba(10, 95, 224, 0.2)",
                         borderRadius: "16px",
-                        boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
+                        boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
                       }}
                     >
                       Los datos estarán disponibles después de que termine el
@@ -157,7 +157,7 @@ const Enterpise = () => {
                       width: "50%",
                       render: (text) => (
                         <span style={{ fontSize: "15px" }}>
-                          <CalendarTwoTone twoToneColor="rgba(15,120,142,0.8)" />{" "}
+                          <CalendarTwoTone twoToneColor="rgba(10, 95, 224, 0.8)" />{" "}
                           {text} Días
                         </span>
                       ),
@@ -170,8 +170,8 @@ const Enterpise = () => {
               {competitionEnded && (
                 <Alert
                   style={{
-                    backgroundColor: "rgba(15,120,142,0.1)",
-                    border: "1px solid rgba(15,120,142,0.3)",
+                    backgroundColor: "rgba(10, 95, 224, 0.1)",
+                    border: "1px solid rgba(10, 95, 224, 0.3)",
                   }}
                   message={`La competencia terminó el ${endDate.toLocaleDateString(
                     "es-ES",
@@ -188,7 +188,7 @@ const Enterpise = () => {
                     <CheckCircleFilled
                       style={{
                         background:
-                          "linear-gradient(100deg, rgb(15, 120, 142) 0%, rgba(77, 180, 202, 0.8) 50%, rgb(60, 87, 93) 100%)",
+                          "linear-gradient(135deg, rgba(10, 95, 224, 0.95) 0%, rgba(10, 140, 207, 0.9) 50%, rgba(18, 227, 194, 0.95) 100%)",
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
                         backgroundClip: "text",

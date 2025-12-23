@@ -218,7 +218,7 @@ const Team = () => {
           <Flex align="center" gap="small" justify="center">
             <span
               style={{
-                color: "rgba(230,184,0,0.9)",
+                color: "rgba(18, 227, 194, 0.9)",
                 fontWeight: "700",
                 fontSize: "14px",
               }}
@@ -239,7 +239,7 @@ const Team = () => {
           <Flex align="center" gap="small" justify="center">
             <span
               style={{
-                color: "rgba(15,120,142,0.8)",
+                color: "rgba(10, 95, 224, 0.8)",
                 fontWeight: "700",
                 fontSize: "14px",
               }}
@@ -281,8 +281,8 @@ const Team = () => {
             icon={<ClockCircleOutlined />}
             style={{
               marginBottom: "16px",
-              backgroundColor: "rgba(230,184,0,0.1)",
-              border: "1px solid rgba(230,184,0,0.3)",
+              backgroundColor: "rgba(18, 227, 194, 0.1)",
+              border: "1px solid rgba(18, 227, 194, 0.03)",
             }}
           />
         )}
@@ -305,7 +305,7 @@ const Team = () => {
               <CheckCircleFilled
                 style={{
                   background:
-                    "linear-gradient(100deg, rgb(15, 120, 142) 0%, rgba(77, 180, 202, 0.8) 50%, rgb(60, 87, 93) 100%)",
+                    "linear-gradient(135deg, rgba(10, 95, 224, 0.95) 0%, rgba(10, 140, 207, 0.9) 50%, rgba(18, 227, 194, 0.95) 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
@@ -315,8 +315,8 @@ const Team = () => {
             }
             style={{
               marginBottom: "16px",
-              backgroundColor: "rgba(15,120,142,0.1)",
-              border: "1px solid rgba(15,120,142,0.3)",
+              backgroundColor: "rgba(10, 95, 224, 0.1)",
+              border: "1px solid rgba(10, 95, 224, 0.3)",
             }}
           />
         )}
@@ -340,14 +340,14 @@ const Team = () => {
                     width: "100%",
                     textAlign: "center",
                     padding: "40px 20px",
-                    color: "rgba(15,120,142,0.6)",
+                    color: "rgba(10, 95, 224, 0.6)",
                     fontSize: "14px",
                     fontStyle: "italic",
                     background:
-                      "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-                    border: "1px solid rgba(15,120,142,0.2)",
+                      "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+                    border: "1px solid rgba(10, 95, 224, 0.2)",
                     borderRadius: "16px",
-                    boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
+                    boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
                   }}
                 >
                   Los datos del equipo estarán disponibles cuando comience la
@@ -380,14 +380,14 @@ const Team = () => {
                       width: "100%",
                       textAlign: "center",
                       padding: "40px 20px",
-                      color: "rgba(15,120,142,0.6)",
+                      color: "rgba(10, 95, 224, 0.6)",
                       fontSize: "14px",
                       fontStyle: "italic",
                       background:
-                        "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-                      border: "1px solid rgba(15,120,142,0.2)",
+                        "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+                      border: "1px solid rgba(10, 95, 224, 0.2)",
                       borderRadius: "16px",
-                      boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
+                      boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
                     }}
                   >
                     Los datos de actividad estarán disponibles después de que
@@ -427,14 +427,14 @@ const Team = () => {
                   width: "100%",
                   textAlign: "center",
                   padding: "40px 20px",
-                  color: "rgba(15,120,142,0.6)",
+                  color: "rgba(10, 95, 224, 0.6)",
                   fontSize: "14px",
                   fontStyle: "italic",
                   background:
-                    "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-                  border: "1px solid rgba(15,120,142,0.2)",
+                    "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+                  border: "1px solid rgba(10, 95, 224, 0.2)",
                   borderRadius: "16px",
-                  boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
+                  boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
                 }}
               >
                 Los datos estarán disponibles después de que termine el primer
@@ -450,7 +450,7 @@ const Team = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                color: "rgba(15,120,142,0.8)",
+                color: "rgba(10, 95, 224, 0.8)",
                 fontWeight: "600",
               }}
             >
@@ -464,10 +464,10 @@ const Team = () => {
           }
           style={{
             background:
-              "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-            border: "1px solid rgba(15,120,142,0.2)",
+              "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+            border: "1px solid rgba(10, 95, 224, 0.2)",
             borderRadius: "12px",
-            boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
+            boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
             marginTop: "16px",
           }}
         >
@@ -493,7 +493,7 @@ const Team = () => {
                   style={{
                     textAlign: "center",
                     padding: "40px 20px",
-                    color: "rgba(15,120,142,0.6)",
+                    color: "rgba(10, 95, 224, 0.6)",
                     fontSize: "14px",
                     fontStyle: "italic",
                   }}
@@ -525,7 +525,7 @@ const Team = () => {
                     cursor: "pointer",
                     backgroundColor:
                       index === selectedIntervalIndex
-                        ? "rgba(15,120,142,0.1)"
+                        ? "rgba(10, 95, 224, 0.1)"
                         : "transparent",
                   },
                 })}
@@ -546,15 +546,15 @@ const Team = () => {
                   return (
                     <Table.Summary.Row
                       style={{
-                        backgroundColor: "rgba(15,120,142,0.15)",
+                        backgroundColor: "rgba(10, 95, 224, 0.15)",
                         fontWeight: "700",
-                        borderTop: "3px solid rgba(15,120,142,0.4)",
+                        borderTop: "3px solid rgba(10, 95, 224, 0.4)",
                       }}
                     >
                       <Table.Summary.Cell colSpan={3}>
                         <span
                           style={{
-                            color: "rgba(15,120,142,0.9)",
+                            color: "rgba(10, 95, 224, 0.9)",
                             fontWeight: "700",
                             fontSize: "15px",
                           }}
@@ -569,7 +569,7 @@ const Team = () => {
                         <Flex align="center" gap="small" justify="center">
                           <span
                             style={{
-                              color: "rgba(230,184,0,1)",
+                              color: "rgba(18, 227, 194,1)",
                               fontWeight: "700",
                               fontSize: "16px",
                             }}

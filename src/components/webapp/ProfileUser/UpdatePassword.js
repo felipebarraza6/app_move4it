@@ -28,9 +28,10 @@ const UpdatePassword = () => {
       title={
         <div
           style={{
-            color: "rgba(15,120,142,0.8)",
+            color: "#0A5FE0",
             fontWeight: "600",
             fontSize: "18px",
+            fontFamily: "'Montserrat', sans-serif",
             display: "flex",
             alignItems: "center",
             gap: "8px"
@@ -42,10 +43,10 @@ const UpdatePassword = () => {
       }
       style={{
         background:
-          "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-        border: "1px solid rgba(15,120,142,0.2)",
+          "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+        border: "1px solid rgba(10, 95, 224, 0.2)",
         borderRadius: "12px",
-        boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
+        boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
       }}
     >
       <Form form={form} onFinish={onFinish} layout="vertical">
@@ -55,7 +56,7 @@ const UpdatePassword = () => {
             placeholder="Ingresa tu nueva contraseña"
             style={{
               borderRadius: "8px",
-              border: "1px solid rgba(15,120,142,0.3)",
+              border: "1px solid rgba(10, 95, 224, 0.3)",
             }}
           />
         </Item>
@@ -65,7 +66,7 @@ const UpdatePassword = () => {
             placeholder="Confirma tu nueva contraseña"
             style={{
               borderRadius: "8px",
-              border: "1px solid rgba(15,120,142,0.3)",
+              border: "1px solid rgba(10, 95, 224, 0.3)",
             }}
           />
         </Item>
@@ -75,12 +76,12 @@ const UpdatePassword = () => {
             style={{
               ...styles.btn,
               background:
-                "linear-gradient(135deg, rgba(15,120,142,0.8) 0%, rgba(15,120,142,1) 100%)",
+                "linear-gradient(135deg, rgba(10, 95, 224, 0.9) 0%, rgba(18, 227, 194, 0.9) 100%)",
               border: "none",
               borderRadius: "8px",
               height: "40px",
               fontWeight: "600",
-              boxShadow: "0 4px 12px rgba(15,120,142,0.3)",
+              boxShadow: "0 4px 12px rgba(10, 95, 224, 0.3)",
             }}
             htmlType="submit"
           >
@@ -93,8 +94,8 @@ const UpdatePassword = () => {
               margin: "0px 10px 10px 0px",
               borderRadius: "8px",
               height: "40px",
-              border: "1px solid rgba(15,120,142,0.3)",
-              color: "rgba(15,120,142,0.8)",
+              border: "1px solid rgba(10, 95, 224, 0.3)",
+              color: "#0A5FE0",
             }}
           >
             Cancelar

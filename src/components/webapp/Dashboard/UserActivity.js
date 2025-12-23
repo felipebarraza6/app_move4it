@@ -74,7 +74,17 @@ const UserActivity = () => {
   );
 
   return (
-    <Card title="Indicadores competencía" style={styles.card}>
+    <Card 
+      title={
+        <span style={{ color: "#0A5FE0", fontFamily: "'Montserrat', sans-serif", fontWeight: 600 }}>
+          Indicadores competencía
+        </span>
+      }
+      headStyle={{
+        borderBottom: "1px solid rgba(10, 95, 224, 0.2)",
+      }}
+      style={styles.card}
+    >
       <Flex gap={"small"} align="center" style={{ marginTop: "50px" }}>
         <Descriptions bordered style={{ width: "300px" }}>
           <Descriptions.Item label="Pruebas competencia " span={3}>
@@ -98,10 +108,10 @@ const UserActivity = () => {
 
 const styles = {
   card: {
-    background: "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-    border: "1px solid rgba(15,120,142,0.2)",
+    background: "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+    border: "1px solid rgba(10, 95, 224, 0.2)",
     borderRadius: "8px",
-    boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
+    boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
   },
 };
 

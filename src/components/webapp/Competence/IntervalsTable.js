@@ -71,9 +71,9 @@ const IntervalsTable = () => {
         <Card style={{ marginBottom: "16px" }}>
           <Tag
             style={{
-              backgroundColor: "rgba(230,184,0,0.1)",
-              color: "rgba(230,184,0,0.9)",
-              border: "1px solid rgba(230,184,0,0.3)",
+              backgroundColor: "rgba(18, 227, 194, 0.1)",
+              color: "rgba(18, 227, 194, 0.9)",
+              border: "1px solid rgba(18, 227, 194, 0.03)",
             }}
           >
             {`La competencia comenzará el ${startDate.toLocaleDateString(
@@ -94,10 +94,10 @@ const IntervalsTable = () => {
             key={intervals[currentInterval].interval_id}
             style={{
               background:
-                "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-              border: "1px solid rgba(15,120,142,0.2)",
+                "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+              border: "1px solid rgba(10, 95, 224, 0.2)",
               borderRadius: "16px",
-              boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
+              boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
               marginBottom: "16px",
             }}
           >
@@ -122,9 +122,9 @@ const IntervalsTable = () => {
                           disabled={currentInterval >= intervals.length - 1}
                           onClick={previousInterval}
                           style={{
-                            backgroundColor: "rgba(15,120,142,0.1)",
-                            borderColor: "rgba(15,120,142,0.3)",
-                            color: "rgba(15,120,142,0.8)",
+                            backgroundColor: "rgba(10, 95, 224, 0.1)",
+                            borderColor: "rgba(10, 95, 224, 0.3)",
+                            color: "rgba(10, 95, 224, 0.8)",
                           }}
                         >
                           <ArrowLeftOutlined />
@@ -160,14 +160,14 @@ const IntervalsTable = () => {
                         <div
                           style={{
                             fontSize: "12px",
-                            backgroundColor: "rgba(15,120,142,0.1)",
+                            backgroundColor: "rgba(10, 95, 224, 0.1)",
                             padding: "12px 16px",
                             marginTop: "8px",
                             marginBottom: "8px",
                             borderRadius: "8px",
-                            color: "rgba(15,120,142,0.8)",
+                            color: "rgba(10, 95, 224, 0.8)",
                             fontWeight: "600",
-                            border: "1px solid rgba(15,120,142,0.3)",
+                            border: "1px solid rgba(10, 95, 224, 0.3)",
                             textAlign: "center",
                             minWidth: "80px",
                           }}
@@ -209,9 +209,9 @@ const IntervalsTable = () => {
                           disabled={currentInterval === 0}
                           onClick={nextInterval}
                           style={{
-                            backgroundColor: "rgba(15,120,142,0.1)",
-                            borderColor: "rgba(15,120,142,0.3)",
-                            color: "rgba(15,120,142,0.8)",
+                            backgroundColor: "rgba(10, 95, 224, 0.1)",
+                            borderColor: "rgba(10, 95, 224, 0.3)",
+                            color: "rgba(10, 95, 224, 0.8)",
                           }}
                         >
                           <div style={{ fontSize: "10px", marginRight: "5px" }}>
@@ -253,7 +253,7 @@ const IntervalsTable = () => {
                 <Text
                   style={{
                     fontSize: "18px",
-                    color: "rgba(15,120,142,0.8)",
+                    color: "rgba(10, 95, 224, 0.8)",
                     fontWeight: "600",
                   }}
                 >
@@ -278,8 +278,8 @@ const IntervalsTable = () => {
                     <List.Item>
                       <p
                         style={{
-                          color: "rgba(15,120,142,0.8)",
-                          border: "1px solid rgba(15,120,142,0.3)",
+                          color: "rgba(10, 95, 224, 0.8)",
+                          border: "1px solid rgba(10, 95, 224, 0.3)",
                           borderRadius: "5px",
                           textAlign: "center",
                           padding: "2px",
@@ -302,10 +302,10 @@ const IntervalsTable = () => {
             key={intervals[currentInterval].interval_id}
             style={{
               background:
-                "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-              border: "1px solid rgba(15,120,142,0.2)",
+                "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+              border: "1px solid rgba(10, 95, 224, 0.2)",
               borderRadius: "16px",
-              boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
+              boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
             }}
           >
             <Descriptions
@@ -315,7 +315,7 @@ const IntervalsTable = () => {
                 <Text
                   style={{
                     fontSize: "18px",
-                    color: "rgba(15,120,142,0.8)",
+                    color: "rgba(10, 95, 224, 0.8)",
                     fontWeight: "600",
                   }}
                 >
@@ -334,9 +334,9 @@ const IntervalsTable = () => {
                 {sourcesActive && (
                   <Tag
                     style={{
-                      backgroundColor: "rgba(15,120,142,0.1)",
-                      color: "rgba(15,120,142,0.8)",
-                      border: "1px solid rgba(15,120,142,0.3)",
+                      backgroundColor: "rgba(10, 95, 224, 0.1)",
+                      color: "rgba(10, 95, 224, 0.8)",
+                      border: "1px solid rgba(10, 95, 224, 0.3)",
                     }}
                   >
                     {intervals[currentInterval].start_date}
@@ -354,9 +354,9 @@ const IntervalsTable = () => {
                 {sourcesActive && (
                   <Tag
                     style={{
-                      backgroundColor: "rgba(15,120,142,0.1)",
-                      color: "rgba(15,120,142,0.8)",
-                      border: "1px solid rgba(15,120,142,0.3)",
+                      backgroundColor: "rgba(10, 95, 224, 0.1)",
+                      color: "rgba(10, 95, 224, 0.8)",
+                      border: "1px solid rgba(10, 95, 224, 0.3)",
                     }}
                   >
                     {intervals[currentInterval].end_date}
@@ -380,8 +380,8 @@ const IntervalsTable = () => {
                     <List.Item>
                       <p
                         style={{
-                          color: "rgba(15,120,142,0.8)",
-                          border: "1px solid rgba(15,120,142,0.3)",
+                          color: "rgba(10, 95, 224, 0.8)",
+                          border: "1px solid rgba(10, 95, 224, 0.3)",
                           borderRadius: "5px",
                           textAlign: "center",
                           padding: "2px",

@@ -97,8 +97,8 @@ const CompetitionSummary = () => {
   return (
     <Card
       title={
-        <Flex gap="small">
-          <TrophyFilled style={styles.iconThrophy} /> Competencía "
+        <Flex gap="small" style={{ color: "#0A5FE0", fontFamily: "'Montserrat', sans-serif", fontWeight: 600 }}>
+          <TrophyFilled style={{ ...styles.iconThrophy, color: "#12E3C2" }} /> Competencía "
           {name_competition}"
         </Flex>
       }
@@ -108,7 +108,7 @@ const CompetitionSummary = () => {
       <Flex gap="medium" justify="space-between" align="center">
         <Flex vertical gap="small" style={{ minWidth: "120px" }}>
           <Flex align="center" gap="small">
-            <TeamOutlined style={{ color: "rgba(15,120,142,0.8)" }} />
+            <TeamOutlined style={{ color: "#0A5FE0" }} />
             <span style={{ fontSize: "14px", color: "#666" }}>Equipo</span>
           </Flex>
           <span style={{ fontSize: "16px", fontWeight: "500" }}>
@@ -120,15 +120,15 @@ const CompetitionSummary = () => {
           <div
             style={{
               padding: "6px 10px",
-              backgroundColor: "rgba(230,184,0,0.1)",
-              border: "1px solid rgba(230,184,0,0.3)",
+              backgroundColor: "rgba(18, 227, 194, 0.1)",
+              border: "1px solid rgba(18, 227, 194, 0.03)",
               borderRadius: "8px",
               fontSize: "11px",
               maxWidth: "180px",
               lineHeight: "1.3",
             }}
           >
-            <div style={{ color: "rgba(230,184,0,0.9)", fontWeight: "500" }}>
+            <div style={{ color: "#12E3C2", fontWeight: "500" }}>
               ⚠️ Comienza el{" "}
               {startDate.toLocaleDateString("es-ES", {
                 day: "2-digit",
@@ -137,7 +137,8 @@ const CompetitionSummary = () => {
             </div>
             <div
               style={{
-                color: "rgba(60,87,93,0.7)",
+                color: "#052240",
+                opacity: 0.7,
                 fontSize: "10px",
                 marginTop: "1px",
               }}
@@ -150,8 +151,8 @@ const CompetitionSummary = () => {
             <div
               style={{
                 padding: "4px 8px",
-                backgroundColor: "rgba(15,120,142,0.1)",
-                border: "1px solid rgba(15,120,142,0.3)",
+                backgroundColor: "rgba(10, 95, 224, 0.1)",
+                border: "1px solid rgba(10, 95, 224, 0.3)",
                 borderRadius: "8px",
                 fontSize: "10px",
                 maxWidth: "160px",
@@ -159,9 +160,9 @@ const CompetitionSummary = () => {
                 marginBottom: "6px",
               }}
             >
-              <div style={{ color: "rgba(15,120,142,0.9)", fontWeight: "500" }}>
+              <div style={{ color: "#0A5FE0", fontWeight: "600" }}>
                 <CalendarFilled
-                  style={{ marginRight: "4px", color: "rgba(15,120,142,0.9)" }}
+                  style={{ marginRight: "4px", color: "#0A5FE0" }}
                 />{" "}
                 Terminó el{" "}
                 {endDate.toLocaleDateString("es-ES", {
@@ -185,7 +186,7 @@ const CompetitionSummary = () => {
                   style={{
                     fontSize: "14px",
                     fontWeight: "600",
-                    color: "rgba(15,120,142,0.8)",
+                    color: "#0A5FE0",
                   }}
                 >
                   <FlagOutlined style={{ marginRight: "4px" }} />
@@ -206,7 +207,7 @@ const CompetitionSummary = () => {
                   style={{
                     fontSize: "14px",
                     fontWeight: "600",
-                    color: "rgba(15,120,142,0.8)",
+                    color: "#0A5FE0",
                   }}
                 >
                   <FieldNumberOutlined style={{ marginRight: "4px" }} />
@@ -243,14 +244,14 @@ const styles = {
   },
   card: {
     background:
-      "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-    border: "1px solid rgba(15,120,142,0.2)",
+      "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+    border: "1px solid rgba(10, 95, 224, 0.2)",
     borderRadius: "8px",
-    boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
+    boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
   },
   iconThrophy: {
     fontSize: "20px",
-    color: "#e6b800",
+    color: "#12E3C2",
   },
 };
 

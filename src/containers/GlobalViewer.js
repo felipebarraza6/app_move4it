@@ -105,7 +105,7 @@ const GlobalViewer = () => {
                   >
                     <Flex align="top" style={{ width: "100%" }}>
                       <Tag color="#d4b106">{item.position}</Tag>
-                      <Tag color="#0f788e" style={{ width: "100px" }}>
+                      <Tag color="#0A5FE0" style={{ width: "100px" }}>
                         {item.name}
                       </Tag>
                       <Tag
@@ -195,7 +195,7 @@ const GlobalViewer = () => {
                   </Flex>
                   <Flex align="top">
                     <Tag color="#d4b106">#</Tag>
-                    <Tag color="#0f788e" style={{ width: "100px" }}>
+                    <Tag color="#0A5FE0" style={{ width: "100px" }}>
                       Equipo
                     </Tag>
                     <Tag
@@ -220,17 +220,17 @@ const GlobalViewer = () => {
 const cardStyle = {
   width: "450px",
   background:
-    "linear-gradient(0deg, rgba(15,120,142,0.056481967787114895) 0%, rgba(197,239,255,0.1153054971988795) 35%, rgba(60,87,93,1) 100%)",
+    "linear-gradient(135deg, rgba(10, 95, 224, 0.08) 0%, rgba(10, 140, 207, 0.12) 50%, rgba(18, 227, 194, 0.08) 100%)",
 };
 
 const buttonStyle = {
-  backgroundColor: "#0f788e",
+  backgroundColor: "#0A5FE0",
   color: "white",
-  borderColor: "#0f788e",
+  borderColor: "#0A5FE0",
 };
 
 const dropdownStyle = {
-  backgroundColor: "#0f788e",
+  backgroundColor: "#0A5FE0",
   color: "white",
   width: "10%",
 };
@@ -238,7 +238,7 @@ const dropdownStyle = {
 const detailCardStyle = {
   width: "650px",
   background:
-    "linear-gradient(50deg, rgba(15,120,142,0.056481967787114895) 0%, rgba(197,239,255,0.1153054971988795) 35%, rgba(60,87,93,1) 100%)",
+    "linear-gradient(135deg, rgba(10, 95, 224, 0.08) 0%, rgba(10, 140, 207, 0.12) 50%, rgba(18, 227, 194, 0.08) 100%)",
 };
 
 export default GlobalViewer;

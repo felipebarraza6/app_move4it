@@ -34,7 +34,7 @@ const MyData = () => {
       style={{
         width: isMobile ? "100%" : "50%",
         background:
-          "linear-gradient(31deg, rgba(177,206,223,1) 0%, rgba(147,156,162,0.2805716036414566) 100%)",
+          "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
       }}
     >
       <Descriptions bordered size="small">

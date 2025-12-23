@@ -88,9 +88,12 @@ const Dashboard = () => {
   }, []); // Remove resizeTo dependency as it's not needed
 
   const last_competence_end =
-    state.user.enterprise_competition_overflow.last_competence.end_date;
+    state.user?.enterprise_competition_overflow?.last_competence?.end_date;
 
   const active_competence = () => {
+    if (!last_competence_end) {
+      return false;
+    }
     const today = new Date().toISOString().split("T")[0];
     if (last_competence_end < today) {
       return false;
@@ -111,27 +114,27 @@ const Dashboard = () => {
         <CompetitionSummary />
       </Flex>
       <Flex justify="center" vertical gap="large">
-        {active_competence() ? (
+        {active_competence() && state.user?.enterprise_competition_overflow?.last_competence ? (
           <>
             <UserChallenge
               challengers={
                 state.user.enterprise_competition_overflow.last_competence.stats
-                  .current_interval_data
+                  ?.current_interval_data
               }
               pagination={false}
             />
             <MyTeamActivity
               team_data={
                 state.user.enterprise_competition_overflow.last_competence.stats
-                  .current_interval_data?.my_group
+                  ?.current_interval_data?.my_group
               }
             />
           </>
-        ) : (
+        ) : last_competence_end ? (
           (() => {
             const startDate = parseDateYMDLocal(
-              state.user.enterprise_competition_overflow.last_competence
-                .start_date
+              state.user.enterprise_competition_overflow?.last_competence
+                ?.start_date
             );
             const endDate = parseDateYMDLocal(last_competence_end);
             const today = normalizeDateOnly(new Date());
@@ -171,7 +174,7 @@ const Dashboard = () => {
                     <CheckCircleFilled
                       style={{
                         background:
-                          "linear-gradient(100deg, rgb(15, 120, 142) 0%, rgba(77, 180, 202, 0.8) 50%, rgb(60, 87, 93) 100%)",
+                          "linear-gradient(135deg, rgba(10, 95, 224, 0.95) 0%, rgba(10, 140, 207, 0.9) 50%, rgba(18, 227, 194, 0.95) 100%)",
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
                         backgroundClip: "text",
@@ -183,6 +186,13 @@ const Dashboard = () => {
               );
             }
           })()
+        ) : (
+          <Alert
+            message="No hay competencia activa"
+            description="No se encontró información de competencia disponible."
+            type="info"
+            showIcon
+          />
         )}
       </Flex>
 

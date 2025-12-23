@@ -37,10 +37,10 @@ const Blog = ({ type }) => {
       title={type ? type.toUpperCase() : "Noticias"}
       style={{
         marginTop: "20px",
-        background: "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-        border: "1px solid rgba(15,120,142,0.2)",
+        background: "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+        border: "1px solid rgba(10, 95, 224, 0.2)",
         borderRadius: "8px",
-        boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
+        boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
       }}
       extra={
         <Button
@@ -48,8 +48,8 @@ const Blog = ({ type }) => {
           type="primary"
           onClick={() => navigate("/blog")}
           style={{
-            background: "rgba(15,120,142,1)",
-            border: "1px solid rgba(230,184,0,0.4)",
+            background: "#0A5FE0",
+            border: "1px solid rgba(18, 227, 194, 0.4)",
             borderRadius: "6px"
           }}
         >
@@ -127,10 +127,10 @@ const styles = {
   card: {
     width: "250px",
     marginBottom: "20px",
-    background: "linear-gradient(135deg, rgba(15,120,142,0.03) 0%, rgba(230,184,0,0.02) 100%)",
-    border: "1px solid rgba(15,120,142,0.15)",
+    background: "linear-gradient(135deg, rgba(10, 95, 224, 0.3) 0%, rgba(18, 227, 194, 0.2) 100%)",
+    border: "1px solid rgba(10, 95, 224, 0.15)",
     borderRadius: "8px",
-    boxShadow: "0 2px 8px rgba(15,120,142,0.08)",
+    boxShadow: "0 2px 8px rgba(10, 95, 224, 0.8)",
   },
   img: {
     width: "100%",

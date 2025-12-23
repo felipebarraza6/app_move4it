@@ -12,13 +12,13 @@ const Welcome = () => {
   return (
     <Card style={styles.card}>
       <Flex gap="small" vertical>
-        <div style={{ color: "rgba(15,120,142,0.8)" }}>
+        <div style={{ color: "#0A5FE0", fontFamily: "'Montserrat', sans-serif", fontWeight: 600 }}>
           Hola, {capitalizeFirstLetter(state.user.first_name)}{" "}
           {capitalizeFirstLetter(state.user.last_name)}
         </div>
         <div>
           <span style={{ color: "#1a1a1a" }}>Bienvenido a </span>
-          <span style={{ color: "#e6b800", fontWeight: "600" }}>Move4it</span>
+          <span style={{ color: "#12E3C2", fontWeight: "600" }}>Move4IA</span>
         </div>
       </Flex>
     </Card>
@@ -30,11 +30,11 @@ const styles = {
     fontSize: "15px",
   },
   card: {
-    background: "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
+    background: "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
     fontSize: "17px",
-    border: "1px solid rgba(15,120,142,0.2)",
+    border: "1px solid rgba(10, 95, 224, 0.2)",
     borderRadius: "8px",
-    boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
+    boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
     color: "#1a1a1a",
   },
 };

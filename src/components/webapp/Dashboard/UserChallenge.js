@@ -102,10 +102,10 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
               size={window.innerWidth < 768 ? "small" : "large"}
               onClick={showModal}
               style={{
-                background: "rgba(15,120,142,1)",
-                border: "1px solid rgba(230,184,0,0.4)",
+                background: "#0A5FE0",
+                border: "1px solid rgba(18, 227, 194, 0.4)",
                 borderRadius: "6px",
-                boxShadow: "0 2px 8px rgba(15,120,142,0.3)",
+                boxShadow: "0 2px 8px rgba(10, 95, 224, 0.3)",
               }}
               icon={
                 state.is_completed ? (
@@ -146,7 +146,7 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
         title={
           <div
             style={{
-              color: "rgba(15,120,142,0.8)",
+              color: "#0A5FE0",
               fontWeight: "600",
               fontSize: "18px",
               display: "flex",
@@ -170,8 +170,8 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
             style={{
               borderRadius: "8px",
               height: "40px",
-              border: "1px solid rgba(15,120,142,0.3)",
-              color: "rgba(15,120,142,0.8)",
+              border: "1px solid rgba(10, 95, 224, 0.3)",
+              color: "#0A5FE0",
               fontWeight: "500",
             }}
           >
@@ -186,12 +186,12 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
             disabled={loading}
             style={{
               background:
-                "linear-gradient(135deg, rgba(15,120,142,0.8) 0%, rgba(15,120,142,1) 100%)",
+                "linear-gradient(135deg, rgba(10, 95, 224, 0.9) 0%, rgba(18, 227, 194, 0.9) 100%)",
               border: "none",
               borderRadius: "8px",
               height: "40px",
               fontWeight: "600",
-              boxShadow: "0 4px 12px rgba(15,120,142,0.3)",
+              boxShadow: "0 4px 12px rgba(10, 95, 224, 0.3)",
             }}
           >
             Enviar
@@ -246,16 +246,16 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
               size="small"
               hoverable
               style={{
-                backgroundColor: "rgba(230,184,0,0.15)",
-                border: "1px solid rgba(230,184,0,0.3)",
+                backgroundColor: "rgba(18, 227, 194, 0.15)",
+                border: "1px solid rgba(18, 227, 194, 0.03)",
                 textAlign: "center",
                 width: "120px",
               }}
             >
               <PlusCircleOutlined
-                style={{ marginRight: "5px", color: "rgba(230,184,0,0.9)" }}
+                style={{ marginRight: "5px", color: "#12E3C2" }}
               />{" "}
-              <span style={{ color: "rgba(60,87,93,0.9)", fontWeight: "500" }}>
+              <span style={{ color: "#052240", fontWeight: "600" }}>
                 {(state.activity.points / quantity_participants).toFixed(2)}{" "}
                 puntos
               </span>
@@ -264,15 +264,15 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
               size="small"
               hoverable
               style={{
-                backgroundColor: "rgba(15,120,142,0.1)",
-                border: "1px solid rgba(15,120,142,0.3)",
+                backgroundColor: "rgba(10, 95, 224, 0.1)",
+                border: "1px solid rgba(10, 95, 224, 0.3)",
                 textAlign: "center",
               }}
             >
               <FilterFilled
-                style={{ marginRight: "5px", color: "rgba(15,120,142,0.8)" }}
+                style={{ marginRight: "5px", color: "#0A5FE0" }}
               />
-              <span style={{ color: "rgba(60,87,93,0.9)", fontWeight: "500" }}>
+              <span style={{ color: "#052240", fontWeight: "600" }}>
                 {state.activity.category.name}
               </span>
             </Card>
@@ -347,13 +347,13 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
                     size="small"
                     style={{
                       width: "100%",
-                      backgroundColor: "rgba(15,120,142,0.05)",
-                      border: "1px solid rgba(15,120,142,0.2)",
+                      backgroundColor: "rgba(10, 95, 224, 0.05)",
+                      border: "1px solid rgba(10, 95, 224, 0.2)",
                     }}
                   >
                     <Button
                       size="large"
-                      style={{ color: "rgba(15,120,142,0.8)" }}
+                      style={{ color: "#0A5FE0" }}
                       type="link"
                     >
                       <Flex gap="small" align="center">
@@ -449,9 +449,9 @@ const UserChallenge = ({ challengers }) => {
       render: (state) => (
         <Tag
           style={{
-            backgroundColor: "rgba(15,120,142,0.1)",
-            color: "rgba(15,120,142,0.8)",
-            border: "1px solid rgba(15,120,142,0.3)",
+            backgroundColor: "rgba(10, 95, 224, 0.1)",
+            color: "#0A5FE0",
+            border: "1px solid rgba(10, 95, 224, 0.3)",
           }}
         >
           {state.activity.category.name}
@@ -477,9 +477,9 @@ const UserChallenge = ({ challengers }) => {
           <Tag color="green-inverse"> {x.interval?.start_date || "N/A"}</Tag>
           <Tag
             style={{
-              backgroundColor: "rgba(15,120,142,0.1)",
-              color: "rgba(15,120,142,0.8)",
-              border: "1px solid rgba(15,120,142,0.3)",
+              backgroundColor: "rgba(10, 95, 224, 0.1)",
+              color: "#0A5FE0",
+              border: "1px solid rgba(10, 95, 224, 0.3)",
             }}
           >
             {x.interval?.end_date || "N/A"}
@@ -500,9 +500,9 @@ const UserChallenge = ({ challengers }) => {
       render: (state) => (
         <Tag
           style={{
-            backgroundColor: "rgba(15,120,142,0.1)",
-            color: "rgba(15,120,142,0.8)",
-            border: "1px solid rgba(15,120,142,0.3)",
+            backgroundColor: "rgba(10, 95, 224, 0.1)",
+            color: "#0A5FE0",
+            border: "1px solid rgba(10, 95, 224, 0.3)",
           }}
         >
           {state.interval?.end_date || "N/A"}
@@ -635,12 +635,12 @@ const UserChallenge = ({ challengers }) => {
                 size="small"
                 style={{
                   fontSize: "12px",
-                  backgroundColor: "rgba(15,120,142,0.1)",
+                  backgroundColor: "rgba(10, 95, 224, 0.1)",
                   padding: "8px 12px",
                   borderRadius: "8px",
-                  color: "rgba(15,120,142,0.8)",
+                  color: "#0A5FE0",
                   fontWeight: "600",
-                  border: "1px solid rgba(15,120,142,0.3)",
+                  border: "1px solid rgba(10, 95, 224, 0.3)",
                   textAlign: "center",
                   minWidth: "80px",
                 }}
@@ -648,7 +648,7 @@ const UserChallenge = ({ challengers }) => {
                 <div style={{ textAlign: "center", marginBottom: "4px" }}>
                   <CalendarOutlined
                     style={{
-                      color: "rgba(15,120,142,0.8)",
+                      color: "#0A5FE0",
                       fontSize: "14px",
                     }}
                   />
@@ -780,8 +780,8 @@ const UserChallenge = ({ challengers }) => {
       <Card
         title={
           <Flex gap="small" align="center" justify="space-between">
-            <Flex gap="small">
-              {window.innerWidth > 726 && <OrderedListOutlined />}{" "}
+            <Flex gap="small" style={{ color: "#0A5FE0", fontFamily: "'Montserrat', sans-serif", fontWeight: 600 }}>
+              {window.innerWidth > 726 && <OrderedListOutlined style={{ color: "#0A5FE0" }} />}{" "}
               {location.pathname === "/profile_competition"
                 ? window.innerWidth > 726 && "Tus pruebas en competencía"
                 : "Tus pruebas"}
@@ -789,6 +789,9 @@ const UserChallenge = ({ challengers }) => {
             <Flex>{extra()}</Flex>
           </Flex>
         }
+        headStyle={{
+          borderBottom: "1px solid rgba(10, 95, 224, 0.2)",
+        }}
         style={{
           ...styles.table,
           marginBottom: "16px",
@@ -809,9 +812,9 @@ const UserChallenge = ({ challengers }) => {
               <Flex style={{ marginBottom: "8px" }}>
                 <Tag
                   style={{
-                    backgroundColor: "rgba(230,184,0,0.1)",
-                    color: "rgba(230,184,0,0.9)",
-                    border: "1px solid rgba(230,184,0,0.3)",
+                    backgroundColor: "rgba(18, 227, 194, 0.1)",
+                    color: "rgba(18, 227, 194, 0.9)",
+                    border: "1px solid rgba(18, 227, 194, 0.03)",
                   }}
                 >
                   {`La competencia comenzará el ${startDate.toLocaleDateString(
@@ -830,9 +833,9 @@ const UserChallenge = ({ challengers }) => {
               <Flex style={{ marginBottom: "8px" }}>
                 <Tag
                   style={{
-                    backgroundColor: "rgba(15,120,142,0.1)",
-                    color: "rgba(15,120,142,0.8)",
-                    border: "1px solid rgba(15,120,142,0.3)",
+                    backgroundColor: "rgba(10, 95, 224, 0.1)",
+                    color: "#0A5FE0",
+                    border: "1px solid rgba(10, 95, 224, 0.3)",
                   }}
                 >
                   {`La competencia terminó el ${endDate.toLocaleDateString(
@@ -947,10 +950,10 @@ const styles = {
   table: {
     width: "100%",
     background:
-      "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-    border: "1px solid rgba(15,120,142,0.2)",
+      "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+    border: "1px solid rgba(10, 95, 224, 0.2)",
     borderRadius: "8px",
-    boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
+    boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
   },
 };
 

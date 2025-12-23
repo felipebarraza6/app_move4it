@@ -131,9 +131,10 @@ const FormData = () => {
       title={
         <div
           style={{
-            color: "rgba(15,120,142,0.8)",
+            color: "#0A5FE0",
             fontWeight: "600",
             fontSize: "18px",
+            fontFamily: "'Montserrat', sans-serif",
             display: "flex",
             alignItems: "center",
             gap: "8px",
@@ -145,11 +146,11 @@ const FormData = () => {
       }
       style={{
         background:
-          "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-        border: "1px solid rgba(15,120,142,0.2)",
+          "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+        border: "1px solid rgba(10, 95, 224, 0.2)",
         borderRadius: "12px",
         width: "100%",
-        boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
+        boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
         marginBottom: "20px",
       }}
     >
@@ -186,7 +187,7 @@ const FormData = () => {
             maxLength={12}
             style={{
               borderRadius: "8px",
-              border: "1px solid rgba(15,120,142,0.3)",
+              border: "1px solid rgba(10, 95, 224, 0.3)",
             }}
           />
         </Item>
@@ -195,7 +196,7 @@ const FormData = () => {
             placeholder="Ingresa tu nombre"
             style={{
               borderRadius: "8px",
-              border: "1px solid rgba(15,120,142,0.3)",
+              border: "1px solid rgba(10, 95, 224, 0.3)",
             }}
           />
         </Item>
@@ -204,7 +205,7 @@ const FormData = () => {
             placeholder="Ingresa tu apellido"
             style={{
               borderRadius: "8px",
-              border: "1px solid rgba(15,120,142,0.3)",
+              border: "1px solid rgba(10, 95, 224, 0.3)",
             }}
           />
         </Item>
@@ -213,7 +214,7 @@ const FormData = () => {
             style={{
               width: "100%",
               borderRadius: "8px",
-              border: "1px solid rgba(15,120,142,0.3)",
+              border: "1px solid rgba(10, 95, 224, 0.3)",
             }}
             placeholder="Selecciona tu fecha de nacimiento"
             format="YYYY-MM-DD"
@@ -224,7 +225,7 @@ const FormData = () => {
             placeholder="Ingresa tu número de teléfono"
             style={{
               borderRadius: "8px",
-              border: "1px solid rgba(15,120,142,0.3)",
+              border: "1px solid rgba(10, 95, 224, 0.3)",
             }}
           />
         </Item>
@@ -236,12 +237,12 @@ const FormData = () => {
             htmlType="submit"
             style={{
               background:
-                "linear-gradient(135deg, rgba(15,120,142,0.8) 0%, rgba(15,120,142,1) 100%)",
+                "linear-gradient(135deg, rgba(10, 95, 224, 0.9) 0%, rgba(18, 227, 194, 0.9) 100%)",
               border: "none",
               borderRadius: "8px",
               height: "40px",
               fontWeight: "600",
-              boxShadow: "0 4px 12px rgba(15,120,142,0.3)",
+              boxShadow: "0 4px 12px rgba(10, 95, 224, 0.3)",
             }}
           >
             Actualizar Información

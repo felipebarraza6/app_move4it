@@ -32,7 +32,7 @@ const MyTeam = () => {
         title={
           <div
             style={{
-              color: "rgba(15,120,142,0.8)",
+              color: "#0A5FE0",
               fontWeight: "600",
               fontSize: "16px",
             }}
@@ -43,10 +43,10 @@ const MyTeam = () => {
         style={{
           width: window.innerWidth > 726 ? "300px" : "100%",
           background:
-            "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-          border: "1px solid rgba(15,120,142,0.2)",
+            "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+          border: "1px solid rgba(10, 95, 224, 0.2)",
           borderRadius: "16px",
-          boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
+          boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
         }}
       >
         <Descriptions bordered column={1}>

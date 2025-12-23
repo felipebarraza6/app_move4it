@@ -47,7 +47,7 @@ const Login = () => {
       style={{
         minHeight: "100vh",
         padding: "20px",
-        background: "linear-gradient(169deg, rgba(15,120,142,1) 0%, rgba(122,160,168,1) 35%, rgba(60,87,93,1) 100%)",
+        background: "linear-gradient(135deg, rgba(10, 95, 224, 0.98) 0%, rgba(10, 140, 207, 0.98) 50%, rgba(18, 227, 194, 0.98) 100%)",
       }}
     >
       <Col xl={6} lg={8} md={12} sm={16} xs={22}>
@@ -57,7 +57,7 @@ const Login = () => {
             marginBottom: "20px",
             borderRadius: "16px",
             boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
-            border: "1px solid rgba(230,184,0,0.2)",
+            border: "1px solid rgba(10, 95, 224, 0.2)",
             background: "rgba(255, 255, 255, 0.95)",
             backdropFilter: "blur(10px)"
           }}
@@ -78,9 +78,10 @@ const Login = () => {
               color: "#1a1a1a",
               fontWeight: "600",
               fontSize: "24px",
-              margin: "0 0 8px 0"
+              margin: "0 0 8px 0",
+              fontFamily: "'Montserrat', sans-serif"
             }}>
-              <span style={{ color: "#1a1a1a" }}>Bienve</span><span style={{ color: "#e6b800" }}>nido</span>
+              <span style={{ color: "#1a1a1a" }}>Bienve</span><span style={{ color: "#12E3C2" }}>nido</span>
             </h2>
             <p style={{
               color: "#666",
@@ -101,7 +102,7 @@ const Login = () => {
             >
               <Input
                 type="email"
-                prefix={<MailOutlined style={{ color: "rgba(15,120,142,1)" }} />}
+                prefix={<MailOutlined style={{ color: "#0A5FE0" }} />}
                 placeholder="Correo electrónico"
                 size="large"
                 style={{
@@ -109,7 +110,7 @@ const Login = () => {
                   border: "1px solid #e1e5e9",
                   padding: "12px 16px"
                 }}
-                onFocus={(e) => e.target.style.borderColor = "#e6b800"}
+                onFocus={(e) => e.target.style.borderColor = "#12E3C2"}
                 onBlur={(e) => e.target.style.borderColor = "#e1e5e9"}
               />
             </Form.Item>
@@ -121,7 +122,7 @@ const Login = () => {
               ]}
             >
               <Input.Password
-                prefix={<MdOutlinePassword style={{ color: "rgba(15,120,142,1)" }} />}
+                prefix={<MdOutlinePassword style={{ color: "#0A5FE0" }} />}
                 placeholder="Contraseña"
                 size="large"
                 style={{
@@ -129,7 +130,7 @@ const Login = () => {
                   border: "1px solid #e1e5e9",
                   padding: "12px 16px"
                 }}
-                onFocus={(e) => e.target.style.borderColor = "#e6b800"}
+                onFocus={(e) => e.target.style.borderColor = "#12E3C2"}
                 onBlur={(e) => e.target.style.borderColor = "#e1e5e9"}
               />
             </Form.Item>
@@ -142,13 +143,13 @@ const Login = () => {
                 block
                 size="large"
                 style={{
-                  background: "linear-gradient(169deg, rgba(15,120,142,1) 0%, rgba(122,160,168,1) 35%, rgba(60,87,93,1) 100%)",
-                  border: "1px solid rgba(230,184,0,0.4)",
+                  background: "linear-gradient(135deg, rgba(10, 95, 224, 0.95) 0%, rgba(18, 227, 194, 0.95) 100%)",
+                  border: "1px solid rgba(18, 227, 194, 0.4)",
                   borderRadius: "8px",
                   height: "48px",
                   fontSize: "16px",
-                  fontWeight: "500",
-                  boxShadow: "0 4px 12px rgba(15,120,142,0.4), 0 0 0 1px rgba(230,184,0,0.1)"
+                  fontWeight: "600",
+                  boxShadow: "0 4px 16px rgba(18, 227, 194, 0.4)"
                 }}
               >
                 {loading ? "Iniciando sesión..." : "Iniciar sesión"}
@@ -165,7 +166,7 @@ const Login = () => {
                   color: "#666",
                   height: "40px",
                   borderRadius: "8px",
-                  border: "1px solid rgba(230,184,0,0.2)"
+                  border: "1px solid rgba(10, 95, 224, 0.2)"
                 }}
               >
                 Limpiar campos
@@ -188,7 +189,7 @@ const Login = () => {
           bodyStyle={{ padding: "16px" }}
         >
           <div style={{ color: "#666", fontSize: "12px" }}>
-            Desarrollado por <strong style={{ color: "rgba(15,120,142,1)" }}>fbarraza - dev</strong> 👨‍💻
+            Desarrollado por <strong style={{ color: "#0A5FE0" }}>fbarraza - dev</strong> 👨‍💻
             <br />
             <span style={{ color: "#888" }}>LATAM 🇨🇱</span>
           </div>

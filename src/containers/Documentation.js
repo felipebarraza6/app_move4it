@@ -100,7 +100,7 @@ const Documentation = () => {
     <div
       style={{
         background:
-          "linear-gradient(135deg, rgba(15,120,142,0.02) 0%, rgba(230,184,0,0.01) 100%)",
+          "linear-gradient(135deg, rgba(10, 95, 224, 0.2) 0%, rgba(18, 227, 194, 0.1) 100%)",
         minHeight: "100vh",
         padding: "24px",
       }}
@@ -110,10 +110,10 @@ const Documentation = () => {
         <Card
           style={{
             background:
-              "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-            border: "1px solid rgba(15,120,142,0.2)",
+              "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+            border: "1px solid rgba(10, 95, 224, 0.2)",
             borderRadius: "16px",
-            boxShadow: "0 8px 24px rgba(15,120,142,0.08)",
+            boxShadow: "0 8px 24px rgba(10, 95, 224, 0.8)",
           }}
         >
           <Flex vertical gap="medium" align="center">
@@ -122,7 +122,7 @@ const Documentation = () => {
                 textAlign: "center",
                 fontSize: "16px",
                 margin: 0,
-                color: "rgba(15,120,142,0.7)",
+                color: "rgba(10, 95, 224, 0.7)",
               }}
             >
               Guía completa de todos los módulos y funcionalidades de la
@@ -140,10 +140,10 @@ const Documentation = () => {
                 style={{
                   height: "100%",
                   background:
-                    "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-                  border: "1px solid rgba(15,120,142,0.2)",
+                    "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+                  border: "1px solid rgba(10, 95, 224, 0.2)",
                   borderRadius: "16px",
-                  boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
+                  boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
                   transition: "all 0.3s ease",
                 }}
                 bodyStyle={{ padding: "24px" }}
@@ -154,14 +154,14 @@ const Documentation = () => {
                     <div
                       style={{
                         fontSize: "28px",
-                        color: "rgba(15,120,142,0.8)",
+                        color: "rgba(10, 95, 224, 0.8)",
                         display: "flex",
                         alignItems: "center",
                         padding: "8px",
                         background:
-                          "linear-gradient(135deg, rgba(15,120,142,0.1) 0%, rgba(230,184,0,0.05) 100%)",
+                          "linear-gradient(135deg, rgba(10, 95, 224, 0.1) 0%, rgba(18, 227, 194, 0.5) 100%)",
                         borderRadius: "12px",
-                        border: "1px solid rgba(15,120,142,0.2)",
+                        border: "1px solid rgba(10, 95, 224, 0.2)",
                       }}
                     >
                       {module.icon}
@@ -170,7 +170,7 @@ const Documentation = () => {
                       level={4}
                       style={{
                         margin: 0,
-                        color: "rgba(15,120,142,0.8)",
+                        color: "rgba(10, 95, 224, 0.8)",
                         fontWeight: "600",
                       }}
                     >
@@ -187,7 +187,7 @@ const Documentation = () => {
                   <Paragraph
                     style={{
                       margin: 0,
-                      color: "rgba(15,120,142,0.7)",
+                      color: "rgba(10, 95, 224, 0.7)",
                       fontSize: "14px",
                       lineHeight: "1.6",
                     }}
@@ -200,7 +200,7 @@ const Documentation = () => {
                     <Text
                       strong
                       style={{
-                        color: "rgba(15,120,142,0.8)",
+                        color: "rgba(10, 95, 224, 0.8)",
                         fontSize: "14px",
                         fontWeight: "600",
                       }}
@@ -219,14 +219,14 @@ const Documentation = () => {
                               width: "8px",
                               height: "8px",
                               borderRadius: "50%",
-                              backgroundColor: "rgba(15,120,142,0.6)",
-                              boxShadow: "0 2px 4px rgba(15,120,142,0.2)",
+                              backgroundColor: "rgba(10, 95, 224, 0.6)",
+                              boxShadow: "0 2px 4px rgba(10, 95, 224, 0.2)",
                             }}
                           />
                           <Text
                             style={{
                               fontSize: "13px",
-                              color: "rgba(15,120,142,0.7)",
+                              color: "rgba(10, 95, 224, 0.7)",
                             }}
                           >
                             {feature}
@@ -245,10 +245,10 @@ const Documentation = () => {
         <Card
           style={{
             background:
-              "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-            border: "1px solid rgba(15,120,142,0.2)",
+              "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+            border: "1px solid rgba(10, 95, 224, 0.2)",
             borderRadius: "16px",
-            boxShadow: "0 8px 24px rgba(15,120,142,0.08)",
+            boxShadow: "0 8px 24px rgba(10, 95, 224, 0.8)",
           }}
         >
           <Flex vertical gap="large">
@@ -257,12 +257,12 @@ const Documentation = () => {
               style={{
                 textAlign: "center",
                 margin: 0,
-                color: "rgba(15,120,142,0.8)",
+                color: "rgba(10, 95, 224, 0.8)",
                 fontWeight: "600",
               }}
             >
               <RocketOutlined
-                style={{ marginRight: "12px", color: "rgba(15,120,142,0.8)" }}
+                style={{ marginRight: "12px", color: "rgba(10, 95, 224, 0.8)" }}
               />
               Cómo usar la plataforma
             </Title>
@@ -364,19 +364,19 @@ const Documentation = () => {
           style={{
             textAlign: "center",
             background:
-              "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-            border: "1px solid rgba(15,120,142,0.2)",
+              "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+            border: "1px solid rgba(10, 95, 224, 0.2)",
             borderRadius: "16px",
-            boxShadow: "0 8px 24px rgba(15,120,142,0.08)",
+            boxShadow: "0 8px 24px rgba(10, 95, 224, 0.8)",
           }}
         >
           <Flex vertical gap="small" align="center">
             <Flex align="center" gap="small">
-              <InfoCircleOutlined style={{ color: "rgba(15,120,142,0.8)" }} />
+              <InfoCircleOutlined style={{ color: "rgba(10, 95, 224, 0.8)" }} />
               <Text
                 style={{
                   margin: 0,
-                  color: "rgba(15,120,142,0.7)",
+                  color: "rgba(10, 95, 224, 0.7)",
                   fontSize: "14px",
                 }}
               >
@@ -384,11 +384,11 @@ const Documentation = () => {
               </Text>
             </Flex>
             <Flex align="center" gap="small">
-              <HeartOutlined style={{ color: "rgba(15,120,142,0.6)" }} />
+              <HeartOutlined style={{ color: "rgba(10, 95, 224, 0.6)" }} />
               <Text
                 style={{
                   fontSize: "12px",
-                  color: "rgba(15,120,142,0.6)",
+                  color: "rgba(10, 95, 224, 0.6)",
                 }}
               >
                 Desarrollado por fbarraza - dev / LATAM

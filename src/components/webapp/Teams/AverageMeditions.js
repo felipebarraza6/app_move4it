@@ -65,10 +65,10 @@ const AverageMeditions = () => {
         <Card
           style={{
             background:
-              "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-            border: "1px solid rgba(15,120,142,0.2)",
+              "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+            border: "1px solid rgba(10, 95, 224, 0.2)",
             borderRadius: "16px",
-            boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
+            boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
             textAlign: "center",
             width: "100%",
           }}
@@ -76,7 +76,7 @@ const AverageMeditions = () => {
             <Text
               style={{
                 fontSize: "17px",
-                color: "rgba(15,120,142,0.8)",
+                color: "#0A5FE0",
                 fontWeight: "600",
               }}
             >
@@ -207,10 +207,10 @@ const AverageMeditions = () => {
 const styles = {
   static: {
     background:
-      "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-    border: "1px solid rgba(15,120,142,0.2)",
+      "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+    border: "1px solid rgba(10, 95, 224, 0.2)",
     borderRadius: "12px",
-    boxShadow: "0 2px 8px rgba(15,120,142,0.1)",
+    boxShadow: "0 2px 8px rgba(10, 95, 224, 0.1)",
     width: "100%",
   },
 };

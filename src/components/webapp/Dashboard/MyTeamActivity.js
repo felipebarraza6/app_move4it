@@ -28,7 +28,14 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
     console.log("MyTeamActivity: team_data is undefined");
     return (
       <Card
-        title={window.innerWidth > 726 ? "Actividad de mi equipo" : <></>}
+        title={
+          <span style={{ color: "#0A5FE0", fontFamily: "'Montserrat', sans-serif", fontWeight: 600 }}>
+            {window.innerWidth > 726 ? "Actividad de mi equipo" : <></>}
+          </span>
+        }
+        headStyle={{
+          borderBottom: "1px solid rgba(10, 95, 224, 0.2)",
+        }}
         style={{
           ...styles.card,
           marginBottom: "16px",
@@ -424,18 +431,18 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
             style={{
               color:
                 isCurrentUser && isTeamPage
-                  ? "rgba(15,120,142,1)"
-                  : "rgba(15,120,142,0.8)",
+                  ? "#0A5FE0"
+                  : "#0A5FE0",
               fontWeight: isCurrentUser && isTeamPage ? "700" : "600",
               backgroundColor:
                 isCurrentUser && isTeamPage
-                  ? "rgba(15,120,142,0.1)"
+                  ? "rgba(10, 95, 224, 0.1)"
                   : "transparent",
               padding: isCurrentUser && isTeamPage ? "4px 8px" : "0",
               borderRadius: isCurrentUser && isTeamPage ? "4px" : "0",
               border:
                 isCurrentUser && isTeamPage
-                  ? "1px solid rgba(15,120,142,0.3)"
+                  ? "1px solid rgba(10, 95, 224, 0.3)"
                   : "none",
               wordBreak: "break-word",
               overflow: "hidden",
@@ -459,8 +466,8 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
           style={{
             color:
               completed === record.totalActivities
-                ? "rgba(15,120,142,0.8)"
-                : "rgba(15,120,142,0.6)",
+                ? "#0A5FE0"
+                : "#0A8CCF",
             fontWeight: "500",
           }}
         >
@@ -477,7 +484,7 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
       render: (points) => (
         <span
           style={{
-            color: "rgba(15,120,142,0.8)",
+            color: "rgba(10, 95, 224, 0.8)",
             fontWeight: "600",
           }}
         >
@@ -496,9 +503,9 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
           style={{
             color:
               parseFloat(percentage) >= 80
-                ? "rgba(15,120,142,0.8)"
+                ? "rgba(10, 95, 224, 0.8)"
                 : parseFloat(percentage) >= 50
-                ? "rgba(230,184,0,0.8)"
+                ? "rgba(18, 227, 194, 0.8)"
                 : "rgba(255,77,79,0.8)",
             fontWeight: "600",
           }}
@@ -571,9 +578,9 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
                 setSelectedIntervalIndex(selectedIntervalIndex + 1)
               }
               style={{
-                backgroundColor: "rgba(15,120,142,0.1)",
-                borderColor: "rgba(15,120,142,0.3)",
-                color: "rgba(15,120,142,0.8)",
+                backgroundColor: "rgba(10, 95, 224, 0.1)",
+                borderColor: "rgba(10, 95, 224, 0.3)",
+                color: "rgba(10, 95, 224, 0.8)",
               }}
             >
               <ArrowLeftOutlined />
@@ -603,14 +610,14 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
             <div
               style={{
                 fontSize: "12px",
-                backgroundColor: "rgba(15,120,142,0.1)",
+                backgroundColor: "rgba(10, 95, 224, 0.1)",
                 padding: "12px 16px",
                 marginTop: "8px",
                 marginBottom: "8px",
                 borderRadius: "8px",
-                color: "rgba(15,120,142,0.8)",
+                color: "rgba(10, 95, 224, 0.8)",
                 fontWeight: "600",
-                border: "1px solid rgba(15,120,142,0.3)",
+                border: "1px solid rgba(10, 95, 224, 0.3)",
                 textAlign: "center",
                 minWidth: "80px",
               }}
@@ -645,9 +652,9 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
                 setSelectedIntervalIndex(selectedIntervalIndex - 1)
               }
               style={{
-                backgroundColor: "rgba(15,120,142,0.1)",
-                borderColor: "rgba(15,120,142,0.3)",
-                color: "rgba(15,120,142,0.8)",
+                backgroundColor: "rgba(10, 95, 224, 0.1)",
+                borderColor: "rgba(10, 95, 224, 0.3)",
+                color: "rgba(10, 95, 224, 0.8)",
               }}
             >
               <div style={{ fontSize: "10px", marginRight: "5px" }}>
@@ -685,7 +692,7 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
 
         return (
           <Flex gap="small" align="center">
-            <CalendarFilled style={{ color: "rgba(15,120,142,0.8)" }} />
+            <CalendarFilled style={{ color: "rgba(10, 95, 224, 0.8)" }} />
             <span style={{ fontSize: "12px", color: "#666" }}>
               {startDate.toLocaleDateString("es-ES", {
                 day: "2-digit",
@@ -730,7 +737,7 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
 
       return (
         <Flex gap="small" align="center">
-          <CalendarFilled style={{ color: "rgba(15,120,142,0.8)" }} />
+          <CalendarFilled style={{ color: "rgba(10, 95, 224, 0.8)" }} />
           <span style={{ fontSize: "12px", color: "#666" }}>
             {startDate.toLocaleDateString("es-ES", {
               day: "2-digit",
@@ -751,7 +758,14 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
 
   return (
     <Card
-      title={window.innerWidth > 726 ? "Actividad de mi equipo" : <></>}
+      title={
+        <span style={{ color: "#0A5FE0", fontFamily: "'Montserrat', sans-serif", fontWeight: 600 }}>
+          {window.innerWidth > 726 ? "Actividad de mi equipo" : <></>}
+        </span>
+      }
+      headStyle={{
+        borderBottom: "1px solid rgba(10, 95, 224, 0.2)",
+      }}
       style={{
         ...styles.card,
         marginBottom: "16px",
@@ -772,9 +786,9 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
             <Flex style={{ marginBottom: "8px" }}>
               <Tag
                 style={{
-                  backgroundColor: "rgba(230,184,0,0.1)",
-                  color: "rgba(230,184,0,0.9)",
-                  border: "1px solid rgba(230,184,0,0.3)",
+                  backgroundColor: "rgba(18, 227, 194, 0.1)",
+                  color: "rgba(18, 227, 194, 0.9)",
+                  border: "1px solid rgba(18, 227, 194, 0.03)",
                 }}
               >
                 {`La competencia comenzará el ${startDate.toLocaleDateString(
@@ -793,9 +807,9 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
               <Flex style={{ marginBottom: "8px" }}>
                 <Tag
                   style={{
-                    backgroundColor: "rgba(15,120,142,0.1)",
-                    color: "rgba(15,120,142,0.8)",
-                    border: "1px solid rgba(15,120,142,0.3)",
+                    backgroundColor: "rgba(10, 95, 224, 0.1)",
+                    color: "rgba(10, 95, 224, 0.8)",
+                    border: "1px solid rgba(10, 95, 224, 0.3)",
                   }}
                 >
                   {`La competencia terminó el ${endDate.toLocaleDateString(
@@ -833,12 +847,12 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
                               padding: "8px 12px",
                               marginBottom: "8px",
                               background: activity.is_completed
-                                ? "rgba(15,120,142,0.1)"
+                                ? "rgba(10, 95, 224, 0.1)"
                                 : "rgba(255,255,255,0.8)",
                               border: `1px solid ${
                                 activity.is_completed
-                                  ? "rgba(15,120,142,0.3)"
-                                  : "rgba(15,120,142,0.2)"
+                                  ? "rgba(10, 95, 224, 0.3)"
+                                  : "rgba(10, 95, 224, 0.2)"
                               }`,
                               borderRadius: "6px",
                             }}
@@ -847,7 +861,7 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
                               <div
                                 style={{
                                   fontWeight: "500",
-                                  color: "rgba(15,120,142,0.8)",
+                                  color: "rgba(10, 95, 224, 0.8)",
                                 }}
                               >
                                 {activity.activity ||
@@ -865,7 +879,7 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
                               {activity.is_completed && (
                                 <span
                                   style={{
-                                    color: "rgba(230,184,0,0.9)",
+                                    color: "rgba(18, 227, 194, 0.9)",
                                     fontWeight: "600",
                                     fontSize: "12px",
                                   }}
@@ -876,7 +890,7 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
                               <span
                                 style={{
                                   color: activity.is_completed
-                                    ? "rgba(15,120,142,0.8)"
+                                    ? "rgba(10, 95, 224, 0.8)"
                                     : "rgba(255,77,79,0.8)",
                                   fontWeight: "600",
                                   fontSize: "12px",
@@ -893,7 +907,7 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
                     ) : (
                       <div
                         style={{
-                          color: "rgba(15,120,142,0.6)",
+                          color: "rgba(10, 95, 224, 0.6)",
                           fontStyle: "italic",
                           textAlign: "center",
                           padding: "20px",
@@ -928,15 +942,15 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
                   return (
                     <Table.Summary.Row
                       style={{
-                        backgroundColor: "rgba(15,120,142,0.1)",
+                        backgroundColor: "rgba(10, 95, 224, 0.1)",
                         fontWeight: "600",
-                        borderTop: "2px solid rgba(15,120,142,0.3)",
+                        borderTop: "2px solid rgba(10, 95, 224, 0.3)",
                       }}
                     >
                       <Table.Summary.Cell colSpan={2}>
                         <span
                           style={{
-                            color: "rgba(15,120,142,0.8)",
+                            color: "rgba(10, 95, 224, 0.8)",
                             fontWeight: "700",
                             fontSize: "14px",
                           }}
@@ -948,7 +962,7 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
                         <div style={{ textAlign: "center" }}>
                           <span
                             style={{
-                              color: "rgba(15,120,142,0.8)",
+                              color: "rgba(10, 95, 224, 0.8)",
                               fontWeight: "600",
                             }}
                           >
@@ -960,7 +974,7 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
                         <div style={{ textAlign: "center" }}>
                           <span
                             style={{
-                              color: "rgba(15,120,142,0.8)",
+                              color: "rgba(10, 95, 224, 0.8)",
                               fontWeight: "600",
                             }}
                           >
@@ -974,9 +988,9 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
                             style={{
                               color:
                                 parseFloat(averageEffectiveness) >= 80
-                                  ? "rgba(15,120,142,0.8)"
+                                  ? "rgba(10, 95, 224, 0.8)"
                                   : parseFloat(averageEffectiveness) >= 50
-                                  ? "rgba(230,184,0,0.8)"
+                                  ? "rgba(18, 227, 194, 0.8)"
                                   : "rgba(255,77,79,0.8)",
                               fontWeight: "700",
                               fontSize: "14px",
@@ -1031,16 +1045,16 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
                 return (
                   <Table.Summary.Row
                     style={{
-                      backgroundColor: "rgba(15,120,142,0.1)",
+                      backgroundColor: "rgba(10, 95, 224, 0.1)",
                       fontWeight: "600",
-                      borderTop: "2px solid rgba(15,120,142,0.3)",
+                      borderTop: "2px solid rgba(10, 95, 224, 0.3)",
                     }}
                   >
                     <Table.Summary.Cell colSpan={1}>
                       <Flex align="center" gap="small">
                         <span
                           style={{
-                            color: "rgba(15,120,142,0.8)",
+                            color: "rgba(10, 95, 224, 0.8)",
                             fontWeight: "700",
                             fontSize: "14px",
                           }}
@@ -1054,7 +1068,7 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
                       <div style={{ textAlign: "center" }}>
                         <span
                           style={{
-                            color: "rgba(15,120,142,0.8)",
+                            color: "rgba(10, 95, 224, 0.8)",
                             fontWeight: "600",
                           }}
                         >
@@ -1066,7 +1080,7 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
                       <div style={{ textAlign: "center" }}>
                         <span
                           style={{
-                            color: "rgba(15,120,142,0.8)",
+                            color: "rgba(10, 95, 224, 0.8)",
                             fontWeight: "600",
                           }}
                         >
@@ -1080,9 +1094,9 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
                           style={{
                             color:
                               parseFloat(averageEffectiveness) >= 80
-                                ? "rgba(15,120,142,0.8)"
+                                ? "rgba(10, 95, 224, 0.8)"
                                 : parseFloat(averageEffectiveness) >= 50
-                                ? "rgba(230,184,0,0.8)"
+                                ? "rgba(18, 227, 194, 0.8)"
                                 : "rgba(255,77,79,0.8)",
                             fontWeight: "700",
                             fontSize: "14px",
@@ -1104,12 +1118,12 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
                     <div
                       style={{
                         padding: "16px",
-                        background: "rgba(15,120,142,0.02)",
+                        background: "rgba(10, 95, 224, 0.2)",
                       }}
                     >
                       <h4
                         style={{
-                          color: "rgba(15,120,142,0.8)",
+                          color: "rgba(10, 95, 224, 0.8)",
                           marginBottom: "12px",
                           fontSize: "14px",
                           fontWeight: "600",
@@ -1134,12 +1148,12 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
                                 alignItems: "center",
                                 padding: "8px 12px",
                                 background: activity.is_completed
-                                  ? "rgba(15,120,142,0.1)"
+                                  ? "rgba(10, 95, 224, 0.1)"
                                   : "rgba(255,255,255,0.8)",
                                 border: `1px solid ${
                                   activity.is_completed
-                                    ? "rgba(15,120,142,0.3)"
-                                    : "rgba(15,120,142,0.2)"
+                                    ? "rgba(10, 95, 224, 0.3)"
+                                    : "rgba(10, 95, 224, 0.2)"
                                 }`,
                                 borderRadius: "6px",
                               }}
@@ -1147,7 +1161,7 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
                               <div style={{ flex: 1 }}>
                                 <span
                                   style={{
-                                    color: "rgba(15,120,142,0.8)",
+                                    color: "rgba(10, 95, 224, 0.8)",
                                     fontWeight: "500",
                                   }}
                                 >
@@ -1166,7 +1180,7 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
                                 {activity.is_completed && (
                                   <span
                                     style={{
-                                      color: "rgba(230,184,0,0.9)",
+                                      color: "rgba(18, 227, 194, 0.9)",
                                       fontWeight: "600",
                                       fontSize: "12px",
                                     }}
@@ -1177,7 +1191,7 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
                                 <span
                                   style={{
                                     color: activity.is_completed
-                                      ? "rgba(15,120,142,0.8)"
+                                      ? "rgba(10, 95, 224, 0.8)"
                                       : "rgba(255,77,79,0.8)",
                                     fontWeight: "600",
                                     fontSize: "12px",
@@ -1194,7 +1208,7 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
                       ) : (
                         <div
                           style={{
-                            color: "rgba(15,120,142,0.6)",
+                            color: "rgba(10, 95, 224, 0.6)",
                             fontStyle: "italic",
                             textAlign: "center",
                             padding: "20px",
@@ -1219,10 +1233,10 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
 const styles = {
   card: {
     background:
-      "linear-gradient(135deg, rgba(15,120,142,0.05) 0%, rgba(230,184,0,0.03) 100%)",
-    border: "1px solid rgba(15,120,142,0.2)",
+      "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+    border: "1px solid rgba(10, 95, 224, 0.2)",
     borderRadius: "8px",
-    boxShadow: "0 4px 12px rgba(15,120,142,0.1)",
+    boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
     width: "100%",
   },
 };
@@ -1231,11 +1245,11 @@ const styles = {
 const style = document.createElement("style");
 style.textContent = `
   .current-user-row {
-    background-color: rgba(15,120,142,0.08) !important;
-    border-left: 3px solid rgba(15,120,142,0.6) !important;
+    background-color: rgba(10, 95, 224, 0.8) !important;
+    border-left: 3px solid rgba(10, 95, 224, 0.6) !important;
   }
   .current-user-row:hover {
-    background-color: rgba(15,120,142,0.12) !important;
+    background-color: rgba(10, 95, 224, 0.12) !important;
   }
 `;
 if (!document.head.querySelector("style[data-team-user-highlight]")) {
