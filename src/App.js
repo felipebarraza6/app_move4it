@@ -157,27 +157,17 @@ const App = () => {
               animation: "shimmer 8s infinite",
             }}
           >
-            <div
+            <img
+              src={logo}
+              alt="Move4IA"
               style={{
-                padding: "20px",
-                backgroundColor: "rgba(255, 255, 255, 0.1)",
-                borderRadius: "12px",
-                backdropFilter: "blur(10px)",
-                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
+                height: "80px",
+                width: "auto",
+                maxWidth: "200px",
+                filter: "brightness(0) invert(1) drop-shadow(0 4px 12px rgba(18, 227, 194, 0.6))",
+                objectFit: "contain",
               }}
-            >
-              <img
-                src={logo}
-                alt="Move4IA"
-                style={{
-                  height: "80px",
-                  width: "auto",
-                  maxWidth: "200px",
-                  filter: "drop-shadow(0 4px 12px rgba(18, 227, 194, 0.6))",
-                  objectFit: "contain",
-                }}
-              />
-            </div>
+            />
             <Spin
               indicator={
                 <LoadingOutlined
@@ -193,7 +183,7 @@ const App = () => {
               fontWeight: 500,
               textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
             }}>
-              Cargando tu competencia...
+              Preparando tu experiencia...
             </p>
           </div>
         ) : state.isAuth ? (

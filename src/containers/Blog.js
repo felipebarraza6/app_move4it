@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Row, Col, Card, Tooltip, Drawer, Button, Flex } from "antd";
-import { EyeFilled, PaperClipOutlined } from "@ant-design/icons";
+import { Card, Drawer, Button, Flex } from "antd";
+import { PaperClipOutlined } from "@ant-design/icons";
 import { endpoints } from "../config/endpoints";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../App";
@@ -60,39 +60,29 @@ const Blog = ({ type }) => {
       <Flex
         justify={window.innerWidth < 768 ? "center" : "start"}
         gap="large"
-        wrap={window.innerWidth < 768 ? "wrap" : "nowrap"}
+        wrap="wrap"
       >
         {blogs.map((blog, index) => (
-          <Col key={index}>
-            <Card
-              style={styles.card}
-              actions={[
-                <Tooltip title="Ver noticia">
-                  <EyeFilled
-                    key="setting"
-                    onClick={() => {
-                      showDrawer(blog);
-                    }}
-                  />
-                </Tooltip>,
-              ]}
-              hoverable
-              cover={
-                blog.principal_img && (
-                  <img
-                    alt="example"
-                    src={blog.principal_img}
-                    style={styles.img}
-                  />
-                )
-              }
-            >
-              <Card.Meta
-                title={blog.title}
-                description={blog.description1.substring(0, 100) + "..."}
-              />
-            </Card>
-          </Col>
+          <Card
+            key={index}
+            style={styles.card}
+            onClick={() => showDrawer(blog)}
+            hoverable
+            cover={
+              blog.principal_img && (
+                <img
+                  alt="example"
+                  src={blog.principal_img}
+                  style={styles.img}
+                />
+              )
+            }
+          >
+            <Card.Meta
+              title={blog.title}
+              description={blog.description1.substring(0, 100) + "..."}
+            />
+          </Card>
         ))}
       </Flex>
       <Drawer
@@ -109,10 +99,7 @@ const Blog = ({ type }) => {
           style={{ borderRadius: "8px" }}
           alt="img"
         />
-        <h5>
-          {blogSingle && blogSingle.created.slice(0, 10)}{" "}
-          {blogSingle && blogSingle.created.slice(11, 16)} hrs.
-        </h5>
+
         <p>{blogSingle && blogSingle.description1}</p>
         <p>{blogSingle && blogSingle.description2}</p>
         <p>{blogSingle && blogSingle.description3}</p>
