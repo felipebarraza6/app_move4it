@@ -519,40 +519,16 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
   // Función helper para formatear fechas de manera segura
   const formatDateSafe = (dateString) => {
     if (!dateString) return "dd-m";
-
-    // Debug: mostrar qué fecha estamos procesando
-    console.log("=== DEBUG FECHA ===");
-    console.log("dateString original:", dateString);
-
-    // Intentar diferentes formatos de fecha
-    let date;
-    if (dateString.includes("-")) {
-      // Formato YYYY-MM-DD
-      date = new Date(dateString);
-      console.log("Formato YYYY-MM-DD, fecha parseada:", date);
-    } else if (dateString.includes("/")) {
-      // Formato DD/MM/YYYY o MM/DD/YYYY
-      const parts = dateString.split("/");
-      if (parts.length === 3) {
-        // Asumir formato DD/MM/YYYY
-        date = new Date(parts[2], parts[1] - 1, parts[0]);
-        console.log("Formato DD/MM/YYYY, fecha parseada:", date);
-      }
-    } else {
-      // Intentar parsear directamente
-      date = new Date(dateString);
-      console.log("Parseo directo, fecha parseada:", date);
+    try {
+      const date = parseDateYMDLocal(dateString);
+      if (!date || isNaN(date.getTime())) return "dd-m";
+      return date.toLocaleDateString("es-ES", {
+        day: "2-digit",
+        month: "short",
+      });
+    } catch (_) {
+      return "dd-m";
     }
-
-    const result = isNaN(date.getTime())
-      ? "dd-m"
-      : date.toLocaleDateString("es-ES", {
-          day: "2-digit",
-          month: "short",
-        });
-
-    console.log("Resultado final:", result);
-    return result;
   };
 
   const extra = () => {

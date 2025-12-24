@@ -25,7 +25,7 @@ const IntervalsTable = () => {
     .filter((interval) => interval.end_date < todayString)
     .sort((a, b) => {
       // Ordenar descendente: el más reciente primero (índice 0)
-      return new Date(b.end_date) - new Date(a.end_date);
+      return parseDateYMDLocal(b.end_date) - parseDateYMDLocal(a.end_date);
     });
 
   const currentIntervalValue =

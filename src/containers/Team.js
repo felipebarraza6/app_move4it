@@ -64,7 +64,7 @@ const Team = () => {
     // Primero ordenar los intervalos completados por fecha (del más antiguo al más reciente)
     // para poder calcular correctamente las diferencias
     const sortedByDate = completedIntervals.sort((a, b) => {
-      return new Date(a.end_date) - new Date(b.end_date);
+      return parseDateYMDLocal(a.end_date) - parseDateYMDLocal(b.end_date);
     });
 
     // Mapear y calcular puntos por intervalo
@@ -128,7 +128,7 @@ const Team = () => {
       })
       .sort((a, b) => {
         // Ordenar por fecha de fin (más reciente primero) para la visualización
-        return new Date(b.end_date) - new Date(a.end_date);
+        return parseDateYMDLocal(b.end_date) - parseDateYMDLocal(a.end_date);
       });
   }
 
@@ -146,7 +146,7 @@ const Team = () => {
     // Ordenar historical_data de la misma manera que rankingData
     const sortedHistoricalIntervals = completedHistoricalIntervals.sort(
       (a, b) => {
-        return new Date(b.end_date) - new Date(a.end_date);
+        return parseDateYMDLocal(b.end_date) - parseDateYMDLocal(a.end_date);
       }
     );
 
@@ -409,7 +409,10 @@ const Team = () => {
                         );
                         // Ordenar descendente: el más reciente primero (índice 0)
                         return completedHistoricalIntervals.sort((a, b) => {
-                          return new Date(b.end_date) - new Date(a.end_date);
+                          return (
+                            parseDateYMDLocal(b.end_date) -
+                            parseDateYMDLocal(a.end_date)
+                          );
                         });
                       })(),
                       selectedIntervalIndex,

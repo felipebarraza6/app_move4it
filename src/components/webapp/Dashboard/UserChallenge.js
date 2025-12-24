@@ -582,9 +582,8 @@ const UserChallenge = ({ challengers }) => {
     const formatDM = (dateString) => {
       if (!dateString) return "dd-m";
       try {
-        const dt = new Date(dateString);
-        // Si no es válida
-        if (isNaN(dt.getTime())) return "dd-m";
+        const dt = parseDateYMDLocal(dateString);
+        if (!dt || isNaN(dt.getTime())) return "dd-m";
         return dt.toLocaleDateString("es-ES", {
           day: "2-digit",
           month: "short",

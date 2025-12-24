@@ -156,34 +156,36 @@ const Home = () => {
               </Flex>
             </Affix>
           )}
-          <Flex gap={"small"}>
-            <Card
-              style={{
-                minHeight: "85vh",
-                width: "100%",
-                background: "white",
-                border: "1px solid rgba(10, 95, 224, 0.1)",
-                borderRadius: "0px"
-              }}
-            >
-              <Routes>
-                <Route path="*" element={<Dashboard />} />
-                <Route path="/profile_user" element={<ProfileUser />} />
-                <Route path="/documentation" element={<Documentation />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route
-                  path="/profile_competition"
-                  element={<ProfileUserCompetition />}
-                />
-                <Route path="/team" element={<Team />} />
-                <Route path="/enterprise" element={<Enterprise />} />
-                <Route path="/challenges" element={<Challenges />} />
+          <div key={location.pathname} className="page-transition-enter">
+            <Flex gap={"small"}>
+              <Card
+                style={{
+                  minHeight: "85vh",
+                  width: "100%",
+                  background: "white",
+                  border: "1px solid rgba(10, 95, 224, 0.1)",
+                  borderRadius: "0px"
+                }}
+              >
+                <Routes>
+                  <Route path="*" element={<Dashboard />} />
+                  <Route path="/profile_user" element={<ProfileUser />} />
+                  <Route path="/documentation" element={<Documentation />} />
+                  <Route path="/blog" element={<Blog />} />
+                  <Route
+                    path="/profile_competition"
+                    element={<ProfileUserCompetition />}
+                  />
+                  <Route path="/team" element={<Team />} />
+                  <Route path="/enterprise" element={<Enterprise />} />
+                  <Route path="/challenges" element={<Challenges />} />
 
-                <Route path="/achievements" element={<Achievements />} />
-                <Route path="/global_viewer" element={<GlobalViewer />} />
-              </Routes>
-            </Card>
-          </Flex>
+                  <Route path="/achievements" element={<Achievements />} />
+                  <Route path="/global_viewer" element={<GlobalViewer />} />
+                </Routes>
+              </Card>
+            </Flex>
+          </div>
         </Content>
       </Layout>
     </Layout>

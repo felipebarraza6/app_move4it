@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
+import { parseDateYMDLocal } from "../../../utils/date";
 import { Card, Descriptions } from "antd";
 import { AppContext } from "../../../App";
 
@@ -23,7 +24,7 @@ const MyData = () => {
   const date = new Date();
 
   const age = Math.floor(
-    (date - new Date(date_of_birth)) / (365.25 * 24 * 60 * 60 * 1000)
+    (date - parseDateYMDLocal(date_of_birth)) / (365.25 * 24 * 60 * 60 * 1000)
   );
 
   return (

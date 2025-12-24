@@ -82,20 +82,27 @@ const App = () => {
   const [state, dispatch] = useReducer(authReducer, initialState);
   const [isInitializing, setIsInitializing] = useState(true);
 
+  const [isExiting, setIsExiting] = useState(false);
+
   useEffect(() => {
     const initializeApp = async () => {
       setIsInitializing(true);
       try {
         const result = await updateApp(dispatch);
         if (!result.success) {
-          // Si no hay sesión válida, limpiar estado
           dispatch({ type: "LOGOUT" });
         }
       } catch (error) {
         console.error("Error initializing app:", error);
         dispatch({ type: "LOGOUT" });
       } finally {
-        setIsInitializing(false);
+        // Iniciar desvanecimiento rápido antes de ocultar
+        setTimeout(() => {
+          setIsExiting(true);
+          setTimeout(() => {
+            setIsInitializing(false);
+          }, 400); // Duración reducida
+        }, 100); // Pausa mínima
       }
     };
 
@@ -145,10 +152,16 @@ const App = () => {
       <AppContext.Provider value={{ state, dispatch }}>
         {isInitializing ? (
           <div
+            className={isExiting ? "loading-screen-exit" : ""}
             style={{
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              zIndex: 9999,
               height: "100vh",
               flexDirection: "column",
               gap: "24px",
@@ -157,42 +170,59 @@ const App = () => {
               animation: "shimmer 8s infinite",
             }}
           >
-            <img
-              src={logo}
-              alt="Move4IA"
+            <div
               style={{
-                height: "80px",
-                width: "auto",
-                maxWidth: "200px",
-                filter: "brightness(0) invert(1) drop-shadow(0 4px 12px rgba(18, 227, 194, 0.6))",
-                objectFit: "contain",
+                padding: "20px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                animation: "float 4s ease-in-out infinite",
               }}
-            />
-            <Spin
-              indicator={
-                <LoadingOutlined
-                  style={{ fontSize: 48, color: "#12E3C2" }}
-                  spin
+            >
+              <img
+                src={logo}
+                alt="Move4IA"
+                style={{
+                  height: "120px",
+                  width: "auto",
+                  maxWidth: "280px",
+                  filter: "brightness(0) invert(1) drop-shadow(0 8px 16px rgba(18, 227, 194, 0.4))",
+                  objectFit: "contain",
+                }}
+              />
+            </div>
+            {!isExiting && (
+              <>
+                <Spin
+                  indicator={
+                    <LoadingOutlined
+                      style={{ fontSize: 32, color: "#12E3C2" }}
+                      spin
+                    />
+                  }
                 />
-              }
-            />
-            <p style={{ 
-              color: "#FFFFFF", 
-              fontSize: "16px", 
-              fontFamily: "'Inter', sans-serif",
-              fontWeight: 500,
-              textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
-            }}>
-              Preparando tu experiencia...
-            </p>
+                <p style={{ 
+                  color: "#FFFFFF", 
+                  fontSize: "14px", 
+                  fontFamily: "'Inter', sans-serif",
+                  fontWeight: 400,
+                  letterSpacing: "0.5px",
+                  opacity: 0.8,
+                  textShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+                }}>
+                  Preparando tu experiencia...
+                </p>
+              </>
+            )}
           </div>
-        ) : state.isAuth ? (
+        ) : null}
+        {state.isAuth ? (
           <div className="App">
             <RouterProvider router={router} />
           </div>
-        ) : (
+        ) : !isInitializing ? (
           <Login />
-        )}
+        ) : null}
       </AppContext.Provider>
     </ConfigProvider>
   );

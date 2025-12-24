@@ -60,7 +60,7 @@ const CompetitionSummary = () => {
       // Filtrar intervalos completados y ordenar por fecha más reciente
       const completedIntervals = rankingData
         .filter((interval) => interval.end_date < todayString)
-        .sort((a, b) => new Date(b.end_date) - new Date(a.end_date));
+        .sort((a, b) => parseDateYMDLocal(b.end_date) - parseDateYMDLocal(a.end_date));
 
       console.log("Intervalos completados:", completedIntervals);
 
