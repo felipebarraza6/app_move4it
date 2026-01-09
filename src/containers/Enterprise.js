@@ -13,9 +13,34 @@ import { AppContext } from "../App";
 import { parseDateYMDLocal, normalizeDateOnly } from "../utils/date";
 
 const Enterpise = () => {
-  const { state } = useContext(AppContext);
-  const sourceValidate =
-    state.user.enterprise_competition_overflow.last_competence.stats.my_team;
+  const { state, dispatch } = useContext(AppContext);
+
+  // Lazy load stats if not already loaded
+  React.useEffect(() => {
+    const loadStats = async () => {
+      const competence = state.user?.enterprise_competition_overflow?.last_competence;
+      
+      if (competence && competence.id && (!competence.stats || !competence.ranking)) {
+        console.log('Loading stats/ranking for competence in Enterprise:', competence.id);
+        try {
+          const { endpoints } = await import('../config/endpoints');
+          const statsData = await endpoints.competence.retrieveStats(competence.id);
+          
+          dispatch({
+            type: 'UPDATE_COMPETENCE_STATS',
+            payload: statsData,
+          });
+        } catch (error) {
+          console.error('Error loading stats:', error);
+        }
+      }
+    };
+
+    loadStats();
+  }, [state.user?.enterprise_competition_overflow?.last_competence?.id, dispatch]);
+
+  const stats = state.user?.enterprise_competition_overflow?.last_competence?.stats;
+  const sourceValidate = stats?.my_team;
 
   // Verificar estado de la competencia
   const startDate = parseDateYMDLocal(
@@ -29,6 +54,21 @@ const Enterpise = () => {
   const competitionNotStarted = today < startDate;
   const competitionEnded = today > endDate;
   const competitionActive = today >= startDate && today <= endDate;
+
+  // Show loading spinner if stats are missing
+  if (!stats) {
+    return (
+      <Row justify="center" align="middle" style={{ padding: "50px" }}>
+        <Flex vertical align="center" gap="middle">
+          <Alert
+            message="Cargando estadísticas de empresa..."
+            type="info"
+            showIcon
+          />
+        </Flex>
+      </Row>
+    );
+  }
 
   return (
     <Row justify={"space-between"} align="top">
