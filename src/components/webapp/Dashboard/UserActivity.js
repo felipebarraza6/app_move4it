@@ -11,9 +11,21 @@ const UserActivity = () => {
     totalDuration: 0,
   };
 
-  const activities =
-    state.user.enterprise_competition_overflow.last_competence.stats
-      .historical_data;
+  // Check if stats are loaded
+  const stats = state.user?.enterprise_competition_overflow?.last_competence?.stats;
+  
+  if (!stats || !stats.historical_data) {
+    return (
+      <Card
+        style={styles.card}
+        loading={true}
+      >
+        Cargando indicadores...
+      </Card>
+    );
+  }
+
+  const activities = stats.historical_data;
 
   const allActivities = activities.reduce((acc, activity) => {
     return acc.concat(activity.data.user.activities);
