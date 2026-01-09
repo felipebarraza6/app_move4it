@@ -160,6 +160,7 @@ const FormData = () => {
           identification_number: state.user.identification_number,
           last_name: state.user.last_name,
           phone: state.user.phone_number,
+          date_of_birth: state.user.date_of_birth ? moment(state.user.date_of_birth) : null,
         }}
         onFinish={onFinish}
         form={form}
