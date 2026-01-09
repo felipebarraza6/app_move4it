@@ -28,11 +28,11 @@ const UserActivity = () => {
   const activities = stats.historical_data;
 
   const allActivities = activities.reduce((acc, activity) => {
-    return acc.concat(activity.data.user.activities);
+    return acc.concat(activity?.data?.user?.activities || []);
   }, []);
 
   const allActivitiesGroup = activities.reduce((acc, activity) => {
-    return acc.concat(activity.data.my_team.activities);
+    return acc.concat(activity?.data?.my_team?.activities || []);
   }, []);
 
   const groupedActivities = allActivitiesGroup.reduce((acc, activity) => {

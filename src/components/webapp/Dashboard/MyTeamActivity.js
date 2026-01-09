@@ -158,8 +158,8 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
     } else {
       // En Dashboard.js: mostrar intervalo actual
       const currentIntervalData =
-        state.user.enterprise_competition_overflow.last_competence.stats
-          .current_interval_data;
+        state.user?.enterprise_competition_overflow?.last_competence?.stats
+          ?.current_interval_data;
       let currentInterval = 0; // Fallback al primer intervalo
 
       if (currentIntervalData && currentIntervalData.id) {
@@ -331,8 +331,8 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
       } else {
         // En Dashboard.js: mostrar actividades del intervalo actual
         const currentIntervalData =
-          state.user.enterprise_competition_overflow.last_competence.stats
-            .current_interval_data;
+          state.user?.enterprise_competition_overflow?.last_competence?.stats
+            ?.current_interval_data;
         let currentInterval = 0;
 
         if (currentIntervalData && currentIntervalData.id) {
