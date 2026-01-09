@@ -18,7 +18,41 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
   const location = useLocation();
   const [data, setData] = useState([]);
 
-  // Early return if team_data is not available
+  // Check if stats are loaded (for lazy loading compatibility)
+  const hasStats = state.user?.enterprise_competition_overflow?.last_competence?.stats;
+  
+  const last_competence_end =
+    state.user?.enterprise_competition_overflow?.last_competence?.end_date;
+
+  const active_competence = () => {
+    if (!last_competence_end) return false;
+    const today = new Date().toISOString().split("T")[0];
+    return !(last_competence_end < today);
+  };
+
+  // Process team_data which is now my_group structure
+  const processTeamData = React.useCallback(() => {
+    if (!team_data || typeof team_data !== "object") return [];
+
+    // Detectar el tipo de estructura de datos
+    if (team_data.data || team_data.intervals) {
+      // Estructura de Team.js
+      return processIntervalsStructure(team_data);
+    } else {
+      // Estructura de Dashboard.js
+      return processMyGroupStructure(team_data);
+    }
+  }, [team_data, location.pathname]);
+
+  // useEffect MUST be before any conditional returns (React Rules of Hooks)
+  useEffect(() => {
+    if (team_data) {
+      const processedData = processTeamData();
+      setData(processedData);
+    }
+  }, [team_data, processTeamData]);
+
+  // Early return if team_data is not available - AFTER all hooks
   if (!team_data) {
     console.log("MyTeamActivity: team_data is undefined");
     return (
@@ -42,34 +76,6 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
       </Card>
     );
   }
-
-  // Check if stats are loaded (for lazy loading compatibility)
-  const hasStats = state.user?.enterprise_competition_overflow?.last_competence?.stats;
-  
-  const last_competence_end =
-    state.user?.enterprise_competition_overflow?.last_competence?.end_date;
-
-  const active_competence = () => {
-    if (!last_competence_end) return false;
-    const today = new Date().toISOString().split("T")[0];
-    return !(last_competence_end < today);
-  };
-
-  // Process team_data which is now my_group structure
-  // team_data = { "empleado1@gmail.com": [...activities], "empleado2@gmail.com": [...activities] }
-
-  const processTeamData = () => {
-    if (!team_data || typeof team_data !== "object") return [];
-
-    // Detectar el tipo de estructura de datos
-    if (team_data.data || team_data.intervals) {
-      // Estructura de Team.js: historical_data con data.my_team o stats.my_team con intervals
-      return processIntervalsStructure(team_data);
-    } else {
-      // Estructura de Dashboard.js: my_group con emails como claves
-      return processMyGroupStructure(team_data);
-    }
-  };
 
   const processIntervalsStructure = (teamData) => {
     // Determinar si estamos en Team.js (mostrar intervalos anteriores) o Dashboard.js (mostrar intervalo actual)
@@ -250,12 +256,6 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
       };
     });
   };
-
-  // useEffect must be AFTER function definitions to avoid "Cannot access before initialization" error
-  useEffect(() => {
-    const processedData = processTeamData();
-    setData(processedData);
-  }, [team_data]);
 
   // Función para obtener actividades detalladas de un usuario
   const getDetailedActivities = (email) => {
