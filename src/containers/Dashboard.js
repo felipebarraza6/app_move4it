@@ -87,6 +87,34 @@ const Dashboard = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []); // Remove resizeTo dependency as it's not needed
 
+  // Lazy load stats if not already loaded
+  useEffect(() => {
+    const loadStats = async () => {
+      const competence = state.user?.enterprise_competition_overflow?.last_competence;
+      
+      if (competence && competence.id && !competence.stats) {
+        console.log('Loading stats for competence:', competence.id);
+        try {
+          const { endpoints } = await import('../config/endpoints');
+          const statsData = await endpoints.competence.retrieveStats(competence.id);
+          
+          dispatch({
+            type: 'UPDATE_COMPETENCE_STATS',
+            payload: statsData,
+          });
+          
+          console.log('Stats loaded successfully');
+        } catch (error) {
+          console.error('Error loading stats:', error);
+        }
+      }
+    };
+
+    loadStats();
+  }, [state.user?.enterprise_competition_overflow?.last_competence?.id, dispatch]);
+
+  console.log("=== FIN DEBUG DASHBOARD ===");
+
   const last_competence_end =
     state.user?.enterprise_competition_overflow?.last_competence?.end_date;
 

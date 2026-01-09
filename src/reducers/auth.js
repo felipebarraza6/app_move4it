@@ -121,6 +121,29 @@ export const authReducer = (state, action) => {
         dashboard: { ...state.dashboard, stats_personal: action.payload },
       };
 
+    case "UPDATE_COMPETENCE_STATS":
+      // Merge stats into existing competence structure
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          enterprise_competition_overflow: {
+            ...state.user.enterprise_competition_overflow,
+            last_competence: {
+              ...state.user.enterprise_competition_overflow.last_competence,
+              stats: action.payload.stats,
+              avg_corporal_meditions: action.payload.avg_corporal_meditions,
+              avg_corporal_meditions_teams: action.payload.avg_corporal_meditions_teams,
+              intervals_to_back: action.payload.intervals_to_back,
+              ranking: action.payload.ranking,
+              avg_corporal_meditions_competition: action.payload.avg_corporal_meditions_competition,
+              days_remaining_competence: action.payload.days_remaining_competence,
+              days_remaining_interval: action.payload.days_remaining_interval,
+            },
+          },
+        },
+      };
+
     case "LOGOUT":
       localStorage.clear();
       return {
