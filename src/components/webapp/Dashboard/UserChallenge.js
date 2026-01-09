@@ -256,7 +256,9 @@ const AddAnswerUser = ({ state, updateActivityState }) => {
                 style={{ marginRight: "5px", color: "#12E3C2" }}
               />{" "}
               <span style={{ color: "#052240", fontWeight: "600" }}>
-                {(state.activity.points / quantity_participants).toFixed(2)}{" "}
+                {quantity_participants > 0 
+                  ? (state.activity.points / quantity_participants).toFixed(2) 
+                  : state.activity.points}{" "}
                 puntos
               </span>
             </Card>

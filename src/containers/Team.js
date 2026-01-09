@@ -21,18 +21,53 @@ import AverageMeditions from "../components/webapp/Teams/AverageMeditions";
 import { parseDateYMDLocal, normalizeDateOnly } from "../utils/date";
 
 const Team = () => {
-  const { state } = useContext(AppContext);
+  const { state, dispatch } = useContext(AppContext);
   const [selectedIntervalIndex, setSelectedIntervalIndex] = useState(0);
 
+  // Lazy load stats if not already loaded
+  React.useEffect(() => {
+    const loadStats = async () => {
+      const competence = state.user?.enterprise_competition_overflow?.last_competence;
+      
+      if (competence && competence.id && (!competence.stats || !competence.ranking)) {
+        console.log('Loading stats/ranking for competence in Team:', competence.id);
+        try {
+          const { endpoints } = await import('../config/endpoints');
+          const statsData = await endpoints.competence.retrieveStats(competence.id);
+          
+          dispatch({
+            type: 'UPDATE_COMPETENCE_STATS',
+            payload: statsData,
+          });
+        } catch (error) {
+          console.error('Error loading stats:', error);
+        }
+      }
+    };
+
+    loadStats();
+  }, [state.user?.enterprise_competition_overflow?.last_competence?.id, dispatch]);
+
+  // Check if ranking and stats are loaded
+  const ranking = state.user?.enterprise_competition_overflow?.last_competence?.ranking;
+  const stats = state.user?.enterprise_competition_overflow?.last_competence?.stats;
+
+  if (!ranking || !stats) {
+    return (
+      <Row justify="center" align="middle" style={{ padding: "50px" }}>
+        <Spin size="large" tip="Cargando datos del equipo..." />
+      </Row>
+    );
+  }
+
   // Usar ranking.intervals para el historial de puntos
-  var rankingData =
-    state.user.enterprise_competition_overflow.last_competence.ranking
-      .intervals;
+  var rankingData = ranking.intervals;
 
   // Usar historical_data para la actividad del equipo
-  var teamData =
-    state.user.enterprise_competition_overflow.last_competence.stats
-      .historical_data;
+  // Note: stats from backend comes as { stats: { historical_data: ... }, ranking: ... }
+  // OR as per new endpoint logic. Usually 'stats' in state has 'historical_data' directly if merged correctly.
+  // Let's assume stats behaves as in ProfileUserCompetition: stats.historical_data
+  var teamData = stats.historical_data;
 
   // Verificar estado de la competencia
   const startDate = parseDateYMDLocal(
