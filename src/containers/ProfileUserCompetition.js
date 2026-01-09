@@ -8,7 +8,16 @@ import UserChallenge from "../components/webapp/Dashboard/UserChallenge";
 import UserActivity from "../components/webapp/Dashboard/UserActivity";
 
 const ProfileUserCompetition = () => {
-  const { dispatch } = useContext(AppContext);
+  const { state, dispatch } = useContext(AppContext);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+  }, []);
 
   useEffect(() => {
     const loadStats = async () => {
