@@ -33,16 +33,20 @@ const CompetitionSummary = () => {
 
   const today = normalizeDateOnly(new Date());
 
+  // Check if stats/ranking are loaded
+  const hasStats = state.user.enterprise_competition_overflow.last_competence.ranking;
+  
   // Obtener datos del ranking para mostrar siempre el último intervalo completado
-  const rankingData =
-    state.user.enterprise_competition_overflow.last_competence.ranking
-      .intervals;
+  const rankingData = hasStats
+    ? state.user.enterprise_competition_overflow.last_competence.ranking.intervals
+    : null;
   const myTeamId = state.user.group_participation.id;
 
   console.log("=== DEBUG COMPETITION SUMMARY ===");
   console.log("today:", today);
   console.log("startDate:", startDate);
   console.log("endDate:", endDate);
+  console.log("hasStats:", hasStats);
   console.log("rankingData:", rankingData);
   console.log("myTeamId:", myTeamId);
 
@@ -52,6 +56,11 @@ const CompetitionSummary = () => {
     points = "S/P";
     ranking = "S/R";
     console.log("Competencia no ha comenzado");
+  } else if (!hasStats) {
+    // Stats aún se están cargando
+    points = "...";
+    ranking = "...";
+    console.log("Stats aún cargando");
   } else {
     // Competencia activa o terminada - buscar último intervalo completado
     if (rankingData && Array.isArray(rankingData)) {
