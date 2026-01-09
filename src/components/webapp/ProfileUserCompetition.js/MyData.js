@@ -20,12 +20,17 @@ const MyData = () => {
     .charAt(0)
     .toUpperCase()}${state.user.last_name.slice(1)}`;
 
-  const date_of_birth = state.user.date_of_birth || "1990-01-01";
+  const date_of_birth = state.user.date_of_birth;
   const date = new Date();
 
-  const age = Math.floor(
-    (date - parseDateYMDLocal(date_of_birth)) / (365.25 * 24 * 60 * 60 * 1000)
-  );
+  const calculateAge = () => {
+    if (!date_of_birth) return 0;
+    const birthDate = parseDateYMDLocal(date_of_birth);
+    if (!birthDate) return 0;
+    return Math.floor((date - birthDate) / (365.25 * 24 * 60 * 60 * 1000));
+  };
+
+  const age = calculateAge();
 
   return (
     <Card
@@ -40,7 +45,7 @@ const MyData = () => {
     >
       <Descriptions bordered size="small">
         <Descriptions.Item label="Edad" span={3}>
-          {age} Años
+          {age > 0 ? `${age} Años` : "Fecha de nacimiento no configurada"}
         </Descriptions.Item>
         <Descriptions.Item label="Empresa" span={3}>
           {state.user.enterprise_competition_overflow.name.toUpperCase()}
