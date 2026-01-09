@@ -18,11 +18,6 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
   const location = useLocation();
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    const processedData = processTeamData();
-    setData(processedData);
-  }, [team_data]);
-
   // Early return if team_data is not available
   if (!team_data) {
     console.log("MyTeamActivity: team_data is undefined");
@@ -48,17 +43,16 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
     );
   }
 
+  // Check if stats are loaded (for lazy loading compatibility)
+  const hasStats = state.user?.enterprise_competition_overflow?.last_competence?.stats;
+  
   const last_competence_end =
-    state.user.enterprise_competition_overflow.last_competence.end_date;
+    state.user?.enterprise_competition_overflow?.last_competence?.end_date;
 
   const active_competence = () => {
+    if (!last_competence_end) return false;
     const today = new Date().toISOString().split("T")[0];
-
-    if (last_competence_end < today) {
-      return false;
-    } else {
-      return true;
-    }
+    return !(last_competence_end < today);
   };
 
   // Process team_data which is now my_group structure
@@ -256,6 +250,12 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
       };
     });
   };
+
+  // useEffect must be AFTER function definitions to avoid "Cannot access before initialization" error
+  useEffect(() => {
+    const processedData = processTeamData();
+    setData(processedData);
+  }, [team_data]);
 
   // Función para obtener actividades detalladas de un usuario
   const getDetailedActivities = (email) => {
@@ -687,9 +687,19 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
       return null;
     } else {
       // En Dashboard.js: mostrar fechas del intervalo actual
-      const currentIntervalData =
-        state.user.enterprise_competition_overflow.last_competence.stats
-          .current_interval_data;
+      // Check if stats are loaded first
+      const stats = state.user?.enterprise_competition_overflow?.last_competence?.stats;
+      if (!stats) {
+        // Stats still loading, show fallback
+        return (
+          <Flex gap="small" align="center">
+            <CalendarFilled style={{ color: "rgba(10, 95, 224, 0.8)" }} />
+            <span style={{ fontSize: "12px", color: "#666" }}>Cargando...</span>
+          </Flex>
+        );
+      }
+      
+      const currentIntervalData = stats.current_interval_data;
 
       let startDate, endDate;
 
