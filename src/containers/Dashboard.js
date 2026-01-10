@@ -131,32 +131,42 @@ const Dashboard = () => {
   };
 
   return (
-    <Flex gap="large" vertical>
+    <Flex gap={isMobile ? "small" : "large"} vertical>
       <Flex
         gap="small"
         justify="space-between"
-        vertical={window.innerWidth < 768 ? true : false}
+        vertical={isMobile ? true : false}
       >
-        <Welcome />
-        <Stats />
-        <CompetitionSummary />
+        <div className="stagger-item delay-1" style={{ flex: 1 }}>
+          <Welcome />
+        </div>
+        <div className="stagger-item delay-2" style={{ flex: 1.5 }}>
+          <Stats />
+        </div>
+        <div className="stagger-item delay-3" style={{ flex: 1 }}>
+          <CompetitionSummary />
+        </div>
       </Flex>
-      <Flex justify="center" vertical gap="large">
+      <Flex justify="center" vertical gap={isMobile ? "small" : "large"}>
         {active_competence() && state.user?.enterprise_competition_overflow?.last_competence ? (
           <>
-            <UserChallenge
-              challengers={
-                state.user.enterprise_competition_overflow.last_competence.stats
-                  ?.current_interval_data
-              }
-              pagination={false}
-            />
-            <MyTeamActivity
-              team_data={
-                state.user.enterprise_competition_overflow.last_competence.stats
-                  ?.current_interval_data?.my_group
-              }
-            />
+            <div className="stagger-item delay-4">
+              <UserChallenge
+                challengers={
+                  state.user.enterprise_competition_overflow.last_competence.stats
+                    ?.current_interval_data
+                }
+                pagination={false}
+              />
+            </div>
+            <div className="stagger-item delay-5">
+              <MyTeamActivity
+                team_data={
+                  state.user.enterprise_competition_overflow.last_competence.stats
+                    ?.current_interval_data?.my_group
+                }
+              />
+            </div>
           </>
         ) : last_competence_end ? (
           (() => {
@@ -169,62 +179,70 @@ const Dashboard = () => {
 
             if (today < startDate) {
               return (
-                <Alert
-                  message={`La competencia comenzará el ${startDate.toLocaleDateString(
-                    "es-ES",
-                    {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                    }
-                  )}`}
-                  description="Prepárate para la competencia."
-                  type="warning"
-                  showIcon
-                  icon={<ClockCircleOutlined />}
-                />
+                <div className="stagger-item delay-4">
+                  <Alert
+                    message={`La competencia comenzará el ${startDate.toLocaleDateString(
+                      "es-ES",
+                      {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      }
+                    )}`}
+                    description="Prepárate para la competencia."
+                    type="warning"
+                    showIcon
+                    icon={<ClockCircleOutlined />}
+                  />
+                </div>
               );
             } else {
               return (
-                <Alert
-                  message={`La competencia terminó el ${endDate.toLocaleDateString(
-                    "es-ES",
-                    {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
+                <div className="stagger-item delay-4">
+                  <Alert
+                    message={`La competencia terminó el ${endDate.toLocaleDateString(
+                      "es-ES",
+                      {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      }
+                    )}`}
+                    description="Revisa el resumen y resultados finales disponibles."
+                    type="success"
+                    showIcon
+                    icon={
+                      <CheckCircleFilled
+                        style={{
+                          background:
+                            "linear-gradient(135deg, rgba(10, 95, 224, 0.95) 0%, rgba(10, 140, 207, 0.9) 50%, rgba(18, 227, 194, 0.95) 100%)",
+                          WebkitBackgroundClip: "text",
+                          WebkitTextFillColor: "transparent",
+                          backgroundClip: "text",
+                          fontSize: "18px",
+                        }}
+                      />
                     }
-                  )}`}
-                  description="Revisa el resumen y resultados finales disponibles."
-                  type="success"
-                  showIcon
-                  icon={
-                    <CheckCircleFilled
-                      style={{
-                        background:
-                          "linear-gradient(135deg, rgba(10, 95, 224, 0.95) 0%, rgba(10, 140, 207, 0.9) 50%, rgba(18, 227, 194, 0.95) 100%)",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        backgroundClip: "text",
-                        fontSize: "18px",
-                      }}
-                    />
-                  }
-                />
+                  />
+                </div>
               );
             }
           })()
         ) : (
-          <Alert
-            message="No hay competencia activa"
-            description="No se encontró información de competencia disponible."
-            type="info"
-            showIcon
-          />
+          <div className="stagger-item delay-4">
+            <Alert
+              message="No hay competencia activa"
+              description="No se encontró información de competencia disponible."
+              type="info"
+              showIcon
+            />
+          </div>
         )}
       </Flex>
 
-      <Blog type="novedades" />
+      <div className="stagger-item delay-5">
+        <Blog type="novedades" />
+      </div>
     </Flex>
   );
 };

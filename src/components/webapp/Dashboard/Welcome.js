@@ -10,7 +10,15 @@ const Welcome = () => {
   };
 
   return (
-    <Card style={styles.card}>
+    <Card 
+      styles={{
+        body: {
+          padding: window.innerWidth < 768 ? "8px" : "24px"
+        }
+      }}
+      style={styles.card}
+      size="small"
+    >
       <Flex gap="small" vertical>
         <div style={{ color: "#0A5FE0", fontFamily: "'Montserrat', sans-serif", fontWeight: 600 }}>
           Hola, {capitalizeFirstLetter(state.user.first_name)}{" "}

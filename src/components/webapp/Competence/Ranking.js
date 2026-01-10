@@ -65,6 +65,24 @@ const Ranking = () => {
   return (
     <Card
       size="small"
+      title={
+        <Text
+          style={{
+            fontSize: "18px",
+            color: "rgba(10, 95, 224, 0.8)",
+            fontWeight: "700",
+            fontFamily: "'Montserrat', sans-serif"
+          }}
+        >
+          <TrophyFilled
+            style={{
+              color: "rgba(10, 95, 224, 0.8)",
+              marginRight: "10px",
+            }}
+          />
+          Ranking General
+        </Text>
+      }
       style={{
         width: "100%",
         background:
@@ -76,59 +94,43 @@ const Ranking = () => {
     >
       <Flex vertical gap={"large"} style={{ width: "100%" }}>
         {isFirstInterval && intervals.length === 1 ? (
-          <Card
+          <div
             style={{
               background:
-                "linear-gradient(135deg, rgba(10, 95, 224, 0.1) 0%, rgba(18, 227, 194, 0.5) 100%)",
-              border: "1px solid rgba(10, 95, 224, 0.3)",
+                "linear-gradient(135deg, rgba(10, 95, 224, 0.03) 0%, rgba(18, 227, 194, 0.02) 100%)",
+              border: "1px solid rgba(10, 95, 224, 0.1)",
               borderRadius: "12px",
               textAlign: "center",
-              padding: "24px",
+              padding: "30px 20px",
             }}
           >
             <TrophyFilled
               style={{
-                fontSize: "48px",
-                color: "rgba(10, 95, 224, 0.6)",
-                marginBottom: "16px",
+                fontSize: "32px",
+                color: "rgba(10, 95, 224, 0.3)",
+                marginBottom: "12px",
               }}
             />
             <Text
               style={{
-                fontSize: "18px",
+                fontSize: "15px",
                 color: "rgba(10, 95, 224, 0.8)",
                 fontWeight: "600",
                 display: "block",
-                marginBottom: "8px",
+                marginBottom: "4px",
               }}
             >
-              <TrophyFilled style={{ marginRight: "8px" }} />
-              Ranking en Proceso
+              El ranking se activara al finalizar el primer intervalo
             </Text>
-            <Text
-              style={{
-                fontSize: "14px",
-                color: "rgba(10, 95, 224, 0.7)",
-                display: "block",
-                marginBottom: "12px",
-              }}
-            >
-              El ranking estará disponible después del primer intervalo
-            </Text>
-            <Text
-              style={{
-                fontSize: "12px",
-                color: "rgba(10, 95, 224, 0.6)",
-                display: "block",
-              }}
-            >
-              Fecha estimada: {intervals[0]?.end_date || "Próximamente"}
-            </Text>
-          </Card>
+            <Tag color="cyan">
+              Próximo cierre: {intervals[0]?.end_date || "---"}
+            </Tag>
+          </div>
         ) : (
           <List
             size="small"
             dataSource={data}
+            locale={{ emptyText: "El ranking se activara al finalizar el primer intervalo" }}
             renderItem={(item) => (
               <List.Item style={{ textAlign: "left" }}>
                 <Flex justify="start" style={{ width: "100%" }}>
@@ -184,41 +186,21 @@ const Ranking = () => {
               </List.Item>
             )}
             header={
-              <Flex justify="space-between" style={{ width: "100%" }}>
-                <Text
-                  style={{
-                    fontSize: "20px",
-                    color: "rgba(10, 95, 224, 0.8)",
-                    fontWeight: "600",
-                  }}
-                >
-                  <TrophyFilled
-                    style={{
-                      color: "rgba(10, 95, 224, 0.8)",
-                      marginRight: "10px",
-                    }}
-                  />
-                  Ranking
-                </Text>
-
-                <Flex align="center">
-                  <CalendarFilled
-                    style={{
-                      color: "rgba(10, 95, 224, 0.8)",
-                      marginRight: "10px",
-                    }}
-                  />
-                  <Text
-                    style={{ fontSize: "14px", color: "rgba(10, 95, 224, 0.7)" }}
-                  >
-                    {
-                      intervals.find(
-                        (interval) => interval.interval_id === selectedInterval
-                      )?.end_date
-                    }
-                  </Text>
+              selectedInterval && (
+                <Flex justify="flex-end" style={{ width: "100%" }}>
+                  <Flex align="center">
+                    <Text
+                      style={{ fontSize: "14px", color: "rgba(10, 95, 224, 0.7)" }}
+                    >
+                      {
+                        intervals.find(
+                          (interval) => interval.interval_id === selectedInterval
+                        )?.end_date
+                      }
+                    </Text>
+                  </Flex>
                 </Flex>
-              </Flex>
+              )
             }
           />
         )}

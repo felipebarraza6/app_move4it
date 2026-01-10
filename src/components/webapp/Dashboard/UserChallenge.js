@@ -782,9 +782,9 @@ const UserChallenge = ({ challengers }) => {
         title={
           <Flex gap="small" align="center" justify="space-between">
             <Flex gap="small" style={{ color: "#0A5FE0", fontFamily: "'Montserrat', sans-serif", fontWeight: 600 }}>
-              {window.innerWidth > 726 && <OrderedListOutlined style={{ color: "#0A5FE0" }} />}{" "}
+              <OrderedListOutlined style={{ color: "#0A5FE0" }} />{" "}
               {location.pathname === "/profile_competition"
-                ? window.innerWidth > 726 && "Tus pruebas en competencía"
+                ? "Tus pruebas en competencía"
                 : "Tus pruebas"}
             </Flex>
             <Flex>{extra()}</Flex>
@@ -792,6 +792,11 @@ const UserChallenge = ({ challengers }) => {
         }
         headStyle={{
           borderBottom: "1px solid rgba(10, 95, 224, 0.2)",
+        }}
+        styles={{
+          body: {
+            padding: window.innerWidth < 768 ? "8px" : "24px"
+          }
         }}
         style={{
           ...styles.table,
@@ -814,7 +819,7 @@ const UserChallenge = ({ challengers }) => {
                 <Tag
                   style={{
                     backgroundColor: "rgba(18, 227, 194, 0.1)",
-                    color: "rgba(18, 227, 194, 0.9)",
+                    color: "black",
                     border: "1px solid rgba(18, 227, 194, 0.03)",
                   }}
                 >
@@ -939,6 +944,7 @@ const UserChallenge = ({ challengers }) => {
               bordered={true}
               pagination={false}
               columns={columns}
+              locale={{ emptyText: "No hay datos disponibles" }}
             />
           </Flex>
         </Flex>

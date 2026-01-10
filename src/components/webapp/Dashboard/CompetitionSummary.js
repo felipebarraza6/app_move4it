@@ -6,7 +6,7 @@ import {
   FlagOutlined,
   TeamOutlined,
   TrophyFilled,
-  CalendarFilled,
+  CalendarFilled,WarningOutlined 
 } from "@ant-design/icons";
 import { parseDateYMDLocal, normalizeDateOnly } from "../../../utils/date";
 
@@ -111,6 +111,11 @@ const CompetitionSummary = () => {
           {name_competition}"
         </Flex>
       }
+      styles={{
+        body: {
+          padding: window.innerWidth < 768 ? "8px" : "24px"
+        }
+      }}
       style={styles.card}
       size="small"
     >
@@ -118,9 +123,9 @@ const CompetitionSummary = () => {
         <Flex vertical gap="small" style={{ minWidth: "120px" }}>
           <Flex align="center" gap="small">
             <TeamOutlined style={{ color: "#0A5FE0" }} />
-            <span style={{ fontSize: "14px", color: "#666" }}>Equipo</span>
+            <span style={{ fontSize: "12px", color: "#666" }}>Equipo</span>
           </Flex>
-          <span style={{ fontSize: "16px", fontWeight: "500" }}>
+          <span style={{ fontSize: "13px", fontWeight: "600", color: "#0A5FE0" }}>
             {name_team}
           </span>
         </Flex>
@@ -137,8 +142,8 @@ const CompetitionSummary = () => {
               lineHeight: "1.3",
             }}
           >
-            <div style={{ color: "#12E3C2", fontWeight: "500" }}>
-              ⚠️ Comienza el{" "}
+            <div style={{ color: "black", fontWeight: "500" }}>
+              <WarningOutlined /> Comienza el{" "}
               {startDate.toLocaleDateString("es-ES", {
                 day: "2-digit",
                 month: "short",

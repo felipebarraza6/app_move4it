@@ -8,6 +8,7 @@ import {
   CheckCircleFilled,
   CloseCircleFilled,
   TrophyFilled,
+  TeamOutlined,
 } from "@ant-design/icons";
 import { AppContext } from "../../../App";
 import { parseDateYMDLocal, normalizeDateOnly } from "../../../utils/date";
@@ -746,11 +747,17 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
     <Card
       title={
         <span style={{ color: "#0A5FE0", fontFamily: "'Montserrat', sans-serif", fontWeight: 600 }}>
-          {window.innerWidth > 726 ? "Actividad de mi equipo" : <></>}
+          <TeamOutlined style={{ color: "#0A5FE0", marginRight: "8px" }} />
+          Actividad de mi equipo
         </span>
       }
       headStyle={{
         borderBottom: "1px solid rgba(10, 95, 224, 0.2)",
+      }}
+      styles={{
+        body: {
+          padding: window.innerWidth < 768 ? "8px" : "24px"
+        }
       }}
       style={{
         ...styles.card,

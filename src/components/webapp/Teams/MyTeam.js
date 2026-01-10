@@ -27,7 +27,7 @@ const MyTeam = () => {
   }
 
   return (
-    <Flex>
+    <Flex style={{ width: "100%" }}>
       <Card
         title={
           <div
@@ -40,8 +40,14 @@ const MyTeam = () => {
             {name}
           </div>
         }
+        styles={{
+          body: {
+            padding: window.innerWidth < 768 ? "12px" : "24px"
+          }
+        }}
         style={{
-          width: window.innerWidth > 726 ? "300px" : "100%",
+          width: "100%",
+          maxWidth: window.innerWidth > 726 ? "350px" : "none",
           background:
             "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
           border: "1px solid rgba(10, 95, 224, 0.2)",

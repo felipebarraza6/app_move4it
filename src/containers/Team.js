@@ -288,346 +288,229 @@ const Team = () => {
   ];
 
   return (
-    <Row
-      justify={window.innerWidth > 900 ? "space-between" : "center"}
-      align="middle"
-    >
-      <Flex
-        justify="space-between"
-        align="middle"
-        gap="large"
-        style={{ width: "100%" }}
-        vertical
-      >
-        {/* Mostrar mensaje si la competencia no ha comenzado */}
-        {competitionNotStarted && (
-          <Alert
-            message={`La competencia comenzará el ${startDate.toLocaleDateString(
-              "es-ES",
-              {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-              }
-            )}`}
-            description="Los datos del equipo estarán disponibles cuando comience la competencia."
-            type="warning"
-            showIcon
-            icon={<ClockCircleOutlined />}
-            style={{
-              marginBottom: "16px",
-              backgroundColor: "rgba(18, 227, 194, 0.1)",
-              border: "1px solid rgba(18, 227, 194, 0.03)",
-            }}
-          />
-        )}
+    <div className="stagger-item delay-1">
+      <Flex gap={window.innerWidth < 768 ? "small" : "large"} vertical>
+        {/* Top Row: MyTeam and AverageMeditions */}
+        <Flex
+          gap={window.innerWidth < 768 ? "small" : "large"}
+          justify="space-between"
+          align="stretch"
+          vertical={window.innerWidth < 900}
+          className="stagger-item delay-2"
+        >
+          <div style={{ flex: 1, display: 'flex' }}>
+            <MyTeam />
+          </div>
+          <div style={{ flex: 1.5, display: 'flex' }}>
+            <AverageMeditions />
+          </div>
+        </Flex>
 
-        {/* Mostrar mensaje si la competencia ha terminado */}
-        {competitionEnded && (
-          <Alert
-            message={`La competencia terminó el ${endDate.toLocaleDateString(
-              "es-ES",
-              {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
+        {/* Status Alerts and Activity Data */}
+        <div className="stagger-item delay-3">
+          {competitionNotStarted ? (
+            <Card
+              title={
+                <span style={{ color: "#0A5FE0", fontFamily: "'Montserrat', sans-serif", fontWeight: 600 }}>
+                  Actividad del equipo
+                </span>
               }
-            )}`}
-            description="Revisa el resumen y resultados finales disponibles."
-            type="success"
-            showIcon
-            icon={
-              <CheckCircleFilled
+              className="premium-card"
+            >
+              <div
                 style={{
-                  background:
-                    "linear-gradient(135deg, rgba(10, 95, 224, 0.95) 0%, rgba(10, 140, 207, 0.9) 50%, rgba(18, 227, 194, 0.95) 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                  fontSize: "18px",
+                  width: "100%",
+                  textAlign: "center",
+                  padding: "20px",
+                  color: "rgba(10, 95, 224, 0.6)",
+                  fontSize: "14px",
+                  fontStyle: "italic",
+                }}
+              >
+                Los datos del equipo estarán disponibles cuando comience la competencia.
+              </div>
+            </Card>
+          ) : (
+            <div className="stagger-item delay-4">
+              <MyTeamActivity
+                team_data={
+                  teamData && teamData[selectedIntervalIndex]
+                    ? teamData[selectedIntervalIndex]
+                    : null
+                }
+                navigationProps={{
+                  completedIntervals: (() => {
+                    if (!teamData || !Array.isArray(teamData)) return [];
+                    const today = new Date().toISOString().split("T")[0];
+                    const completedHistoricalIntervals = teamData.filter(
+                      (interval) => interval.end_date < today
+                    );
+                    return completedHistoricalIntervals.sort((a, b) => {
+                      return (
+                        parseDateYMDLocal(b.end_date) -
+                        parseDateYMDLocal(a.end_date)
+                      );
+                    });
+                  })(),
+                  selectedIntervalIndex,
+                  setSelectedIntervalIndex,
                 }}
               />
-            }
-            style={{
-              marginBottom: "16px",
-              backgroundColor: "rgba(10, 95, 224, 0.1)",
-              border: "1px solid rgba(10, 95, 224, 0.3)",
-            }}
-          />
+            </div>
+          )}
+        </div>
+
+        {/* End of Competition Alert (Conditional) */}
+        {competitionEnded && (
+          <div className="stagger-item delay-5">
+            <Alert
+              message={`La competencia terminó el ${endDate.toLocaleDateString(
+                "es-ES",
+                {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                }
+              )}`}
+              description="Revisa el historial de participación del equipo."
+              type="success"
+              showIcon
+              icon={<CheckCircleFilled style={{ color: "rgba(18, 227, 194,1)" }} />}
+              style={{
+                backgroundColor: "rgba(10, 95, 224, 0.1)",
+                border: "1px solid rgba(10, 95, 224, 0.3)",
+                borderRadius: "12px",
+              }}
+            />
+          </div>
         )}
 
-        <Flex
-          gap="large"
-          justify="space-between"
-          align="middle"
-          vertical={window.innerWidth > 900 ? false : true}
-        >
-          <MyTeam />
-          <AverageMeditions />
-        </Flex>
-        <Flex>
-          {(() => {
-            // Mostrar datos siempre, pero con navegación solo si hay intervalos completados
-            if (competitionNotStarted) {
-              return (
+        {/* Bottom Card: Historial de Puntos */}
+        <div className="stagger-item delay-5">
+          <Card
+            title={
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  color: "rgba(10, 95, 224, 0.8)",
+                  fontWeight: "600",
+                }}
+              >
                 <div
-                  style={{
-                    width: "100%",
-                    textAlign: "center",
-                    padding: "40px 20px",
-                    color: "rgba(10, 95, 224, 0.6)",
-                    fontSize: "14px",
-                    fontStyle: "italic",
-                    background:
-                      "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
-                    border: "1px solid rgba(10, 95, 224, 0.2)",
-                    borderRadius: "16px",
-                    boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
-                  }}
+                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
                 >
-                  Los datos del equipo estarán disponibles cuando comience la
-                  competencia.
+                  <TrophyFilled />
+                  Historial de Puntos
                 </div>
-              );
+              </div>
             }
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
+              border: "1px solid rgba(10, 95, 224, 0.2)",
+              borderRadius: "12px",
+              boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
+            }}
+          >
+            {(() => {
+              const hasCompletedIntervals = dataSource.length > 0;
 
-            // Si hay intervalos completados, mostrar con navegación
-            if (
-              completedIntervals.length > 0 &&
-              teamData &&
-              Array.isArray(teamData)
-            ) {
-              const today = new Date().toISOString().split("T")[0];
-              const hasHistoricalData = teamData.some(
-                (interval) => interval.end_date < today
-              );
-
-              console.log("hasHistoricalData:", hasHistoricalData);
-              console.log(
-                "getSelectedIntervalData():",
-                getSelectedIntervalData()
-              );
-
-              if (!hasHistoricalData) {
+              if (!hasCompletedIntervals) {
                 return (
                   <div
                     style={{
-                      width: "100%",
                       textAlign: "center",
                       padding: "40px 20px",
                       color: "rgba(10, 95, 224, 0.6)",
                       fontSize: "14px",
                       fontStyle: "italic",
-                      background:
-                        "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
-                      border: "1px solid rgba(10, 95, 224, 0.2)",
-                      borderRadius: "16px",
-                      boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
                     }}
                   >
-                    Los datos de actividad estarán disponibles después de que
-                    termine el primer intervalo.
+                    Los datos estarán disponibles después de que termine el primer
+                    intervalo.
                   </div>
                 );
               }
 
               return (
-                <div style={{ width: "100%" }}>
-                  <MyTeamActivity
-                    team_data={getSelectedIntervalData()}
-                    navigationProps={{
-                      completedIntervals: (() => {
-                        if (!teamData || !Array.isArray(teamData)) return [];
-                        const today = new Date().toISOString().split("T")[0];
-                        const completedHistoricalIntervals = teamData.filter(
-                          (interval) => interval.end_date < today
-                        );
-                        // Ordenar descendente: el más reciente primero (índice 0)
-                        return completedHistoricalIntervals.sort((a, b) => {
-                          return (
-                            parseDateYMDLocal(b.end_date) -
-                            parseDateYMDLocal(a.end_date)
-                          );
-                        });
-                      })(),
-                      selectedIntervalIndex,
-                      setSelectedIntervalIndex,
-                    }}
-                  />
-                </div>
-              );
-            }
-
-            // Si no hay intervalos completados pero la competencia está activa o terminada
-            return (
-              <div
-                style={{
-                  width: "100%",
-                  textAlign: "center",
-                  padding: "40px 20px",
-                  color: "rgba(10, 95, 224, 0.6)",
-                  fontSize: "14px",
-                  fontStyle: "italic",
-                  background:
-                    "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
-                  border: "1px solid rgba(10, 95, 224, 0.2)",
-                  borderRadius: "16px",
-                  boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
-                }}
-              >
-                Los datos estarán disponibles después de que termine el primer
-                intervalo.
-              </div>
-            );
-          })()}
-        </Flex>
-        <Card
-          title={
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                color: "rgba(10, 95, 224, 0.8)",
-                fontWeight: "600",
-              }}
-            >
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "8px" }}
-              >
-                <TrophyFilled />
-                Historial de Puntos
-              </div>
-            </div>
-          }
-          style={{
-            background:
-              "linear-gradient(135deg, rgba(10, 95, 224, 0.05) 0%, rgba(18, 227, 194, 0.03) 100%)",
-            border: "1px solid rgba(10, 95, 224, 0.2)",
-            borderRadius: "12px",
-            boxShadow: "0 4px 12px rgba(10, 95, 224, 0.1)",
-            marginTop: "16px",
-          }}
-        >
-          {(() => {
-            const today = new Date().toISOString().split("T")[0];
-            const hasCompletedIntervals = (() => {
-              if (!teamData || !Array.isArray(teamData)) {
-                return false;
-              }
-
-              return teamData.some((interval) => {
-                if (!interval || !interval.end_date) return false;
-
-                // Normalizar fechas para comparación
-                const intervalEndDate = interval.end_date.split("T")[0]; // Asegurar formato YYYY-MM-DD
-                return intervalEndDate < today;
-              });
-            })();
-
-            if (!hasCompletedIntervals) {
-              return (
-                <div
+                <Table
                   style={{
-                    textAlign: "center",
-                    padding: "40px 20px",
-                    color: "rgba(10, 95, 224, 0.6)",
-                    fontSize: "14px",
-                    fontStyle: "italic",
+                    width: "100%",
                   }}
-                >
-                  Los datos estarán disponibles después de que termine el primer
-                  intervalo.
-                </div>
-              );
-            }
+                  bordered
+                  dataSource={dataSource}
+                  columns={columns}
+                  pagination={false}
+                  size="middle"
+                  rowClassName={(record, index) =>
+                    index === selectedIntervalIndex
+                      ? "selected-interval-row"
+                      : "historical-interval-row"
+                  }
+                  onRow={(record, index) => ({
+                    onClick: () => setSelectedIntervalIndex(index),
+                    style: {
+                      cursor: "pointer",
+                      backgroundColor:
+                        index === selectedIntervalIndex
+                          ? "rgba(10, 95, 224, 0.1)"
+                          : "transparent",
+                    },
+                  })}
+                  summary={() => {
+                    if (dataSource.length === 0) return null;
 
-            return (
-              <Table
-                style={{
-                  width: "100%",
-                }}
-                bordered
-                dataSource={dataSource}
-                columns={columns}
-                pagination={false}
-                size="middle"
-                rowClassName={(record, index) =>
-                  index === selectedIntervalIndex
-                    ? "selected-interval-row"
-                    : "historical-interval-row"
-                }
-                onRow={(record, index) => ({
-                  onClick: () => setSelectedIntervalIndex(index),
-                  style: {
-                    cursor: "pointer",
-                    backgroundColor:
-                      index === selectedIntervalIndex
-                        ? "rgba(10, 95, 224, 0.1)"
-                        : "transparent",
-                  },
-                })}
-                summary={() => {
-                  if (dataSource.length === 0) return null;
+                    const totalPuntosIntervalo = dataSource.reduce(
+                      (sum, record) => sum + record.puntosIntervalo,
+                      0
+                    );
 
-                  // Calcular la suma de todos los puntos por intervalo
-                  const totalPuntosIntervalo = dataSource.reduce(
-                    (sum, record) => sum + record.puntosIntervalo,
-                    0
-                  );
-
-                  // El total acumulado es el valor más alto (último intervalo cronológicamente)
-                  const totalAcumuladoFinal = Math.max(
-                    ...dataSource.map((record) => record.puntosAcumulados)
-                  );
-
-                  return (
-                    <Table.Summary.Row
-                      style={{
-                        backgroundColor: "rgba(10, 95, 224, 0.15)",
-                        fontWeight: "700",
-                        borderTop: "3px solid rgba(10, 95, 224, 0.4)",
-                      }}
-                    >
-                      <Table.Summary.Cell colSpan={3}>
-                        <span
-                          style={{
-                            color: "rgba(10, 95, 224, 0.9)",
-                            fontWeight: "700",
-                            fontSize: "15px",
-                          }}
-                        >
-                          TOTAL
-                        </span>
-                      </Table.Summary.Cell>
-                      <Table.Summary.Cell align="center">
-                        {/* Celda vacía para la columna de Posición */}
-                      </Table.Summary.Cell>
-                      <Table.Summary.Cell align="center">
-                        <Flex align="center" gap="small" justify="center">
+                    return (
+                      <Table.Summary.Row
+                        style={{
+                          backgroundColor: "rgba(10, 95, 224, 0.15)",
+                          fontWeight: "700",
+                          borderTop: "3px solid rgba(10, 95, 224, 0.4)",
+                        }}
+                      >
+                        <Table.Summary.Cell colSpan={3}>
                           <span
                             style={{
-                              color: "rgba(18, 227, 194,1)",
+                              color: "rgba(10, 95, 224, 0.9)",
                               fontWeight: "700",
-                              fontSize: "16px",
+                              fontSize: "15px",
                             }}
                           >
-                            +{totalPuntosIntervalo}
+                            TOTAL
                           </span>
-                        </Flex>
-                      </Table.Summary.Cell>
-                      <Table.Summary.Cell align="center">
-                        {/* Celda vacía para la columna de Total Acumulado */}
-                      </Table.Summary.Cell>
-                    </Table.Summary.Row>
-                  );
-                }}
-              />
-            );
-          })()}
-        </Card>
+                        </Table.Summary.Cell>
+                        <Table.Summary.Cell align="center" />
+                        <Table.Summary.Cell align="center">
+                          <Flex align="center" gap="small" justify="center">
+                            <span
+                              style={{
+                                color: "rgba(18, 227, 194,1)",
+                                fontWeight: "700",
+                                fontSize: "16px",
+                              }}
+                            >
+                              +{totalPuntosIntervalo}
+                            </span>
+                          </Flex>
+                        </Table.Summary.Cell>
+                        <Table.Summary.Cell align="center" />
+                      </Table.Summary.Row>
+                    );
+                  }}
+                />
+              );
+            })()}
+          </Card>
+        </div>
       </Flex>
-    </Row>
+    </div>
   );
 };
 
