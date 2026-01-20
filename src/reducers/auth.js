@@ -24,8 +24,7 @@ export const authReducer = (state, action) => {
       };
 
     case "LOGOUT":
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
+      localStorage.clear();
       return {
         ...state,
         isAuth: false,
@@ -142,15 +141,6 @@ export const authReducer = (state, action) => {
             },
           },
         },
-      };
-
-    case "LOGOUT":
-      localStorage.clear();
-      return {
-        ...state,
-        isAuth: false,
-        token: null,
-        user: null,
       };
 
     // ... other actions
