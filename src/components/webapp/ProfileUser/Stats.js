@@ -53,23 +53,30 @@ const Stats = () => {
   }, [location.pathname, state.user.profile.corporal_meditions]);
 
   return (
-    <Table
-      size="small"
-      bordered
-      style={{
-        width: isMobile ? "100%" : location.pathname !== "/" ? "100%" : "40%",
-      }}
+    <div className="premium-card" style={{ width: "100%", height: "100%" }}>
+      <Table
+        size="small"
+        bordered={false}
+        style={{ width: "100%" }}
       title={() => (
-        <Flex gap="small" justify="space-between">
-          <Flex gap="small">
-            <LineChartOutlined />
-            <strong>Mediciones Corporales</strong>
+        <Flex gap="small" justify="space-between" align="center">
+          <Flex gap="small" align="center">
+            <LineChartOutlined style={{ color: "#12E3C2" }} />
+            <span style={{ fontWeight: "600", color: "#1a1a1a", fontSize: "13px" }}>Mediciones Corporales</span>
           </Flex>
           <Button
             size="small"
-            type="dashed"
+            type="text"
             onClick={navigateButton}
             disabled={location.pathname === "/profile_user"}
+            style={{ 
+              fontSize: "11px", 
+              background: "rgba(18, 227, 194, 0.1)",
+              color: "#12E3C2",
+              fontWeight: "600",
+              height: "24px",
+              padding: "0 8px"
+            }}
           >
             {state.user.profile.corporal_meditions.length} mediciones
           </Button>
@@ -78,47 +85,65 @@ const Stats = () => {
       columns={[
         {
           name: "created",
-          title: "Fecha",
+          title: <span style={{ whiteSpace: "nowrap", fontSize: "11px", fontWeight: "600", color: "#666" }}>Fecha / Hora</span>,
           dataIndex: "created",
-          width: "25%",
+          width: "35%",
           render: (d) => (
-            <Flex gap="small" vertical>
-              <div> {d.slice(0, 10)}</div>
-              <div>
-                {" "}
-                <b>{d.slice(11, 16)} hrs.</b>
-              </div>
-            </Flex>
+            <div style={{ fontSize: "11px", whiteSpace: "nowrap" }}>
+              <span style={{ fontWeight: "500", color: "#333" }}>{d.slice(0, 10)}</span>
+              <span style={{ 
+                marginLeft: "8px", 
+                fontSize: "10px", 
+                opacity: 0.7,
+                fontWeight: 400,
+                color: "#666"
+              }}>
+                {d.slice(11, 16)} hrs.
+              </span>
+            </div>
           ),
         },
         {
           name: "fat",
-          title: isMobile ? "grasa" : "% Grasa",
+          title: <span style={{ whiteSpace: "nowrap", fontSize: "11px", fontWeight: "600", color: "#666" }}>{isMobile ? "grasa" : "% Grasa"}</span>,
           dataIndex: "fat",
-          width: "25%",
+          width: "20%",
           align: "center",
-          render: (value) => (value ? parseFloat(value).toFixed(2) : value),
+          render: (value) => (
+            <span style={{ fontSize: "13px", fontWeight: "600", color: "#12E3C2" }}>
+              {value ? parseFloat(value).toFixed(1) : value}
+            </span>
+          ),
         },
         {
           name: "weight",
-          title: isMobile ? "peso" : "Peso(kg)",
+          title: <span style={{ whiteSpace: "nowrap", fontSize: "11px", fontWeight: "600", color: "#666" }}>{isMobile ? "peso" : "Peso(kg)"}</span>,
           dataIndex: "weight",
-          width: "25%",
+          width: "20%",
           align: "center",
-          render: (value) => (value ? parseFloat(value).toFixed(2) : value),
+          render: (value) => (
+            <span style={{ fontSize: "13px", fontWeight: "600", color: "#0A8CCF" }}>
+              {value ? parseFloat(value).toFixed(1) : value}
+            </span>
+          ),
         },
         {
           name: "height",
-          title: isMobile ? "altura" : "Altura(mt)",
+          title: <span style={{ whiteSpace: "nowrap", fontSize: "11px", fontWeight: "600", color: "#666" }}>{isMobile ? "altura" : "Altura(mt)"}</span>,
           dataIndex: "height",
           width: "25%",
           align: "center",
-          render: (value) => (value ? parseFloat(value).toFixed(2) : value),
+          render: (value) => (
+            <span style={{ fontSize: "12px", fontWeight: "500", color: "#666" }}>
+              {value ? parseFloat(value).toFixed(2) : value}
+            </span>
+          ),
         },
       ]}
       dataSource={data}
       pagination={sourcePagination()}
     />
+    </div>
   );
 };
 

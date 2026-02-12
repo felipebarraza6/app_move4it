@@ -50,9 +50,9 @@ const AverageMeditions = () => {
 
   return (
     <Flex
-      gap="large"
+      gap={window.innerWidth < 768 ? "small" : "large"}
       justify="center"
-      align="center"
+      align="stretch"
       style={{ width: "100%" }}
       vertical
     >
@@ -85,83 +85,95 @@ const AverageMeditions = () => {
           }
         >
           <Flex
-            gap="large"
+            gap={window.innerWidth < 768 ? "small" : "large"}
             justify="center"
-            align="center"
+            align="stretch"
             style={{ marginBottom: "10px" }}
             vertical={window.innerWidth > 900 ? false : true}
           >
             <Card
               size="small"
+              styles={{ body: { padding: window.innerWidth < 768 ? "8px" : "16px" }}}
               hoverable
               style={{ ...styles.static, textAlign: "center" }}
             >
               <Statistic
                 title="Estatura Inicial"
                 value={firstAvg.height.toFixed(2)}
-                suffix={<Text>mt</Text>}
+                valueStyle={{ fontSize: window.innerWidth < 768 ? "16px" : "20px" }}
+                suffix={<Text style={{ fontSize: "12px" }}>mt</Text>}
               />
             </Card>
             <Card
               size="small"
+              styles={{ body: { padding: window.innerWidth < 768 ? "8px" : "16px" }}}
               hoverable
               style={{ ...styles.static, textAlign: "center" }}
             >
               <Statistic
                 title="Grasa Inicial"
                 value={firstAvg.fat.toFixed(2)}
-                suffix={<Text>%</Text>}
+                valueStyle={{ fontSize: window.innerWidth < 768 ? "16px" : "20px" }}
+                suffix={<Text style={{ fontSize: "12px" }}>%</Text>}
               />
             </Card>
             <Card
               size="small"
+              styles={{ body: { padding: window.innerWidth < 768 ? "8px" : "16px" }}}
               hoverable
               style={{ ...styles.static, textAlign: "center" }}
             >
               <Statistic
                 title="Peso Inicial"
                 value={firstAvg.weight.toFixed(2)}
-                suffix={<Text>Kg</Text>}
+                valueStyle={{ fontSize: window.innerWidth < 768 ? "16px" : "20px" }}
+                suffix={<Text style={{ fontSize: "12px" }}>Kg</Text>}
               />
             </Card>
           </Flex>
           <Flex
-            gap="large"
+            gap={window.innerWidth < 768 ? "small" : "large"}
             justify="center"
-            align="center"
+            align="stretch"
             vertical={window.innerWidth > 900 ? false : true}
           >
             <Card
               size="small"
+              styles={{ body: { padding: window.innerWidth < 768 ? "8px" : "16px" }}}
               hoverable
               style={{ ...styles.static, textAlign: "center" }}
             >
               <Statistic
                 title="Estatura Actual"
                 value={lastAvg.height.toFixed(2)}
-                suffix={<Text>mt</Text>}
+                valueStyle={{ fontSize: window.innerWidth < 768 ? "16px" : "20px" }}
+                suffix={<Text style={{ fontSize: "12px" }}>mt</Text>}
               />
             </Card>
             <Card
               size="small"
+              styles={{ body: { padding: window.innerWidth < 768 ? "8px" : "16px" }}}
               hoverable
               style={{ ...styles.static, textAlign: "center" }}
             >
               <Statistic
                 title="Grasa Actual"
                 value={lastAvg.fat.toFixed(2)}
-                suffix={<Text>%</Text>}
+                valueStyle={{ fontSize: window.innerWidth < 768 ? "16px" : "20px" }}
+                suffix={<Text style={{ fontSize: "12px" }}>%</Text>}
               />
             </Card>
             <Card
               size="small"
+              styles={{ body: { padding: window.innerWidth < 768 ? "8px" : "16px" }}}
               hoverable
               style={{ ...styles.static, textAlign: "center" }}
             >
               <Statistic
                 title="Peso Actual"
                 value={lastAvg.weight.toFixed(2)}
-                suffix={<Text>Kg</Text>}
+                valueStyle={{ fontSize: window.innerWidth < 768 ? "16px" : "20px" }}
+                suffix={<Text style={{ fontSize: "12px" }}>Kg</Text>}
               />
             </Card>
           </Flex>

@@ -94,6 +94,11 @@ const retrieve_competence = async (id) => {
   return request.data;
 };
 
+const retrieve_competence_stats = async (id) => {
+  const request = await methods.GET(`competences/${id}/stats/`);
+  return request.data;
+};
+
 export const endpoints = {
   auth: {
     login: login,
@@ -115,5 +120,6 @@ export const endpoints = {
   competence: {
     list: list_competences,
     retrieve: retrieve_competence,
+    retrieveStats: retrieve_competence_stats, // NEW: For lazy loading stats
   },
 };

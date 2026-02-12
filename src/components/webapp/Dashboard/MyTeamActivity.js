@@ -8,6 +8,7 @@ import {
   CheckCircleFilled,
   CloseCircleFilled,
   TrophyFilled,
+  TeamOutlined,
 } from "@ant-design/icons";
 import { AppContext } from "../../../App";
 import { parseDateYMDLocal, normalizeDateOnly } from "../../../utils/date";
@@ -18,12 +19,41 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
   const location = useLocation();
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    const processedData = processTeamData();
-    setData(processedData);
-  }, [team_data]);
+  // Check if stats are loaded (for lazy loading compatibility)
+  const hasStats = state.user?.enterprise_competition_overflow?.last_competence?.stats;
+  
+  const last_competence_end =
+    state.user?.enterprise_competition_overflow?.last_competence?.end_date;
 
-  // Early return if team_data is not available
+  const active_competence = () => {
+    if (!last_competence_end) return false;
+    const today = new Date().toISOString().split("T")[0];
+    return !(last_competence_end < today);
+  };
+
+  // Process team_data which is now my_group structure
+  const processTeamData = React.useCallback(() => {
+    if (!team_data || typeof team_data !== "object") return [];
+
+    // Detectar el tipo de estructura de datos
+    if (team_data.data || team_data.intervals) {
+      // Estructura de Team.js
+      return processIntervalsStructure(team_data);
+    } else {
+      // Estructura de Dashboard.js
+      return processMyGroupStructure(team_data);
+    }
+  }, [team_data, location.pathname]);
+
+  // useEffect MUST be before any conditional returns (React Rules of Hooks)
+  useEffect(() => {
+    if (team_data) {
+      const processedData = processTeamData();
+      setData(processedData);
+    }
+  }, [team_data, processTeamData]);
+
+  // Early return if team_data is not available - AFTER all hooks
   if (!team_data) {
     console.log("MyTeamActivity: team_data is undefined");
     return (
@@ -47,35 +77,6 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
       </Card>
     );
   }
-
-  const last_competence_end =
-    state.user.enterprise_competition_overflow.last_competence.end_date;
-
-  const active_competence = () => {
-    const today = new Date().toISOString().split("T")[0];
-
-    if (last_competence_end < today) {
-      return false;
-    } else {
-      return true;
-    }
-  };
-
-  // Process team_data which is now my_group structure
-  // team_data = { "empleado1@gmail.com": [...activities], "empleado2@gmail.com": [...activities] }
-
-  const processTeamData = () => {
-    if (!team_data || typeof team_data !== "object") return [];
-
-    // Detectar el tipo de estructura de datos
-    if (team_data.data || team_data.intervals) {
-      // Estructura de Team.js: historical_data con data.my_team o stats.my_team con intervals
-      return processIntervalsStructure(team_data);
-    } else {
-      // Estructura de Dashboard.js: my_group con emails como claves
-      return processMyGroupStructure(team_data);
-    }
-  };
 
   const processIntervalsStructure = (teamData) => {
     // Determinar si estamos en Team.js (mostrar intervalos anteriores) o Dashboard.js (mostrar intervalo actual)
@@ -158,8 +159,8 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
     } else {
       // En Dashboard.js: mostrar intervalo actual
       const currentIntervalData =
-        state.user.enterprise_competition_overflow.last_competence.stats
-          .current_interval_data;
+        state.user?.enterprise_competition_overflow?.last_competence?.stats
+          ?.current_interval_data;
       let currentInterval = 0; // Fallback al primer intervalo
 
       if (currentIntervalData && currentIntervalData.id) {
@@ -331,8 +332,8 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
       } else {
         // En Dashboard.js: mostrar actividades del intervalo actual
         const currentIntervalData =
-          state.user.enterprise_competition_overflow.last_competence.stats
-            .current_interval_data;
+          state.user?.enterprise_competition_overflow?.last_competence?.stats
+            ?.current_interval_data;
         let currentInterval = 0;
 
         if (currentIntervalData && currentIntervalData.id) {
@@ -687,9 +688,19 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
       return null;
     } else {
       // En Dashboard.js: mostrar fechas del intervalo actual
-      const currentIntervalData =
-        state.user.enterprise_competition_overflow.last_competence.stats
-          .current_interval_data;
+      // Check if stats are loaded first
+      const stats = state.user?.enterprise_competition_overflow?.last_competence?.stats;
+      if (!stats) {
+        // Stats still loading, show fallback
+        return (
+          <Flex gap="small" align="center">
+            <CalendarFilled style={{ color: "rgba(10, 95, 224, 0.8)" }} />
+            <span style={{ fontSize: "12px", color: "#666" }}>Cargando...</span>
+          </Flex>
+        );
+      }
+      
+      const currentIntervalData = stats.current_interval_data;
 
       let startDate, endDate;
 
@@ -736,11 +747,17 @@ const MyTeamActivity = ({ team_data, navigationProps }) => {
     <Card
       title={
         <span style={{ color: "#0A5FE0", fontFamily: "'Montserrat', sans-serif", fontWeight: 600 }}>
-          {window.innerWidth > 726 ? "Actividad de mi equipo" : <></>}
+          <TeamOutlined style={{ color: "#0A5FE0", marginRight: "8px" }} />
+          Actividad de mi equipo
         </span>
       }
       headStyle={{
         borderBottom: "1px solid rgba(10, 95, 224, 0.2)",
+      }}
+      styles={{
+        body: {
+          padding: window.innerWidth < 768 ? "8px" : "24px"
+        }
       }}
       style={{
         ...styles.card,

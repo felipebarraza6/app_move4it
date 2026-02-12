@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Layout, Card, Flex, Affix, Button } from "antd";
+import React, { useState, useEffect, useContext } from "react";
+import { Layout, Card, Flex, Affix, Button, Popconfirm } from "antd";
 
 import {
   UserOutlined,
@@ -7,8 +7,12 @@ import {
   TeamOutlined,
   DatabaseOutlined,
   DashboardFilled,
+  BookOutlined,
+  SnippetsOutlined,
+  LogoutOutlined,
 } from "@ant-design/icons";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { AppContext } from "../App";
 
 // Nav
 import MenuNav from "../components/webapp/MenuNav";
@@ -29,6 +33,7 @@ import GlobalViewer from "./GlobalViewer";
 const { Content, Header, Sider } = Layout;
 
 const Home = () => {
+  const { state, dispatch } = useContext(AppContext);
   const location = useLocation();
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
@@ -54,111 +59,161 @@ const Home = () => {
         <Affix>
           <MenuNav />
         </Affix>
-        <Content style={styles.content}>
+        <Content style={{ 
+          ...styles.content, 
+          margin: window.innerWidth < 900 ? "0" : "0 16px",
+          padding: window.innerWidth < 900 ? "0 4px 4px 4px" : "0",
+        }}>
           {window.innerWidth < 900 && (
-            <Affix offsetTop={70}>
+            <Affix offsetTop={0}>
               <Flex
-                gap={"small"}
-                justify="space-around"
+                gap="4px"
+                justify="space-between"
                 align="center"
                 style={{
-                  marginBottom: "10px",
-                  background: "linear-gradient(135deg, rgba(10, 95, 224, 0.98) 0%, rgba(10, 140, 207, 0.98) 50%, rgba(18, 227, 194, 0.98) 100%)",
-                  padding: "10px",
+                  background: "linear-gradient(135deg, rgba(18, 227, 194, 1) 0%, rgba(10, 140, 207, 1) 100%)",
+                  padding: "4px 12px",
                   backdropFilter: "blur(10px)",
-                  boxShadow: "0 2px 8px rgba(10, 95, 224, 0.15)",
+                  boxShadow: "0 2px 10px rgba(0, 0, 0, 0.2)",
+                  height: "48px",
                 }}
               >
-                <Button
-                  type={"primary"}
-                  icon={
-                    <DashboardFilled
-                      style={{
-                        color: "white",
-                      }}
+                {/* Logo M4IA */}
+                <Flex 
+                  align="center" 
+                  gap="2px" 
+                  onClick={() => navigate("/")} 
+                  style={{ cursor: "pointer", marginRight: "4px" }}
+                  className="futuristic-logo-glow"
+                >
+                  <span style={{ 
+                    color: "white", 
+                    fontSize: "15px", 
+                    fontWeight: "900", 
+                    letterSpacing: "-0.5px",
+                    fontFamily: "'Montserrat', sans-serif"
+                  }}>
+                    MOVE
+                  </span>
+                  <div className="m4ia-box" style={{ 
+                    color: "#052240", 
+                    fontSize: "15px", 
+                    fontWeight: "900", 
+                    background: "white", 
+                    padding: "0 5px", 
+                    borderRadius: "4px",
+                    fontFamily: "'Montserrat', sans-serif",
+                    boxShadow: "0 0 10px rgba(255,255,255,0.5)"
+                  }}>
+                    4IA
+                  </div>
+                </Flex>
+
+                {/* Primary Nav */}
+                <Flex gap="4px" style={{ flex: 1, justifyContent: "center" }}>
+                  <Button
+                    type="primary"
+                    icon={<DashboardFilled style={{ fontSize: "16px" }} />}
+                    size="small"
+                    shape="circle"
+                    onClick={() => navigate("/")}
+                    style={{
+                      background: pathname === "/" ? "rgba(255,255,255,1)" : "transparent",
+                      border: "none",
+                      color: pathname === "/" ? "#12E3C2" : "white",
+                      width: "32px",
+                      height: "32px",
+                    }}
+                  />
+                  <Button
+                    type="primary"
+                    icon={<UserOutlined style={{ fontSize: "16px" }} />}
+                    size="small"
+                    shape="circle"
+                    onClick={() => navigate("/profile_competition")}
+                    style={{
+                      background: pathname === "/profile_competition" ? "rgba(255,255,255,1)" : "transparent",
+                      border: "none",
+                      color: pathname === "/profile_competition" ? "#12E3C2" : "white",
+                      width: "32px",
+                      height: "32px",
+                    }}
+                  />
+                  <Button
+                    type="primary"
+                    icon={<TeamOutlined style={{ fontSize: "16px" }} />}
+                    size="small"
+                    shape="circle"
+                    onClick={() => navigate("/team")}
+                    style={{
+                      background: pathname === "/team" ? "rgba(255,255,255,1)" : "transparent",
+                      border: "none",
+                      color: pathname === "/team" ? "#12E3C2" : "white",
+                      width: "32px",
+                      height: "32px",
+                    }}
+                  />
+                  <Button
+                    type="primary"
+                    icon={<TrophyOutlined style={{ fontSize: "16px" }} />}
+                    size="small"
+                    shape="circle"
+                    onClick={() => navigate("/enterprise")}
+                    style={{
+                      background: pathname === "/enterprise" ? "rgba(255,255,255,1)" : "transparent",
+                      border: "none",
+                      color: pathname === "/enterprise" ? "#12E3C2" : "white",
+                      width: "32px",
+                      height: "32px",
+                    }}
+                  />
+                </Flex>
+
+                {/* Secondary Actions */}
+                <Flex gap="2px">
+                  <Button
+                    type="text"
+                    icon={<BookOutlined style={{ color: "white", fontSize: "15px" }} />}
+                    size="small"
+                    onClick={() => navigate("/documentation")}
+                    style={{ border: "none" }}
+                  />
+                  <Button
+                    type="text"
+                    icon={<SnippetsOutlined style={{ color: "white", fontSize: "15px" }} />}
+                    size="small"
+                    onClick={() => navigate("/blog")}
+                    style={{ border: "none" }}
+                  />
+                  <Popconfirm
+                    title="Cerrar sesión"
+                    onConfirm={() => {
+                      dispatch({ type: "LOGOUT" });
+                      navigate("/");
+                    }}
+                    okText="Sí"
+                    cancelText="No"
+                    placement="bottomRight"
+                  >
+                    <Button
+                      type="text"
+                      icon={<LogoutOutlined style={{ color: "rgba(255, 100, 100, 1)", fontSize: "15px" }} />}
+                      size="small"
+                      style={{ border: "none" }}
                     />
-                  }
-                  shape="round"
-                  onClick={() => navigate("/")}
-                  style={{
-                    background:
-                      location.pathname == "/"
-                        ? "rgba(18, 227, 194, 0.9)"
-                        : "rgba(10, 95, 224, 0.8)",
-                    borderColor: "rgba(255,255,255,0.3)",
-                    color: "white",
-                    boxShadow: location.pathname == "/" ? "0 0 12px rgba(18, 227, 194, 0.5)" : "none",
-                  }}
-                />
-                <Button
-                  type={"primary"}
-                  icon={
-                    <UserOutlined
-                      style={{
-                        color: "white",
-                      }}
-                    />
-                  }
-                  shape="round"
-                  onClick={() => navigate("/profile_competition")}
-                  style={{
-                    background:
-                      location.pathname == "/profile_competition"
-                        ? "rgba(18, 227, 194, 0.9)"
-                        : "rgba(10, 95, 224, 0.8)",
-                    borderColor: "rgba(255,255,255,0.3)",
-                    color: "white",
-                    boxShadow: location.pathname == "/profile_competition" ? "0 0 12px rgba(18, 227, 194, 0.5)" : "none",
-                  }}
-                />
-                <Button
-                  type={"primary"}
-                  icon={
-                    <TeamOutlined
-                      style={{
-                        color: location.pathname !== "/team" ? "white" : "#1a1a1a",
-                      }}
-                    />
-                  }
-                  shape="round"
-                  onClick={() => navigate("/team")}
-                  style={{
-                    background:
-                      location.pathname == "/team"
-                        ? "rgba(18, 227, 194, 0.9)"
-                        : "rgba(10, 95, 224, 0.8)",
-                    borderColor: "rgba(255,255,255,0.3)",
-                    color: "white",
-                    boxShadow: location.pathname == "/team" ? "0 0 12px rgba(18, 227, 194, 0.5)" : "none",
-                  }}
-                />
-                <Button
-                  type={"primary"}
-                  icon={
-                    <TrophyOutlined
-                      style={{
-                        color: location.pathname !== "/enterprise" ? "white" : "#1a1a1a",
-                      }}
-                    />
-                  }
-                  shape="round"
-                  onClick={() => navigate("/enterprise")}
-                  style={{
-                    background:
-                      location.pathname == "/enterprise"
-                        ? "rgba(18, 227, 194, 0.9)"
-                        : "rgba(10, 95, 224, 0.8)",
-                    borderColor: "rgba(255,255,255,0.3)",
-                    color: "white",
-                    boxShadow: location.pathname == "/enterprise" ? "0 0 12px rgba(18, 227, 194, 0.5)" : "none",
-                  }}
-                />
+                  </Popconfirm>
+                </Flex>
               </Flex>
             </Affix>
           )}
           <div key={location.pathname} className="page-transition-enter">
             <Flex gap={"small"}>
               <Card
+                styles={{
+                  body: { 
+                    padding: window.innerWidth < 900 ? "8px" : "24px" 
+                  }
+                }}
                 style={{
                   minHeight: "85vh",
                   width: "100%",

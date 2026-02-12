@@ -67,26 +67,7 @@ const IntervalsTable = () => {
 
   return (
     <Flex vertical style={{ width: "100%" }}>
-      {competitionNotStarted && (
-        <Card style={{ marginBottom: "16px" }}>
-          <Tag
-            style={{
-              backgroundColor: "rgba(18, 227, 194, 0.1)",
-              color: "rgba(18, 227, 194, 0.9)",
-              border: "1px solid rgba(18, 227, 194, 0.03)",
-            }}
-          >
-            {`La competencia comenzará el ${startDate.toLocaleDateString(
-              "es-ES",
-              {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-              }
-            )}`}
-          </Tag>
-        </Card>
-      )}
+    
       {competitionEnded &&
         intervals.length > 0 &&
         intervals[currentInterval] && (

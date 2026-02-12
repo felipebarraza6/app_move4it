@@ -65,6 +65,7 @@ const Blog = ({ type }) => {
         {blogs.map((blog, index) => (
           <Card
             key={index}
+            className={`stagger-item delay-${(index % 5) + 1}`}
             style={styles.card}
             onClick={() => showDrawer(blog)}
             hoverable
@@ -79,8 +80,12 @@ const Blog = ({ type }) => {
             }
           >
             <Card.Meta
-              title={blog.title}
-              description={blog.description1.substring(0, 100) + "..."}
+              title={<span style={{ color: '#052240', fontWeight: '700' }}>{blog.title}</span>}
+              description={
+                <span style={{ fontSize: '12px', color: 'rgba(5, 34, 64, 0.7)' }}>
+                  {blog.description1.substring(0, 100) + "..."}
+                </span>
+              }
             />
           </Card>
         ))}
