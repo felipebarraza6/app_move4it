@@ -3,7 +3,7 @@ import axios from "axios";
 import { notification } from "antd";
 import { CloudDownloadOutlined } from "@ant-design/icons";
 //export const BASE_URL = "http://move4it.cl:8000/api/";
-export const BASE_URL = "https://api.move4it.cl/api";
+export const BASE_URL = "https://api.move4ia.app/api";
 
 export const Axios = axios.create({
   baseURL: BASE_URL,
