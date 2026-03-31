@@ -1,4 +1,3 @@
-import axios from "axios";
 import methods from "./api";
 
 const login = async (data) => {
